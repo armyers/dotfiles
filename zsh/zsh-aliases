@@ -1,0 +1,16 @@
+alias Z='source ~/.zshrc'
+alias ls='ls --color=auto -aFG'
+alias ll='ls -l'
+alias df='df -h'
+alias du='du -h'
+alias tree='tree -C'
+alias h='history -i'
+# alias j=jobs
+alias vi=nvim
+alias diff=colordiff
+alias grep='grep --color=always'
+alias bfg='java -jar ~/lib/bfg-1.14.0.jar'
+alias kn='kubectl neat'
+alias flushdns='sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder'
+# this is now a bash script
+# alias nocolor="sed $'s,\x1b\\[[0-9\;]*[a-zA-Z],,g'"

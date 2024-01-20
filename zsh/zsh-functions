@@ -1,0 +1,4 @@
+# view a markdown file in lynx
+rmd () {
+  pandoc $1 | lynx -stdin
+}

@@ -1,0 +1,116 @@
+ulimit -n 65535
+PATH=~/bin:/usr/local/opt/coreutils/libexec/gnubin:$(pyenv root)/shims:/usr/local/opt/openjdk/bin:${KREW_ROOT:-$HOME/.krew}/bin:/usr/local/go/bin:/usr/local/Cellar/bank-vaults/0.9.0/bin:$PATH
+export EDITOR=nvim
+export VISUAL=nvim
+export PAGER=less
+export LESSOPEN='| /usr/local/bin/src-hilite-lesspipe.sh %s'
+export LESS=' -R -X'
+export KUBECTL_EXTERNAL_DIFF="/usr/local/bin/colordiff -u -N"
+
+# history settings
+setopt HIST_VERIFY
+setopt EXTENDED_HISTORY
+setopt INC_APPEND_HISTORY
+setopt HIST_FIND_NO_DUPS
+export HISTFILE=~/.zsh-history
+export SAVEHIST=1000000000
+export HISTSIZE=1000000000
+export HISTFILESIZE=1000000000
+export HISTTIMEFORMAT="[%F %H:%M:%S] "
+
+# work stuff
+if [ -f ~/.workenv ]; then
+  source .workenv
+fi
+
+# pushd settings
+export PUSHD_TO_HOME=true
+export PUSH_SILENT=true
+
+if [[ -n "$SSH_CLIENT" ]]; then
+  REMOTE_IP=$(echo "$SSH_CLIENT" | cut -d' ' -f1)
+fi
+
+# command completions
+autoload -U +X bashcompinit && bashcompinit
+autoload -U +X compinit && compinit
+source <(kubectl completion zsh)
+source <(kustomize completion zsh)
+source <(yq shell-completion zsh)
+source <(eksctl completion zsh)
+source <(helm completion zsh)
+complete -C '/usr/local/bin/aws_completer' aws
+complete -C /usr/local/bin/vault vault
+complete -C /usr/local/Cellar/tfenv/3.0.0/versions/1.6.4/terraform terraform
+
+# local stuff
+[ -f ~/.zsh-functions ]; source ~/.zsh-functions
+[ -f ~/.zsh-aliases ]; source ~/.zsh-aliases
+
+# zsh vi-mode, but with some changes to key bindings
+bindkey -v
+bindkey "^U" kill-whole-line
+bindkey "^K" backward-kill-line
+bindkey "^W" backward-kill-word
+bindkey "^H" backward-delete-char
+bindkey "^?" backward-delete-char
+
+# for zsh vi-mode
+export KEYTIMEOUT=9
+
+# block cursor in Vi command mode
+# vertical var cursor in Vi insert mode
+function zle-keymap-select zle-line-init zle-line-finish {
+  case $KEYMAP in
+    vicmd)      print -n -- "\E]50;CursorShape=0\C-G";; # block cursor
+    viins|main) print -n -- "\E]50;CursorShape=1\C-G";; # line cursor
+  esac
+
+  zle reset-prompt
+  zle -R
+}
+zle -N zle-line-init
+zle -N zle-line-finish
+zle -N zle-keymap-select
+
+# Ignore EOF (^D) at the cli
+set -o ignoreeof
+
+#
+# export PROMPT='%n@%m %4~ %# '
+export PROMPT="[%F{045}%m%f %F{144}%4~%f]%F{043}%(#.#.$)%f "
+
+# fuzzy find
+[ -f ~/.zsh.fzf ] && source ~/.zsh.fzf
+
+# autojump
+[ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
+
+# cargo/rust
+if [ -f "$HOME/.cargo/env" ]; then
+  source "$HOME/.cargo/env"
+fi
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/Users/allenmyers/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/Users/allenmyers/miniconda3/etc/profile.d/conda.sh" ]; then
+        . "/Users/allenmyers/miniconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/Users/allenmyers/miniconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
+# NPM
+NPM_PACKAGES="${HOME}/.npm-packages"
+
+export PATH="$PATH:$NPM_PACKAGES/bin"
+
+# Preserve MANPATH if you already defined it somewhere in your config.
+# Otherwise, fall back to `manpath` so we can inherit from `/etc/manpath`.
+export MANPATH="${MANPATH-$(manpath)}:$NPM_PACKAGES/share/man"

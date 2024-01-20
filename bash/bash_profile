@@ -1,0 +1,79 @@
+# vi-style CLI editing
+set -o vi
+
+alias ls='/bin/ls -aF'
+alias ll='/bin/ls -laF'
+alias df='df -h'
+alias du='du -h'
+alias h=history
+alias j=jobs
+alias vi=nvim
+
+export EDITOR=nvim
+export PAGER=less
+
+PATH=~/bin:/usr/local/opt/coreutils/libexec/gnubin:/Library/Frameworks/Python.framework/Versions/3.9/bin:/usr/local/opt/openjdk/bin:${KREW_ROOT:-$HOME/.krew}/bin:$PATH
+
+# ssh agent forwarding
+eval $(ssh-agent -s) && ssh-add ~/.ssh/{id_rsa,id_ed25519,zaml-prod-09122017.pem,allenrmyers-github}
+
+export BASH_COMPLETION_COMPAT_DIR="/usr/local/etc/bash_completion.d"
+[[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
+complete -C '/usr/local/bin/aws_completer' aws
+source <(kubectl completion bash)
+source <(kustomize completion bash)
+source <(yq shell-completion bash)
+source <(eksctl completion bash)
+source <(helm completion bash)
+
+export HISTFILESIZE=
+export HISTSIZE=
+export HISTCONTROL=
+export HISTTIMEFORMAT="%F %T "
+if [[ -n "$SSH_CLIENT" ]]; then
+  REMOTE_IP=$(echo "$SSH_CLIENT" | cut -d' ' -f1)
+fi
+log_bash_persistent_history() {
+  local rc=$?
+  [[ $(history 1) =~ ^\ *[0-9]+\ +([^\ ]+\ [^\ ]+)\ +(.*)$ ]]
+  local date_part="${BASH_REMATCH[1]}"
+  local command_part="${BASH_REMATCH[2]}"
+  if [[ "$command_part" != "$PERSISTENT_HISTORY_LAST" ]]; then
+    logger -t Shell "${USER}@${REMOTE_IP} ${PWD} [${rc}] ${command_part}"
+    echo "${date_part} [${rc}] ${command_part}" >>~/.persistent_history
+    export PERSISTENT_HISTORY_LAST="$command_part"
+  fi
+}
+run_on_prompt_command() {
+  log_bash_persistent_history
+}
+if [[ "$PROMPT_COMMAND" == "" ]]; then
+  PROMPT_COMMAND="run_on_prompt_command"
+else
+  PROMPT_COMMAND="run_on_prompt_command ; ${PROMPT_COMMAND}"
+fi
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+[ -f ~/.bash_functions ]; source ~/.bash_functions
+
+complete -C /usr/local/bin/vault vault
+
+complete -C /usr/local/Cellar/tfenv/2.0.0/versions/0.12.24/terraform terraform
+. "$HOME/.cargo/env"
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/Users/allenmyers/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/Users/allenmyers/miniconda3/etc/profile.d/conda.sh" ]; then
+        . "/Users/allenmyers/miniconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/Users/allenmyers/miniconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+

@@ -1,0 +1,67 @@
+# This is Git's per-user configuration file.
+[user]
+  name = Allen Myers
+  email = am@zest.ai
+[branch]
+  autosetupmerge = true
+[alias]
+  co = checkout
+  ci = commit
+  st = status
+  br = branch -a -vvv
+  brs = branch -a -vvv --sort committerdate
+  df = diff
+  ds = diff --staged
+  dc = diff --cached
+  lg = log -p
+  ll = log --graph --pretty=format:'%C(yellow)%h%C(cyan)%d%Creset %s %C(white)- %an, %ar%Creset'
+  wt = worktree
+  hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
+  type = cat-file -t
+  dump = cat-file -p
+  plog = log --color  --pretty=format:\"%C(red)%h %C(yellow)%ad %C(green)%an%C(reset): %s\" --date=short
+  unstage = reset HEAD --
+  uncommit = reset --soft HEAD^
+  branches = branch -a
+  rl = reflog --pretty=reflog
+  gls = log --pretty=format:\"[%h] %ae, %ar: %s\" --stat
+[pretty]
+  reflog = %C(auto)%h %<|(20)%gd %C(blue)%cr%C(reset) %gs (%s)
+[color]
+  ui = auto
+  status = always
+[color "branch"]
+  current = cyan
+  local = yellow
+  remote = green
+[color "diff"]
+  meta = white bold
+  frag = cyan bold
+  old = red bold
+  new = green bold
+[color "status"]
+  added = cyan
+  changed = green
+  untracked = yellow
+[push]
+  default = simple
+[diff]
+  tool = vimdiff
+[core]
+  editor = nvim
+  excludesfile = /Users/allenmyers/.gitignore_global
+  pager = git-split-diffs --color | less -RFX
+[rerere]
+  enabled = true
+[pull]
+  rebase = false
+[difftool "sourcetree"]
+  cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+  path =
+[mergetool "sourcetree"]
+  cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+  trustExitCode = true
+[commit]
+  template = /Users/allenmyers/.stCommitMsg
+[split-diffs]
+  theme-name = dark
