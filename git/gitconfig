@@ -49,7 +49,6 @@
   tool = vimdiff
 [core]
   editor = nvim
-  excludesfile = /Users/allenmyers/.gitignore_global
   pager = git-split-diffs --color | less -RFX
 [rerere]
   enabled = true
