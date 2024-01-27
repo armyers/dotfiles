@@ -93,7 +93,6 @@ set -o ignoreeof
 export PROMPT="[%F{045}%m%f %F{144}%4~%f]%F{043}%(#.#.$)%f "
 
 # fuzzy find
-export FZF_CTRL_T_COMMAND='fd -t d -L --strip-cwd-prefix'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 [ -f $XDG_CONFIG_HOME/fzf/file-functions.zsh ] && source $XDG_CONFIG_HOME/fzf/file-functions.zsh
 export FZF_COMPLETION_TRIGGER=''
