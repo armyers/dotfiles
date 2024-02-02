@@ -12,7 +12,7 @@
   brs = branch -a -vvv --sort committerdate
   df = diff
   dc = diff --cached
-  lg = log -p
+  lp = log -p
   ll = log --graph --pretty=format:'%C(yellow)%h%C(cyan)%d%Creset %s %C(white)- %an, %ar%Creset'
   wt = worktree
   hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
