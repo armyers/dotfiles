@@ -1,0 +1,4 @@
+grcov v0.8.19:
+    grcov
+tree-sitter-cli v0.20.8:
+    tree-sitter

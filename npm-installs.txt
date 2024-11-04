@@ -1,0 +1,5 @@
+/Users/allenmyers/.npm-packages/lib
+├── @commitlint/cli@18.4.4
+├── @commitlint/config-conventional@18.4.4
+└── npm-groovy-lint@14.2.3
+

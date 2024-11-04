@@ -1,259 +1,287 @@
-alacritty 0.12.3
-aom 3.7.0
-autoconf 2.71
-autojump 22.5.3_3
-aws-iam-authenticator 0.6.11
-aws-vault 7.2.0
-awscli 2.15.8
-bash 5.2.15
-bash-completion@2 2.11
-berkeley-db 18.1.40_2
-berkeley-db@5 5.3.28_1
-boost 1.82.0_1
-bottom 0.9.6
-brotli 1.1.0
-c-ares 1.20.1 1.25.0 1.21.0
-ca-certificates 2023-12-12 2023-08-22
-cairo 1.18.0
-cffi 1.16.0_1
-clang-format 17.0.3
-colordiff 1.0.21
-coreutils 9.4
-csvkit 1.3.0
-curl 8.5.0
-dart 3.1.5
-diffutils 3.10
-dive 0.11.0
-docker 3.0.2,50996
-docker-completion 24.0.6
-docutils 0.20.1_1
-dotnet 7.0.100
-dotnet-sdk 7.0.403,4243dbe5-7173-4422-a073-b13395231cfa,808d2c3639437ef67630dc0083a0fbd6
-doxygen 1.9.8
-eksctl 0.162.0
-elixir 1.16.0
-erlang 26.2.1 26.0.2
-evernote 10.5.7-2171
-fd 8.7.1
-firefox 84.0
-flock 2.2.513
-flutter 3.13.9
-font-3270-nerd-font 3.0.2
-font-fira-code-nerd-font 3.0.2
-font-hack-nerd-font 3.0.2
-font-sauce-code-pro-nerd-font 3.0.2
-fontconfig 2.14.2
-freetype 2.13.2
-fribidi 1.0.13
-fzf 0.44.0
-gawk 5.3.0
-gcc 13.2.0
-gd 2.3.3_6
-gdbm 1.23
-gdk-pixbuf 2.42.10_1
-gettext 0.22.4 0.22.3
-gh 2.41.0
-giflib 5.2.1
-git 2.42.1
-git-delta 0.16.5
-gitui 0.24.3
-glances 3.4.0.3
-glib 2.78.0 2.78.1
-gmp 6.3.0
-gnu-sed 4.9
-gnu-tar 1.35
-go 1.21.4
-gobject-introspection 1.78.1
-graphite2 1.3.14
-graphviz 9.0.0
-grep 3.11
-gts 0.7.6_3
-hadolint 2.12.0
-harfbuzz 8.3.0
-helm 3.13.2
-highway 1.0.7
-htop 3.2.2
-icu4c 73.2
-imath 3.1.9
-isl 0.26
-istioctl 1.19.3
-jansson 2.14
-jasper 4.0.0
-jemalloc 5.3.0
-jiggler 1.9
-jpeg 9e
-jpeg-turbo 3.0.0
-jpeg-xl 0.8.2_1
-jq 1.7
-kafka 3.6.1
-kdash v0.4.4
-kdiff3 1.10.6
-keycastr 0.9.15
-kitty 0.31.0
-kotlin 1.9.20
-krew 0.4.4
-kube-capacity 0.7.4
-kube-linter 0.6.4
-kubectl-debug 0.2.0-rc
-kubernetes-cli 1.28.3
-kubetail 1.6.18
-kustomize 5.2.1
-lastpass 4.60.0,1121
-lastpass-cli 1.3.7
-lazygit 0.40.2
-less 643
-libassuan 2.5.6
-libavif 1.0.1
-libev 4.33
-libevent 2.1.12_1
-libffi 3.4.4
-libgit2 1.7.1
-libgit2@1.6 1.6.4
-libgpg-error 1.47
-libidn2 2.3.4_1
-liblinear 2.47
-libmpc 1.3.1
-libnet 1.3
-libnghttp2 1.58.0
-libpng 1.6.40
-libpthread-stubs 0.5
-librsvg 2.57.0
-libssh2 1.11.0_1
-libtermkey 0.22
-libtiff 4.6.0
-libtool 2.4.7
-libunistring 1.1
-libuv 1.47.0
-libvmaf 2.3.1
-libvterm 0.3.3 0.3.2
-libx11 1.8.7
-libxau 1.0.11
-libxcb 1.16
-libxdmcp 1.1.4
-libxext 1.3.5
-libxrender 0.9.11
-libyaml 0.2.5
-little-cms2 2.15
-llvm 17.0.6
-llvm@16 16.0.6
-logcli 2.9.2
-lua 5.4.6
-lua@5.3 5.3.6
-luajit 2.1.1703358377 2.1.1696795921
-luajit-openresty 2.1-20231006
-luarocks 3.9.2
-luv 1.45.0-0
-lynx 2.8.9rel.1_2
-lz4 1.9.4
-lzo 2.10
-m4 1.4.19
-make 4.4.1
-markdown 1.0.1
-mdv 1.7.5
-meld 3.21.0-r3,19
-mingw-w64 11.0.1
-minikube 1.32.0
-mono 6.12.0.182
-moreutils 0.67
-mpdecimal 2.5.1
-mpfr 4.2.0-p12
-msgpack 6.0.0
-nasm 2.16.01
-ncurses 6.4
-neovim 0.9.5
-netpbm 11.02.04
-nghttp2 1.57.0
-nmap 7.94_1
-node 21.5.0
-oniguruma 6.9.9
-openblas 0.3.24
-openexr 3.2.1
-openjdk 21.0.1
-openldap 2.6.6
-openssl@1.1 1.1.1w
-openssl@3 3.1.4 3.1.3 3.2.0_1
-pandoc 3.1.9
-pango 1.50.14
-pcre 8.45
-pcre2 10.42
-perl 5.38.2_1
-pinentry 1.2.1
-pixman 0.42.2
-pkg-config 0.29.2_3
-postman 10.12.0
-prometheus 2.47.2
-pstree 2.40
-pwgen 2.08
-pycparser 2.21_1
-pyenv 2.3.35
-pyenv-virtualenv 1.2.1
-pygments 2.16.1_1
-pyinstaller 6.3.0
-pyright 1.1.335
-python-markdown 3.5.1
-python-packaging 23.2_1
-python-pytz 2023.3.post1
-python-setuptools 68.2.2 69.0.3
-python-tabulate 0.9.0
-python@3.10 3.10.13
-python@3.11 3.11.7
-python@3.12 3.12.1
-python@3.7 3.7.16
-python@3.8 3.8.18_1
-python@3.9 3.9.7_1 3.9.18
-pyvim 3.0.3
-pyyaml 6.0.1_1
-qlmarkdown 1.3.6
-r 4.3.2
-ranger 1.9.3_2
-readline 8.2.7 8.2.1
-ripgrep 13.0.0
-rtmpdump 2.4-20151223_3
-rust 1.75.0
-rustup-init 1.26.0_1
-shellcheck 0.9.0
-shfmt 3.7.0
-six 1.16.0_4
-skitch 2.9,265157
-slack 4.12.0
-source-highlight 3.1.9_5
-sourcetree 4.1.0,237
-sqlite 3.44.0 3.44.2 3.43.2
-stern 1.26.0
-stylua 0.19.0
-tcl-tk 8.6.13_5
-tcptraceroute 1.5beta7_2
-telnet 294
-terraform 1.6.2
-terraform-ls 0.32.4
-tfenv 3.0.0
-tflint 0.49.0
-the_silver_searcher 2.2.0
-tmux 3.3a_3
-tree 2.1.1
-tree-sitter 0.20.8
-typescript 5.2.2
-unibilium 2.1.1
-universal-ctags p6.0.20231119.0
-unixodbc 2.3.12
-utf8proc 2.9.0
-vault 1.15.0
-viscosity 1.9
-visual-studio-code 1.52.1
-watch 4.0.4
-wdiff 1.2.2_2
-webp 1.3.2
-wezterm 20230712-072601,f4abf8fd
-wget 1.21.4
-wxwidgets 3.2.4
-xorgproto 2023.2
-xz 5.4.5
-yabai 6.0.1
-yadm 3.2.2
-yamllint 1.33.0
-yarn 1.22.21
-ydiff 1.2_2
-yq 4.35.2
-z3 4.12.2 4.12.4
-zookeeper 3.9.1
-zstd 1.5.5
+alacritty
+aom
+autoconf
+autojump
+aws-iam-authenticator
+aws-vault
+awscli
+aylei/tap/kubectl-debug
+bash
+bash-completion@2
+bat
+berkeley-db
+berkeley-db@5
+boost
+bottom
+brotli
+c-ares
+ca-certificates
+cairo
+cffi
+clang-format
+colordiff
+coreutils
+csvkit
+curl
+dart-lang/dart/dart
+diffutils
+dive
+docker
+docker
+docker-completion
+docutils
+dog
+dotnet
+dotnet-sdk
+doxygen
+duf
+dust
+eksctl
+elixir
+erlang
+evernote
+fd
+firefox
+flock
+flutter
+fontconfig
+freetype
+fribidi
+fzf
+fzy
+gawk
+gcc
+gd
+gdbm
+gdk-pixbuf
+gettext
+gh
+giflib
+git
+git-delta
+gitui
+glances
+glib
+glow
+gmp
+gnu-sed
+gnu-tar
+go
+gobject-introspection
+graphite2
+graphviz
+grep
+groovy
+gts
+hadolint
+harfbuzz
+hashicorp/tap/terraform
+hashicorp/tap/vault
+helm
+highway
+homebrew/cask-fonts/font-3270-nerd-font
+homebrew/cask-fonts/font-fira-code-nerd-font
+homebrew/cask-fonts/font-hack-nerd-font
+homebrew/cask-fonts/font-sauce-code-pro-nerd-font
+htop
+icu4c
+imath
+isl
+istioctl
+jandedobbeleer/oh-my-posh/oh-my-posh
+jansson
+jasper
+jemalloc
+jiggler
+johanhaleby/kubetail/kubetail
+jpeg
+jpeg-turbo
+jpeg-xl
+jq
+kafka
+kdash-rs/kdash/kdash
+kdiff3
+keycastr
+kitty
+koekeishiya/formulae/yabai
+kotlin
+krb5
+krew
+kube-linter
+kubernetes-cli
+kustomize
+lastpass
+lastpass-cli
+lazygit
+less
+libassuan
+libavif
+libev
+libevent
+libffi
+libgit2
+libgit2@1.6
+libgpg-error
+libidn2
+liblinear
+libmpc
+libnet
+libnghttp2
+libpng
+libpthread-stubs
+librsvg
+libssh2
+libtermkey
+libtiff
+libtool
+libunistring
+libuv
+libvmaf
+libvterm
+libx11
+libxau
+libxcb
+libxdmcp
+libxext
+libxrender
+libyaml
+little-cms2
+llvm
+llvm@16
+logcli
+lsd
+lua
+lua@5.3
+luajit
+luajit-openresty
+luarocks
+luv
+lynx
+lz4
+lzo
+m4
+make
+markdown
+mdv
+meld
+mingw-w64
+minikube
+mono
+moreutils
+mpdecimal
+mpfr
+msgpack
+nasm
+ncdu
+ncurses
+neovim
+netpbm
+nghttp2
+nmap
+noahgorstein/tap/jqp
+node
+oniguruma
+openblas
+openexr
+openjdk
+openjdk@17
+openldap
+openssl@1.1
+openssl@3
+pandoc
+pango
+pcre
+pcre2
+perl
+pick
+pinentry
+pixman
+pkg-config
+postgresql@15
+postman
+prometheus
+pstree
+pwgen
+pycharm
+pycparser
+pyenv
+pyenv-virtualenv
+pygments
+pyinstaller
+pyright
+python-markdown
+python-packaging
+python-pytz
+python-setuptools
+python-tabulate
+python@3.10
+python@3.11
+python@3.12
+python@3.7
+python@3.8
+python@3.9
+pyvim
+pyyaml
+qlmarkdown
+r
+ranger
+readline
+ripgrep
+robscott/tap/kube-capacity
+rtmpdump
+ruby
+rust
+rustup-init
+sd
+selecta
+shellcheck
+shfmt
+six
+sk
+skitch
+slack
+source-highlight
+sourcetree
+sqlite
+starship
+stern
+stow
+stylua
+tcl-tk
+tcptraceroute
+telnet
+terraform-ls
+tfenv
+tflint
+the_silver_searcher
+tmux
+tree
+tree-sitter
+typescript
+unibilium
+universal-ctags
+unixodbc
+utf8proc
+viscosity
+visual-studio-code
+watch
+wdiff
+webp
+wezterm
+wget
+wxwidgets
+xh
+xorgproto
+xz
+yadm
+yamllint
+yarn
+ydiff
+yq
+z
+z3
+zed
+zellij
+zookeeper
+zoxide
+zstd

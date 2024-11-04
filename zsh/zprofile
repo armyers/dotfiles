@@ -1,0 +1,20 @@
+# zsh
+ulimit -n 65535
+
+# NPM
+export NPM_PACKAGES="${HOME}/.npm-packages"
+
+export PATH="$NPM_PACKAGES/bin:/usr/local/opt/openjdk@17/bin:/usr/local/opt/ruby/bin:/usr/local/opt/postgresql@15/bin:/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+eval "$(/opt/homebrew/bin/brew shellenv)"
+#
+# cargo/rust
+if [ -f "$HOME/.cargo/env" ]; then
+  source "$HOME/.cargo/env"
+fi
+
+export PATH="$HOME/bin:$PATH"
+
+# Preserve MANPATH if you already defined it somewhere in your config.
+# Otherwise, fall back to `manpath` so we can inherit from `/etc/manpath`.
+export MANPATH="${MANPATH-$(manpath)}:$NPM_PACKAGES/share/man"

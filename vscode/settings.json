@@ -1,53 +1,57 @@
 {
-  "[python]": {
-    "editor.codeActionsOnSave": {
-      "source.organizeImports": true
+    "files.eol": "\n",
+    "files.trimFinalNewlines": true,
+    "files.insertFinalNewline": true,
+    "files.trimTrailingWhitespace": true,
+    "[python]": {
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": true
+        },
+        "editor.formatOnSave": true
     },
-    "editor.formatOnSave": true
-  },
-  "python.linting.pylintEnabled": true,
-  "python.linting.enabled": true,
-  "python.testing.pytestArgs": [
-    "tests",
-    "-s",
-    "--disable-warnings"
+    "python.linting.pylintEnabled": true,
+    "python.linting.enabled": true,
+    "python.testing.pytestArgs": [
+        "tests",
+        "-s",
+        "--disable-warnings"
     ],
-  "python.testing.unittestEnabled": false,
-  "python.testing.pytestEnabled": true,
-  "python.formatting.provider": "yapf",
-  "autoDocstring.docstringFormat": "sphinx",
-  "pylint.importStrategy": "fromEnvironment",
-  "[terraform]": {
-    "editor.defaultFormatter": "hashicorp.terraform",
-    "editor.formatOnSave": true,
-    "editor.formatOnSaveMode": "file"
-  },
-  "[terraform-vars]": {
-    "editor.defaultFormatter": "hashicorp.terraform",
-    "editor.formatOnSave": true,
-    "editor.formatOnSaveMode": "file"
-  },
-  "[shellscript]": {
-    "editor.tabSize": 2,
-    "editor.defaultFormatter": "foxundermoon.shell-format",
-    "editor.formatOnSave": true
-  },
-  "[shell-format]": {
-    "editor.formatOnSave": true,
-    "shellformat.effectLanguages": [
-      "shellscript",
-      "dockerfile",
-      "dotenv",
-      "hosts",
-      "jvmoptions",
-      "ignore",
-      "gitignore",
-      "properties",
-      "spring-boot-properties",
-      "azcli",
-      "bats"
-    ],
-    "shellformat.flag": "-i 2 -ci -sr -bn -s",
-    "shellformat.path": "/usr/local/bin/shfmt"
-  }
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "python.formatting.provider": "yapf",
+    "autoDocstring.docstringFormat": "sphinx",
+    "pylint.importStrategy": "fromEnvironment",
+    "[terraform]": {
+        "editor.defaultFormatter": "hashicorp.terraform",
+        "editor.formatOnSave": true,
+        "editor.formatOnSaveMode": "file"
+    },
+    "[terraform-vars]": {
+        "editor.defaultFormatter": "hashicorp.terraform",
+        "editor.formatOnSave": true,
+        "editor.formatOnSaveMode": "file"
+    },
+    "[shellscript]": {
+        "editor.tabSize": 2,
+        "editor.defaultFormatter": "foxundermoon.shell-format",
+        "editor.formatOnSave": true
+    },
+    "[shell-format]": {
+        "editor.formatOnSave": true,
+        "shellformat.effectLanguages": [
+            "shellscript",
+            "dockerfile",
+            "dotenv",
+            "hosts",
+            "jvmoptions",
+            "ignore",
+            "gitignore",
+            "properties",
+            "spring-boot-properties",
+            "azcli",
+            "bats"
+        ],
+        "shellformat.flag": "-i 2 -ci -sr -bn -s",
+        "shellformat.path": "/usr/local/bin/shfmt"
+    }
 }

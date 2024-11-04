@@ -2,3 +2,13 @@
 rmd () {
   pandoc $1 | lynx -stdin
 }
+
+overlord-git-status() {
+  (\ls -1d ~/code/kubernetes_overlord-*) | sort | xargs -n 1 -I {} bash -c '(echo_green "######################################################
+>>>> {}"; git -C {} status)' |& less
+}
+
+serverless-git-status() {
+  (\ls -1d ~/code/terraform-mh-serverless-[1-9]) | sort | xargs -n 1 -I {} bash -c '(echo_green "######################################################
+>>>> {}"; git -C {} status)' |& less
+}
