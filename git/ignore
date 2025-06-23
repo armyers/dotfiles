@@ -6,21 +6,6 @@
 # we need to ignore .git for the benefit of rg, ag and fzf
 .git/
 
-# ignore a bunch of crap in my home dir
-Applications/
-Desktop/
-Library/
-Movies/
-Music/
-Pictures/
-Postman/
-Public/
-go/
-miniconda3/
-node_modules/
-nvim-macos/
-yarn.lock
-
 # Local .terraform directories
 .terraform/
 
