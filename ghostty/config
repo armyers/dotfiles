@@ -1,0 +1,4 @@
+auto-update-channel = tip
+font-size = 15
+maximize = true
+keybind = shift+enter=text:\n
