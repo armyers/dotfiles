@@ -1,0 +1,45 @@
+{
+  "title": "home/end keys go to begin/end of line",
+  "rules": [
+    {
+      "description": "home key goes to begin of line",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "home"
+          },
+          "to": [
+            {
+              "repeat": true,
+              "key_code": "left_arrow",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "end key goes to end of line",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "end"
+          },
+          "to": [
+            {
+              "repeat": true,
+              "key_code": "right_arrow",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

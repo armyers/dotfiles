@@ -1,0 +1,31 @@
+{
+  "title": "ctrl-shift-c to copy to clipboard",
+  "rules": [
+    {
+      "description": "ctrl-shift-c to copy to clipboard",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "modifiers": {
+              "mandatory": [
+                "left_control",
+                "left_shift"
+              ]
+            },
+            "key_code": "c"
+          },
+          "to": [
+            {
+              "repeat": true,
+              "key_code": "c",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

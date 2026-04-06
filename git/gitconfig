@@ -64,3 +64,5 @@
   template = /Users/allenmyers/.stCommitMsg
 [split-diffs]
   theme-name = dark
+[credential]
+	helper = osxkeychain

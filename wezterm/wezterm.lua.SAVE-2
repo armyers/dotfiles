@@ -1,0 +1,356 @@
+-- Pull in the wezterm API
+local wezterm = require("wezterm")
+
+local function filter(tbl, callback)
+  local filt_table = {}
+
+  for i, v in ipairs(tbl) do
+    if callback(v, i) then
+      table.insert(filt_table, v)
+    end
+  end
+  return filt_table
+end
+
+local function kill_workspace(workspace)
+  ---@diagnostic disable-next-line: unused-local
+  return function(window, pane, line)
+    workspace = workspace or window:get_active_workspace()
+    local success, stdout = wezterm.run_child_process({ "wezterm", "cli", "list", "--format=json" })
+
+    if success then
+      local json = wezterm.json_parse(stdout)
+      if not json then
+        return
+      end
+
+      local workspace_panes = filter(json, function(p)
+        return p.workspace == workspace
+      end)
+
+      for _, p in ipairs(workspace_panes) do
+        wezterm.run_child_process({ "wezterm", "cli", "kill-pane", "--pane-id=" .. p.pane_id })
+      end
+    end
+  end
+end
+
+-- local function switch_panes(window, pane, direction, max)
+--   local status = "default"
+--
+--   _, status = wezterm.action.ActivatePaneDirection(direction)
+--   wezterm.log_info("direction: " .. direction)
+--   if status then
+--     wezterm.log_info("status: " .. status)
+--   end
+--   wezterm.log_info("max: " .. max)
+--   if window then
+--     wezterm.log_info("window: " .. window:window_id())
+--   end
+--   if pane then
+--     wezterm.log_info("pane: " .. pane:pane_id())
+--   end
+-- end
+
+-- This will hold the configuration.
+local config = wezterm.config_builder()
+
+-- increase fps for display speed
+config.max_fps = 120
+
+-- set the color scheme:
+-- config.color_scheme = "Catppuccin Mocha (Gogh)"
+
+-- define word boundaries
+config.selection_word_boundary = "-{}[]()\"'`.,;:$/= "
+
+-- buffer scrollback
+-- How many lines of scrollback you want to retain per tab
+config.scrollback_lines = 100000
+
+-- Enable the scrollbar.
+-- It will occupy the right window padding space.
+-- If right padding is set to 0 then it will be increased
+-- to a single cell width
+config.enable_scroll_bar = true
+
+-- make sure this is true
+config.unzoom_on_switch_pane = true
+
+-- bump the font size
+config.font_size = 15
+
+config.unix_domains = {
+  {
+    name = "unix",
+  },
+}
+
+---@diagnostic disable-next-line: unused-local
+wezterm.on("update-right-status", function(window, pane)
+  window:set_left_status(window:active_workspace())
+  window:set_right_status("")
+end)
+
+config.use_fancy_tab_bar = false
+config.show_tabs_in_tab_bar = true
+-- config.show_new_tab_button_in_tab_bar = false
+config.hide_tab_bar_if_only_one_tab = false
+
+config.inactive_pane_hsb = {
+  saturation = 0.9,
+  brightness = 0.25,
+}
+
+config.leader = {
+  key = " ",
+  mods = "CTRL",
+  timeout_milliseconds = 3000,
+}
+
+-- Helper function to wrap around pane navigation
+local function wrap_activate_pane(window, direction)
+  local pane = window:active_pane()
+  local tab = window:active_tab()
+
+  wezterm.log_info("wrap_activate_pane: " .. direction)
+
+  if not pane or not tab then
+    return
+  end
+
+  -- Get all panes in the tab
+  local panes = tab:panes()
+  local pane_count = #panes
+
+  -- Get the current pane's position and dimensions
+  local current_pane_info = pane:get_dimensions()
+  local current_x = current_pane_info.pixel_x
+  local current_y = current_pane_info.pixel_y
+  local current_width = current_pane_info.pixel_width
+  local current_height = current_pane_info.pixel_height
+
+  local target_pane = nil
+  local best_match_distance = math.huge
+
+  for _, candidate_pane in ipairs(panes) do
+    local candidate_info = candidate_pane:get_dimensions()
+    local candidate_x = candidate_info.pixel_x
+    local candidate_y = candidate_info.pixel_y
+
+    local distance = math.huge
+    if direction == "Left" and candidate_x < current_x then
+      distance = current_x - (candidate_x + candidate_info.pixel_width)
+    elseif direction == "Right" and candidate_x > current_x then
+      distance = candidate_x - (current_x + current_width)
+    elseif direction == "Up" and candidate_y < current_y then
+      distance = current_y - (candidate_y + candidate_info.pixel_height)
+    elseif direction == "Down" and candidate_y > current_y then
+      distance = candidate_y - (current_y + current_height)
+    end
+
+    if distance < best_match_distance then
+      best_match_distance = distance
+      target_pane = candidate_pane
+    end
+  end
+
+  -- If no pane is found in the desired direction, wrap to the opposite side
+  if not target_pane then
+    if direction == "Left" or direction == "Right" then
+      -- Wrap horizontally
+      local sorted_panes = table.sort(panes, function(a, b)
+        return a:get_dimensions().pixel_x < b:get_dimensions().pixel_x
+      end)
+      target_pane = direction == "Left" and sorted_panes[#sorted_panes] or sorted_panes[1]
+    else
+      -- Wrap vertically
+      local sorted_panes = table.sort(panes, function(a, b)
+        return a:get_dimensions().pixel_y < b:get_dimensions().pixel_y
+      end)
+      target_pane = direction == "Up" and sorted_panes[#sorted_panes] or sorted_panes[1]
+    end
+  end
+
+  -- Activate the target pane
+  if target_pane then
+    window:perform_action(wezterm.action.ActivatePaneById(target_pane:pane_id()), pane)
+  end
+end
+
+wezterm.on("wrap-activate-pane-left", function(window, pane)
+  wezterm.log_info("wrap-activate-pane-left")
+  wrap_activate_pane(window, "Left")
+end)
+
+wezterm.on("wrap-activate-pane-right", function(window, pane)
+  wezterm.log_info("wrap-activate-pane-right")
+  wrap_activate_pane(window, "Right")
+end)
+
+wezterm.on("wrap-activate-pane-up", function(window, pane)
+  wezterm.log_info("wrap-activate-pane-up")
+  wrap_activate_pane(window, "Up")
+end)
+
+wezterm.on("wrap-activate-pane-down", function(window, pane)
+  wezterm.log_info("wrap-activate-pane-down")
+  wrap_activate_pane(window, "Down")
+end)
+
+config.keys = {
+  { key = "a", mods = "LEADER|CTRL", action = wezterm.action({ SendString = "\x01" }) },
+  { key = "-", mods = "LEADER", action = wezterm.action({ SplitVertical = { domain = "CurrentPaneDomain" } }) },
+  { key = "\\", mods = "LEADER", action = wezterm.action({ SplitHorizontal = { domain = "CurrentPaneDomain" } }) },
+  { key = "z", mods = "LEADER", action = "TogglePaneZoomState" },
+  { key = "c", mods = "LEADER", action = wezterm.action({ SpawnTab = "CurrentPaneDomain" }) },
+  { key = "t", mods = "LEADER", action = wezterm.action.ShowTabNavigator },
+  { key = "T", mods = "LEADER", action = wezterm.action.CloseCurrentTab({ confirm = true }) },
+  -- { key = "h", mods = "LEADER", action = wezterm.action({ EmitEvent = "wrap-activate-pane-left" }) },
+  -- { key = "l", mods = "LEADER", action = wezterm.action({ EmitEvent = "wrap-activate-pane-right" }) },
+  -- { key = "k", mods = "LEADER", action = wezterm.action({ EmitEvent = "wrap-activate-pane-up" }) },
+  -- { key = "j", mods = "LEADER", action = wezterm.action({ EmitEvent = "wrap-activate-pane-down" }) },
+  { key = "h", mods = "LEADER", action = wezterm.action.ActivatePaneDirection("Left") },
+  { key = "j", mods = "LEADER", action = wezterm.action.ActivatePaneDirection("Down") },
+  { key = "k", mods = "LEADER", action = wezterm.action.ActivatePaneDirection("Up") },
+  { key = "l", mods = "LEADER", action = wezterm.action.ActivatePaneDirection("Right") },
+  { key = "n", mods = "LEADER", action = wezterm.action.ActivatePaneDirection("Next") },
+  { key = "p", mods = "LEADER", action = wezterm.action.ActivatePaneDirection("Prev") },
+  { key = "H", mods = "LEADER|SHIFT", action = wezterm.action({ AdjustPaneSize = { "Left", 5 } }) },
+  { key = "J", mods = "LEADER|SHIFT", action = wezterm.action({ AdjustPaneSize = { "Down", 5 } }) },
+  { key = "K", mods = "LEADER|SHIFT", action = wezterm.action({ AdjustPaneSize = { "Up", 5 } }) },
+  { key = "L", mods = "LEADER|SHIFT", action = wezterm.action({ AdjustPaneSize = { "Right", 5 } }) },
+  { key = "X", mods = "LEADER", action = wezterm.action({ CloseCurrentPane = { confirm = true } }) },
+  { key = "w", mods = "LEADER", action = wezterm.action.SwitchWorkspaceRelative(1) },
+  { key = "W", mods = "LEADER|SHIFT", action = wezterm.action.SwitchWorkspaceRelative(-1) },
+  { key = "S", mods = "LEADER|SHIFT", action = wezterm.action.Search({ CaseInSensitiveString = "hash" }) },
+
+  -- { key = "O", mods = "LEADER|SHIFT", action = wezterm.action_callback(switch_panes(win, pane, "Right", 5)) },
+
+  {
+    -- Copy mode
+    key = "[",
+    mods = "LEADER",
+    action = wezterm.action.ActivateCopyMode,
+  },
+  {
+    -- Show the launcher in fuzzy selection mode and have it list all workspaces
+    -- and allow activating one.
+    key = "s",
+    mods = "LEADER",
+    action = wezterm.action.ShowLauncherArgs({ flags = "FUZZY|WORKSPACES" }),
+  },
+  {
+    -- create a new workspace
+    key = "N",
+    mods = "LEADER",
+    action = wezterm.action.PromptInputLine({
+      description = wezterm.format({
+        { Attribute = { Intensity = "Bold" } },
+        { Foreground = { AnsiColor = "Fuchsia" } },
+        { Text = "Enter name for new workspace: " },
+      }),
+      action = wezterm.action_callback(function(window, pane, line)
+        -- line will be `nil` if they hit escape without entering anything
+        -- An empty string if they just hit enter
+        -- Or the actual line of text they wrote
+        if line then
+          window:perform_action(
+            wezterm.action.SwitchToWorkspace({
+              name = line,
+            }),
+            pane
+          )
+        end
+      end),
+    }),
+  },
+  {
+    -- rename the current workspace
+    key = "R",
+    mods = "LEADER",
+    action = wezterm.action.PromptInputLine({
+      description = wezterm.format({
+        { Attribute = { Intensity = "Bold" } },
+        { Foreground = { AnsiColor = "Fuchsia" } },
+        { Text = "Enter new name for current workspace: " },
+      }),
+      action = wezterm.action_callback(function(window, pane, line)
+        -- line will be `nil` if they hit escape without entering anything
+        -- An empty string if they just hit enter
+        -- Or the actual line of text they wrote
+        if line then
+          window:perform_action(wezterm.mux.rename_workspace(wezterm.mux.get_active_workspace(), line), pane)
+        end
+      end),
+    }),
+  },
+  {
+    key = "K",
+    mods = "LEADER",
+    action = wezterm.action_callback(function(window)
+      local w = window:active_workspace()
+      kill_workspace(w)
+    end),
+  },
+}
+
+-- Colors adapted to approximate the Neovim "Vague" colorscheme
+config.colors = {
+  -- The default text colors
+  foreground = "#c5c8c6", -- a light gray used for text
+  background = "#1d1f21", -- a nearly black/dark background
+
+  -- Cursor colors
+  cursor_bg = "#aeafad",
+  cursor_border = "#aeafad",
+  cursor_fg = "#1d1f21",
+
+  -- Selection colors
+  selection_bg = "#373b41",
+  selection_fg = "#c5c8c6",
+
+  -- ANSI 16-color palette
+  ansi = {
+    "#1d1f21", -- black
+    "#cc6666", -- red
+    "#b5bd68", -- green
+    "#f0c674", -- yellow
+    "#81a2be", -- blue
+    "#b294bb", -- magenta
+    "#8abeb7", -- cyan
+    "#c5c8c6", -- white
+  },
+  brights = {
+    "#969896", -- bright black
+    "#cc6666", -- bright red
+    "#b5bd68", -- bright green
+    "#f0c674", -- bright yellow
+    "#81a2be", -- bright blue
+    "#b294bb", -- bright magenta
+    "#8abeb7", -- bright cyan
+    "#ffffff", -- bright white
+  },
+
+  -- Tab bar styling (optional)
+  tab_bar = {
+    background = "#282a2e",
+    active_tab = {
+      bg_color = "#1d1f21",
+      fg_color = "#c5c8c6",
+      intensity = "Bold",
+      underline = "None",
+      italic = false,
+    },
+    inactive_tab = {
+      bg_color = "#282a2e",
+      fg_color = "#5f5a60",
+    },
+    inactive_tab_hover = {
+      bg_color = "#373b41",
+      fg_color = "#c5c8c6",
+    },
+  },
+}
+
+return config

@@ -1,0 +1,311 @@
+#
+add_newline = false
+
+# A minimal left prompt
+format = """ (yellow) $aws$kubernetes$python$conda$git_status
+$directory> """
+
+# move the rest of the prompt to the right
+# right_format = """$kubernetes$python$terraform$aws"""
+
+palette = "catppuccin_mocha"
+
+command_timeout = 700
+
+[directory]
+truncation_length = 6
+truncate_to_repo = true
+disabled = false
+
+[package]
+disabled = true
+
+[aws]
+format = '[$symbol($profile )(\($region\) )]($style)'
+style = 'bold blue'
+symbol = "  "
+disabled = false
+
+[python]
+format = '[${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'
+disabled = false
+
+[git_branch]
+format = '[$symbol$branch(:$remote_branch)]($style) '
+disabled = false
+
+[git_status]
+disabled = false
+
+[conda]
+disabled = false
+
+[nodejs]
+disabled = true
+
+[terraform]
+format = '[$symbol$version]($style) '
+disabled = true
+
+[kubernetes]
+symbol = '☸ '
+detect_files = ['Dockerfile']
+format = '[$context(\[$namespace\])]($style) '
+disabled = false
+
+[docker_context]
+disabled = true
+
+[palettes.catppuccin_mocha]
+rosewater = "#f5e0dc"
+flamingo = "#f2cdcd"
+pink = "#f5c2e7"
+mauve = "#cba6f7"
+red = "#f38ba8"
+maroon = "#eba0ac"
+peach = "#fab387"
+yellow = "#f9e2af"
+green = "#a6e3a1"
+teal = "#94e2d5"
+sky = "#89dceb"
+sapphire = "#74c7ec"
+blue = "#89b4fa"
+lavender = "#b4befe"
+text = "#cdd6f4"
+subtext1 = "#bac2de"
+subtext0 = "#a6adc8"
+overlay2 = "#9399b2"
+overlay1 = "#7f849c"
+overlay0 = "#6c7086"
+surface2 = "#585b70"
+surface1 = "#45475a"
+surface0 = "#313244"
+base = "#1e1e2e"
+mantle = "#181825"
+crust = "#11111b"
+
+[username]
+disabled = true
+
+[hostname]
+disabled = true
+
+[localip]
+disabled = true
+
+[shlvl]
+disabled = true
+
+[singularity]
+disabled = true
+
+[vcsh]
+disabled = true
+
+[fossil_branch]
+disabled = true
+
+[fossil_metrics]
+disabled = true
+
+[git_commit]
+disabled = true
+
+[git_state]
+disabled = true
+
+[git_metrics]
+disabled = true
+
+[hg_branch]
+disabled = true
+
+[pijul_channel]
+disabled = true
+
+[c]
+disabled = true
+
+[cmake]
+disabled = true
+
+[cobol]
+disabled = true
+
+[daml]
+disabled = true
+
+[dart]
+disabled = true
+
+[deno]
+disabled = true
+
+[dotnet]
+disabled = true
+
+[elixir]
+disabled = true
+
+[elm]
+disabled = true
+
+[erlang]
+disabled = true
+
+[fennel]
+disabled = true
+
+[guix_shell]
+disabled = true
+
+[haskell]
+disabled = true
+
+[haxe]
+disabled = true
+
+[helm]
+disabled = true
+
+[java]
+disabled = true
+
+[julia]
+disabled = true
+
+[kotlin]
+disabled = true
+
+[gradle]
+disabled = true
+
+[lua]
+disabled = true
+
+[nim]
+disabled = true
+
+[ocaml]
+disabled = true
+
+[opa]
+disabled = true
+
+[perl]
+disabled = true
+
+[php]
+disabled = true
+
+[pulumi]
+disabled = true
+
+[purescript]
+disabled = true
+
+[raku]
+disabled = true
+
+[rlang]
+disabled = true
+
+[red]
+disabled = true
+
+[ruby]
+disabled = true
+
+[rust]
+disabled = true
+
+[scala]
+disabled = true
+
+[solidity]
+disabled = true
+
+[swift]
+disabled = true
+
+[typst]
+disabled = true
+
+[vlang]
+disabled = true
+
+[vagrant]
+disabled = true
+
+[zig]
+disabled = true
+
+[buf]
+disabled = true
+
+[nix_shell]
+disabled = true
+
+[meson]
+disabled = true
+
+[spack]
+disabled = true
+
+[memory_usage]
+disabled = true
+
+[gcloud]
+disabled = true
+
+[openstack]
+disabled = true
+
+[azure]
+disabled = true
+
+[direnv]
+disabled = true
+
+[env_var]
+disabled = true
+
+[crystal]
+disabled = true
+
+[custom]
+disabled = true
+
+[sudo]
+disabled = true
+
+[cmd_duration]
+disabled = true
+
+[line_break]
+disabled = true
+
+[jobs]
+disabled = true
+
+[battery]
+disabled = true
+
+[time]
+disabled = true
+
+[status]
+disabled = true
+
+[os]
+disabled = true
+
+[container]
+disabled = true
+
+[shell]
+disabled = true
+
+[character]
+disabled = true
+

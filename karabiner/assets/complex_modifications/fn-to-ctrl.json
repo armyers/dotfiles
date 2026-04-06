@@ -1,0 +1,28 @@
+{
+  "title": "fn key to left-control on MBP keyboard",
+  "rules": [
+    {
+      "description": "fn key to left-control on MBP keyboard",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "modifiers": {
+              "mandatory": [
+                "fn"
+              ]
+            }
+          },
+          "to": [
+            {
+              "repeat": true,
+              "modifiers": [
+                "left_control"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

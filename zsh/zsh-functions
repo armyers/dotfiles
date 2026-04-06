@@ -12,3 +12,43 @@ serverless-git-status() {
   (\ls -1d ~/code/terraform-mh-serverless-[1-9]) | sort | xargs -n 1 -I {} bash -c '(echo_green "######################################################
 >>>> {}"; git -C {} status)' |& less
 }
+
+fzf_git_log() {
+    local selection=$(
+      git ll --color=always "$@" | \
+        fzf --no-multi --ansi --no-sort --no-height \
+            --preview "echo {} | grep -o '[a-f0-9]\{7\}' | head -1 |
+                       xargs -I@ sh -c 'git show --color=always @'"
+    )
+    if [[ -n $selection ]]; then
+        local commit=$(echo "$selection" | sed 's/^[* |]*//' | awk '{print $1}' | tr -d '\n')
+        git show $commit
+    fi
+}
+
+fzf_git_reflog() {
+    local selection=$(
+      git reflog --color=always "$@" |
+        fzf --no-multi --ansi --no-sort --no-height \
+            --preview "git show --color=always {1}"
+    )
+    if [[ -n $selection ]]; then
+        git show $(echo $selection | awk '{print $1}')
+    fi
+}
+
+fzf_git_log_pickaxe() {
+     if [[ $# == 0 ]]; then
+         echo 'Error: search term was not provided.'
+         return
+     fi
+     local selection=$(
+       git log --oneline --color=always -S "$@" |
+         fzf --no-multi --ansi --no-sort --no-height \
+             --preview "git show --color=always {1}"
+     )
+     if [[ -n $selection ]]; then
+         local commit=$(echo "$selection" | awk '{print $1}' | tr -d '\n')
+         git show $commit
+     fi
+}

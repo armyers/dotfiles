@@ -1,13 +1,5 @@
 # zsh
 
-export EDITOR=nvim
-export VISUAL=nvim
-export PAGER=less
-export LESSOPEN='| /opt/homebrew/bin/src-hilite-lesspipe.sh %s'
-export LESS=' -R -X'
-export MANPAGER='nvim +Man!'
-export KUBECTL_EXTERNAL_DIFF="colordiff -u -N"
-
 # XDG configuration home
 if [[ -z $XDG_CONFIG_HOME ]]
 then
@@ -24,6 +16,24 @@ if [[ -d $HOME/.local/bin ]]
 then
    export PATH=$PATH:$HOME/.local/bin
 fi
+
+# Check if shell is interactive
+if [[ $- != *i* ]]; then
+  # don't need any of the commands below for non-interactive shells
+  exit 0
+fi
+
+# the commands below are for interactive shells only
+export EDITOR=nvim
+export VISUAL=nvim
+export PAGER=less
+export LESSOPEN='| /opt/homebrew/bin/src-hilite-lesspipe.sh %s'
+export LESS=' -R -X'
+export MANPAGER='nvim +Man!'
+export KUBECTL_EXTERNAL_DIFF="colordiff -u -N"
+export GITHUB_TOKEN=$(cat ~/.private/GITHUB_ACCESS_TOKEN)
+[[ -f ~/.private/DD_API_KEY ]] && source ~/.private/DD_API_KEY
+export TENV_AUTO_INSTALL=true
 
 # history settings
 setopt HIST_VERIFY
@@ -92,7 +102,8 @@ source <(yq shell-completion zsh)
 source <(eksctl completion zsh)
 source <(helm completion zsh)
 complete -C /usr/local/bin/vault vault
-complete -C "$(brew --prefix)/Cellar/tfenv/3.0.0/versions/1.7.5/terraform" terraform
+[[ -f $HOME/.tenv.completion.zsh ]] && source $HOME/.tenv.completion.zsh
+complete -C "$(command -v terraform)" terraform
 
 # whalebrew
 if [[ -d /opt/whalebrew/bin ]]; then
@@ -113,7 +124,6 @@ bindkey "^H" backward-delete-char
 bindkey "^?" backward-delete-char
 
 # press 'V' to open nvim to edit the current command line
-export VISUAL=nvim
 autoload edit-command-line; zle -N edit-command-line
 bindkey -M vicmd V edit-command-line
 
@@ -184,3 +194,6 @@ eval "$(zoxide init --cmd j zsh)"
 [[ -f $XDG_CONFIG_HOME/oh-my-posh/config.omp.json ]] && eval "$(oh-my-posh init zsh --config $XDG_CONFIG_HOME/oh-my-posh/config.omp.json)"
 
 [ -s ~/.luaver/luaver ] && . ~/.luaver/luaver
+
+# opencode
+export PATH=/Users/allenmyers/.opencode/bin:$PATH

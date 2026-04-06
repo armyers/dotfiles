@@ -1,2 +1,10 @@
-# yabai -m config focus_follows_mouse autofocus
+#!/usr/bin/env sh
+
+# Focus follows mouse without autoraise.
+# AeroSpace handles all window management — yabai only provides this.
 yabai -m config focus_follows_mouse autofocus
+
+# Workaround for focus_follows_mouse randomly stopping
+yabai -m signal --add event=display_changed action="yabai -m config focus_follows_mouse autofocus"
+yabai -m signal --add event=space_changed action="yabai -m config focus_follows_mouse autofocus"
+yabai -m signal --add event=mission_control_exit action="yabai -m config focus_follows_mouse autofocus"

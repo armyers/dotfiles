@@ -1,0 +1,31 @@
+{
+  "title": "ctrl-shift-x to cut to clipboard",
+  "rules": [
+    {
+      "description": "ctrl-shift-x to cut to clipboard",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "modifiers": {
+              "mandatory": [
+                "left_control",
+                "left_shift"
+              ]
+            },
+            "key_code": "x"
+          },
+          "to": [
+            {
+              "repeat": true,
+              "key_code": "x",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+-- Pull in the wezterm API
+local wezterm = require("wezterm")
+
+-- This will hold the configuration.
+local config = wezterm.config_builder()
+
+config.leader = {
+  key = " ",
+  mods = "CTRL",
+  timeout_milliseconds = 3000,
+}
+
+local function test_event(window, direction)
+  wezterm.log_error("test-event: " .. window)
+  wezterm.log_error("test-event: " .. direction)
+  return true
+end
+
+wezterm.on("test-event", function(window, pane)
+  test_event(window, "aslkdflksdf")
+end)
+
+config.keys = {
+  { key = "S", mods = "LEADER|SHIFT", action = wezterm.action.EmitEvent("test-event") },
+}
+
+return config

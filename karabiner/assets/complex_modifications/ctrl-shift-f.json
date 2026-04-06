@@ -1,0 +1,31 @@
+{
+  "title": "ctrl-shift-f to Iterm2 CMD-F (search)",
+  "rules": [
+    {
+      "description": "ctrl-shift-f to Iterm2 CMD-F (search)",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "modifiers": {
+              "mandatory": [
+                "left_control",
+                "left_shift"
+              ]
+            },
+            "key_code": "f"
+          },
+          "to": [
+            {
+              "repeat": true,
+              "key_code": "f",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

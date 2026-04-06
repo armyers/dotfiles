@@ -1,0 +1,31 @@
+{
+  "title": "ctrl-shift-n to Iterm2 CMD-G (find next)",
+  "rules": [
+    {
+      "description": "ctrl-shift-n to Iterm2 CMD-G (find next)",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "modifiers": {
+              "mandatory": [
+                "left_control",
+                "left_shift"
+              ]
+            },
+            "key_code": "n"
+          },
+          "to": [
+            {
+              "repeat": true,
+              "key_code": "g",
+              "modifiers": [
+                "left_command"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

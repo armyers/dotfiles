@@ -1,0 +1,269 @@
+# AeroSpace config — allenmyers
+# Backup: ~/.config/wm-backup-20260405/aerospace/aerospace.toml
+
+# ─── Startup ────────────────────────────────────────────────────────────────
+after-login-command = []
+after-startup-command = []
+start-at-login = true
+
+# ─── Focus follows mouse ────────────────────────────────────────────────────
+# AeroSpace has no native focus-follows-mouse. Yabai runs alongside for this:
+#   yabai -m config focus_follows_mouse autofocus
+# See ~/.config/yabai/yabairc
+
+# ─── Normalization ──────────────────────────────────────────────────────────
+enable-normalization-flatten-containers = true
+enable-normalization-opposite-orientation-for-nested-containers = true
+
+# ─── Layout ─────────────────────────────────────────────────────────────────
+# accordion-padding only matters when using accordion layout
+accordion-padding = 30
+default-root-container-layout = 'tiles'
+default-root-container-orientation = 'auto'
+
+# ─── Mouse ──────────────────────────────────────────────────────────────────
+on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
+on-focus-changed = ['move-mouse window-lazy-center']
+
+# Unhide apps so cmd-h doesn't break the tiling tree
+automatically-unhide-macos-hidden-apps = true
+
+# ─── Keyboard ───────────────────────────────────────────────────────────────
+[key-mapping]
+preset = 'qwerty'
+
+# ─── Gaps ───────────────────────────────────────────────────────────────────
+# Minimal gaps — your style is one maximized window per workspace
+[gaps]
+inner.horizontal = 0
+inner.vertical   = 0
+outer.left       = 0
+outer.bottom     = 0
+outer.top        = 0
+outer.right      = 0
+
+# ─── Workspace → Monitor assignment ────────────────────────────────────────
+# Main/external monitor (left)
+#   S = Slack
+#   W = Work Chrome
+#   T = Terminal (Ghostty)
+#   A = AWS Chrome 1,
+#   B = AWS Chrome 2
+#   P = Postman
+# Built-in monitor (right)
+#   C = Chrome personal
+#   M = Meetings (Google Meet)
+#   V = VPN
+#   F = Firefox
+[workspace-to-monitor-force-assignment]
+S = 'main'
+W = 'main'
+T = 'main'
+A = 'main'
+B = 'main'
+P = 'main'
+C = 'built-in'
+M = 'built-in'
+V = 'built-in'
+F = 'built-in'
+
+# ─── Auto-assign apps to workspaces ────────────────────────────────────────
+[[on-window-detected]]
+if.app-id = 'com.tinyspeck.slackmacgap'
+run = 'move-node-to-workspace S'
+
+[[on-window-detected]]
+if.app-id = 'com.mitchellh.ghostty'
+run = 'move-node-to-workspace T'
+
+[[on-window-detected]]
+if.app-id = 'com.postmanlabs.mac'
+run = 'move-node-to-workspace P'
+
+[[on-window-detected]]
+if.app-id = 'com.amazonaws.acvc.osx'
+run = 'move-node-to-workspace V'
+
+# Chrome windows go to different workspaces based on profile, but AeroSpace
+# can't distinguish profiles. You'll need to manually move Chrome windows
+# to the right workspace (alt-shift-<key>) after opening them.
+# The first Chrome window will land here by default:
+[[on-window-detected]]
+if.app-id = 'com.google.Chrome'
+run = 'move-node-to-workspace W'
+
+# ─── Main keybindings ──────────────────────────────────────────────────────
+[mode.main.binding]
+
+# --- Layout ---
+alt-slash = 'layout tiles horizontal vertical'
+alt-comma = 'layout accordion horizontal vertical'
+
+# --- Focus (move focus between tiled windows) ---
+# These use alt-ctrl to avoid conflicts with workspace switching
+alt-ctrl-h = 'focus left'
+alt-ctrl-j = 'focus down'
+alt-ctrl-k = 'focus up'
+alt-ctrl-l = 'focus right'
+
+# --- Move window within workspace ---
+alt-ctrl-shift-h = 'move left'
+alt-ctrl-shift-j = 'move down'
+alt-ctrl-shift-k = 'move up'
+alt-ctrl-shift-l = 'move right'
+
+# --- Resize ---
+alt-ctrl-minus = 'resize smart -50'
+alt-ctrl-equal = 'resize smart +50'
+
+# --- Fullscreen ---
+alt-ctrl-f = 'fullscreen'
+
+# --- Switch to workspace (caps+key → alt+key) ---
+alt-s = 'workspace S'  # Slack
+alt-w = 'workspace W'  # Work Chrome
+alt-t = 'workspace T'  # Terminal (Ghostty)
+alt-a = 'workspace A'  # AWS Chrome 1
+alt-b = 'workspace B'  # AWS Chrome 2
+alt-p = 'workspace P'  # Postman
+alt-c = 'workspace C'  # Chrome personal
+alt-m = 'workspace M'  # Meetings
+alt-v = 'workspace V'  # VPN
+alt-f = 'workspace F'  # Firefox
+alt-1 = 'workspace 1'
+alt-2 = 'workspace 2'
+alt-3 = 'workspace 3'
+alt-4 = 'workspace 4'
+alt-5 = 'workspace 5'
+alt-6 = 'workspace 6'
+alt-7 = 'workspace 7'
+alt-8 = 'workspace 8'
+alt-9 = 'workspace 9'
+alt-d = 'workspace D'
+alt-e = 'workspace E'
+alt-g = 'workspace G'
+alt-i = 'workspace I'
+alt-n = 'workspace N'
+alt-o = 'workspace O'
+alt-q = 'workspace Q'
+alt-r = 'workspace R'
+alt-u = 'workspace U'
+alt-x = 'workspace X'
+alt-y = 'workspace Y'
+alt-z = 'workspace Z'
+
+# --- Move window to workspace (caps+shift+key → alt+shift+key) ---
+alt-shift-s = 'move-node-to-workspace S'
+alt-shift-w = 'move-node-to-workspace W'
+alt-shift-t = 'move-node-to-workspace T'
+alt-shift-a = 'move-node-to-workspace A'
+alt-shift-b = 'move-node-to-workspace B'
+alt-shift-p = 'move-node-to-workspace P'
+alt-shift-c = 'move-node-to-workspace C'
+alt-shift-m = 'move-node-to-workspace M'
+alt-shift-v = 'move-node-to-workspace V'
+alt-shift-f = 'move-node-to-workspace F'
+alt-shift-g = 'move-node-to-workspace G'
+alt-shift-1 = 'move-node-to-workspace 1'
+alt-shift-2 = 'move-node-to-workspace 2'
+alt-shift-3 = 'move-node-to-workspace 3'
+alt-shift-4 = 'move-node-to-workspace 4'
+alt-shift-5 = 'move-node-to-workspace 5'
+alt-shift-6 = 'move-node-to-workspace 6'
+alt-shift-7 = 'move-node-to-workspace 7'
+alt-shift-8 = 'move-node-to-workspace 8'
+alt-shift-9 = 'move-node-to-workspace 9'
+alt-shift-d = 'move-node-to-workspace D'
+alt-shift-e = 'move-node-to-workspace E'
+alt-shift-i = 'move-node-to-workspace I'
+alt-shift-n = 'move-node-to-workspace N'
+alt-shift-o = 'move-node-to-workspace O'
+alt-shift-q = 'move-node-to-workspace Q'
+alt-shift-r = 'move-node-to-workspace R'
+alt-shift-u = 'move-node-to-workspace U'
+alt-shift-x = 'move-node-to-workspace X'
+alt-shift-y = 'move-node-to-workspace Y'
+alt-shift-z = 'move-node-to-workspace Z'
+
+# --- Quick switch ---
+alt-tab = 'workspace-back-and-forth'
+
+# --- Move workspace to other monitor ---
+alt-ctrl-tab = 'move-workspace-to-monitor --wrap-around next'
+
+# --- Focus monitor (ctrl-cmd-[/]) ---
+ctrl-cmd-leftSquareBracket  = 'focus-monitor --wrap-around prev'
+ctrl-cmd-rightSquareBracket = 'focus-monitor --wrap-around next'
+
+# --- Move window to other monitor ---
+ctrl-cmd-shift-leftSquareBracket  = 'move-node-to-monitor --wrap-around prev'
+ctrl-cmd-shift-rightSquareBracket = 'move-node-to-monitor --wrap-around next'
+
+# --- Cheatsheet ---
+alt-ctrl-slash = '''exec-and-forget cat > /tmp/aerospace-cheatsheet.txt <<'CHEAT'
+╔═══════════════════════════════════════════════════════════╗
+║              AeroSpace Keybindings                        ║
+║              (caps = alt via Karabiner)                   ║
+╠═══════════════════════════════════════════════════════════╣
+║  SWITCH WORKSPACE:  caps+<key>                            ║
+║    S=Slack  W=Work Chrome  T=Terminal  A/B=AWS            ║
+║    P=Postman  C=Personal Chrome  M=Meetings               ║
+║    V=VPN  F=Firefox  1-9=spare                            ║
+║                                                           ║
+║  MOVE WINDOW TO WORKSPACE:  caps+shift+<key>              ║
+║                                                           ║
+║  FOCUS:      caps+ctrl+h/j/k/l                            ║
+║  MOVE:       caps+ctrl+shift+h/j/k/l                      ║
+║  RESIZE:     caps+ctrl+minus / caps+ctrl+equal            ║
+║  FULLSCREEN: caps+ctrl+f                                  ║
+║                                                           ║
+║  MONITORS                                                 ║
+║    ctrl+cmd+[ / ctrl+cmd+]          focus prev/next       ║
+║    ctrl+cmd+shift+[ / shift+]       move window           ║
+║    caps+ctrl+tab                    move workspace        ║
+║                                                           ║
+║  QUICK SWITCH:  caps+tab          (back and forth)        ║
+║  SERVICE MODE:  caps+ctrl+;       (esc to exit)           ║
+║    r=reset layout  f=toggle float  del=close others       ║
+║  CHEATSHEET:    caps+ctrl+/                               ║
+╚═══════════════════════════════════════════════════════════╝
+CHEAT
+osascript -e 'tell application "TextEdit"
+  open POSIX file "/tmp/aerospace-cheatsheet.txt"
+  activate
+  set font of text of front document to "Menlo"
+  set size of text of front document to 24
+end tell
+tell application "System Events"
+  tell process "TextEdit"
+    set position of front window to {250, 150}
+    set size of front window to {935, 803}
+  end tell
+end tell'
+'''
+
+# --- Service mode ---
+alt-ctrl-semicolon = 'mode service'
+
+# ─── Float rules ───────────────────────────────────────────────────────────
+# TextEdit (used for cheatsheet) should float, not tile
+[[on-window-detected]]
+if.app-id = 'com.apple.TextEdit'
+run = 'layout floating'
+
+# ─── Service mode ──────────────────────────────────────────────────────────
+[mode.service.binding]
+esc = ['reload-config', 'mode main']
+r = ['flatten-workspace-tree', 'mode main']           # reset layout
+f = ['layout floating tiling', 'mode main']            # toggle float
+backspace = ['close-all-windows-but-current', 'mode main']
+shift-f = ['move-node-to-workspace F', 'mode main']   # move to Firefox workspace
+
+alt-shift-h = ['join-with left', 'mode main']
+alt-shift-j = ['join-with down', 'mode main']
+alt-shift-k = ['join-with up', 'mode main']
+alt-shift-l = ['join-with right', 'mode main']
+
+down = 'volume down'
+up = 'volume up'
+shift-down = ['volume set 0', 'mode main']

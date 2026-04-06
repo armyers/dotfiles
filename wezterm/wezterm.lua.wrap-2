@@ -1,0 +1,92 @@
+local wezterm = require 'wezterm'
+
+-- Helper function to wrap around pane navigation
+local function wrap_activate_pane(window, direction)
+  local pane = window:active_pane()
+  local tab = window:active_tab()
+
+  if not pane or not tab then
+    return
+  end
+
+  -- Get all panes in the tab
+  local panes = tab:panes()
+  local pane_count = #panes
+
+  -- Get the current pane's position and dimensions
+  local current_pane_info = pane:get_dimensions()
+  local current_x = current_pane_info.pixel_x
+  local current_y = current_pane_info.pixel_y
+  local current_width = current_pane_info.pixel_width
+  local current_height = current_pane_info.pixel_height
+
+  local target_pane = nil
+  local best_match_distance = math.huge
+
+  for _, candidate_pane in ipairs(panes) do
+    local candidate_info = candidate_pane:get_dimensions()
+    local candidate_x = candidate_info.pixel_x
+    local candidate_y = candidate_info.pixel_y
+
+    local distance = math.huge
+    if direction == 'Left' and candidate_x < current_x then
+      distance = current_x - (candidate_x + candidate_info.pixel_width)
+    elseif direction == 'Right' and candidate_x > current_x then
+      distance = candidate_x - (current_x + current_width)
+    elseif direction == 'Up' and candidate_y < current_y then
+      distance = current_y - (candidate_y + candidate_info.pixel_height)
+    elseif direction == 'Down' and candidate_y > current_y then
+      distance = candidate_y - (current_y + current_height)
+    end
+
+    if distance < best_match_distance then
+      best_match_distance = distance
+      target_pane = candidate_pane
+    end
+  end
+
+  -- If no pane is found in the desired direction, wrap to the opposite side
+  if not target_pane then
+    if direction == 'Left' or direction == 'Right' then
+      -- Wrap horizontally
+      local sorted_panes = table.sort(panes, function(a, b) return a:get_dimensions().pixel_x < b:get_dimensions().pixel_x end)
+      target_pane = direction == 'Left' and sorted_panes[#sorted_panes] or sorted_panes[1]
+    else
+      -- Wrap vertically
+      local sorted_panes = table.sort(panes, function(a, b) return a:get_dimensions().pixel_y < b:get_dimensions().pixel_y end)
+      target_pane = direction == 'Up' and sorted_panes[#sorted_panes] or sorted_panes[1]
+    end
+  end
+
+  -- Activate the target pane
+  if target_pane then
+    window:perform_action(wezterm.action.ActivatePaneById(target_pane:pane_id()), pane)
+  end
+end
+
+wezterm.on('wrap_activate_pane_left', function(window, pane)
+  wrap_activate_pane(window, 'Left')
+end)
+
+wezterm.on('wrap_activate_pane_right', function(window, pane)
+  wrap_activate_pane(window, 'Right')
+end)
+
+wezterm.on('wrap_activate_pane_up', function(window, pane)
+  wrap_activate_pane(window, 'Up')
+end)
+
+wezterm.on('wrap_activate_pane_down', function(window, pane)
+  wrap_activate_pane(window, 'Down')
+end)
+
+-- Keybindings
+return {
+  keys = {
+    {key = 'h', mods = 'CTRL', action = wezterm.action.EmitEvent('wrap_activate_pane_left')},
+    {key = 'l', mods = 'CTRL', action = wezterm.action.EmitEvent('wrap_activate_pane_right')},
+    {key = 'k', mods = 'CTRL', action = wezterm.action.EmitEvent('wrap_activate_pane_up')},
+    {key = 'j', mods = 'CTRL', action = wezterm.action.EmitEvent('wrap_activate_pane_down')},
+  },
+}
+

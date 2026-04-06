@@ -1,0 +1,32 @@
+{
+  "title": "ctrl-shift-p to Iterm2 SHIFT-CMD-G (find previous)",
+  "rules": [
+    {
+      "description": "ctrl-shift-p to Iterm2 SHIFT-CMD-G (find previous)",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "modifiers": {
+              "mandatory": [
+                "left_control",
+                "left_shift"
+              ]
+            },
+            "key_code": "p"
+          },
+          "to": [
+            {
+              "repeat": true,
+              "key_code": "g",
+              "modifiers": [
+                "left_shift",
+                "left_command"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
