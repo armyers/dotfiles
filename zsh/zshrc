@@ -155,11 +155,23 @@ set -o ignoreeof
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 [ -f $XDG_CONFIG_HOME/fzf/file-functions.zsh ] && source $XDG_CONFIG_HOME/fzf/file-functions.zsh
 [ -f $XDG_CONFIG_HOME/fzf/fzf-git.sh ] && source $XDG_CONFIG_HOME/fzf/fzf-git.sh
-export FZF_COMPLETION_TRIGGER=''
+# fzf-git: use Alt key bindings instead of Ctrl-G chords (KEYTIMEOUT=1 breaks chords)
+bindkey '\ef' fzf-git-files-widget       # Alt-F: files
+bindkey '\eb' fzf-git-branches-widget    # Alt-B: branches
+bindkey '\et' fzf-git-tags-widget        # Alt-T: tags
+bindkey '\er' fzf-git-remotes-widget     # Alt-R: remotes
+bindkey '\eh' fzf-git-hashes-widget      # Alt-H: hashes
+bindkey '\es' fzf-git-stashes-widget     # Alt-S: stashes
+bindkey '\el' fzf-git-lreflogs-widget    # Alt-L: reflogs
+bindkey '\ee' fzf-git-each_ref-widget    # Alt-E: each ref
+bindkey '\ew' fzf-git-worktrees-widget   # Alt-W: worktrees
+# use default '**' trigger for fzf completion (e.g., cd **<tab>)
+# export FZF_COMPLETION_TRIGGER=''
 bindkey '^T' fzf-completion
 bindkey '^F' fzf-completion
 bindkey '^D' fzf-completion
-bindkey '^I' $fzf_default_completion
+# this resets TAB to zsh default completion; not needed with '**' trigger
+# bindkey '^I' $fzf_default_completion
 export FZF_CTRL_R_OPTS="
   --preview 'echo {}' --preview-window up:12:hidden:wrap
   --bind 'ctrl-/:toggle-preview'
@@ -197,3 +209,7 @@ eval "$(zoxide init --cmd j zsh)"
 
 # opencode
 export PATH=/Users/allenmyers/.opencode/bin:$PATH
+
+export NVM_DIR="$HOME/.config/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
