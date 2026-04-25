@@ -1,0 +1,47 @@
+ AeroSpace Keybindings          (caps = alt via Karabiner)
+
+ WORKSPACES
+   caps + <key>                  switch to workspace
+   caps + shift + <key>          move window to workspace
+   caps + tab                       back-and-forth
+
+   main monitor:
+   A aws console          B aws console          D aws console
+   F firefox              P postman              S slack
+   T terminal (Ghostty)   W work browser
+
+   built-in monitor:
+   C personal browser   M meetings           O other
+   V vpn
+
+   unassigned: E G I N Q R U X Y Z
+
+ FOCUS / MOVE / JOIN
+   caps + h j k l                 focus left/down/up/right
+   caps + shift + h j k l         move  left/down/up/right
+   caps + cmd + h j k l           join  left/down/up/right
+
+ LAYOUT
+   caps + cmd + f                   fullscreen
+   caps + ,                         layout accordion horizontal vertical
+   caps + /                         layout tiles horizontal vertical
+   caps + =                         resize smart +50
+   caps + -                         resize smart -50
+
+ MONITORS
+   caps + ctrl + tab                move-workspace-to-monitor next
+   ctrl + cmd + [                   focus-monitor prev
+   ctrl + cmd + ]                   focus-monitor next
+   ctrl + cmd + shift + [           move-node-to-monitor prev
+   ctrl + cmd + shift + ]           move-node-to-monitor next
+
+ SERVICE MODE                    caps + ctrl + ;
+   del                              close-all-windows-but-current
+   down                             volume down
+   esc                              reload-config
+   f                                layout floating tiling
+   r                                flatten-workspace-tree
+   shift + down                     volume set 0
+   up                               volume up
+
+ DISMISS                         esc  or  q
