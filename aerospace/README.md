@@ -65,5 +65,16 @@ make
 | caps + ctrl + tab            | move workspace to next monitor   |
 | ctrl + cmd + [ / ]           | focus prev/next monitor          |
 | ctrl + cmd + shift + [ / ]   | move window to prev/next monitor |
+| caps + cmd + s               | screenshot (interactive)         |
 | caps + shift + ?             | cheatsheet popup                 |
 | caps + ctrl + ;              | service mode                     |
+
+## macOS Permissions
+
+> [!important]
+> AeroSpace needs explicit macOS permissions to run certain tools via `exec-and-forget`. These fail silently — no error, no popup, nothing happens.
+
+**Screen Recording** — required for `screencapture`. Add AeroSpace in:
+System Settings > Privacy & Security > Screen Recording
+
+Restart AeroSpace after granting the permission.

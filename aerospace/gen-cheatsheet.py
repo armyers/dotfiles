@@ -219,6 +219,22 @@ def main():
         lines.append(f"   {dk:<33}{short}")
     lines.append("")
 
+    # Other (non-workspace, non-cheatsheet, non-service-mode)
+    misc = [
+        (dk, act)
+        for dk, act in other
+        if "back-and-forth" not in act
+        and "gen-cheatsheet" not in act
+        and act != "mode service"
+    ]
+    if misc:
+        lines.append(" OTHER")
+        for dk, act in misc:
+            # Clean up exec-and-forget prefix for display
+            short = re.sub(r"^exec-and-forget\s+", "", act)
+            lines.append(f"   {dk:<33}{short}")
+        lines.append("")
+
     # Service mode
     lines.append(" SERVICE MODE                    caps + ctrl + ;")
     for combo, action in sorted(svc_bind.items()):

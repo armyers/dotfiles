@@ -35,6 +35,9 @@
    ctrl + cmd + shift + [           move-node-to-monitor prev
    ctrl + cmd + shift + ]           move-node-to-monitor next
 
+ OTHER
+   caps + cmd + s                   screencapture -i -c
+
  SERVICE MODE                    caps + ctrl + ;
    del                              close-all-windows-but-current
    down                             volume down

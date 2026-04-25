@@ -23,8 +23,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var window: PopupWindow!
 
     // Section headers to highlight (green + bold)
-    let sectionHeaders = ["WORKSPACES", "FOCUS / MOVE / JOIN", "LAYOUT", "MONITORS", "SERVICE MODE", "DISMISS",
-                          "main monitor:", "built-in monitor:", "unassigned:"]
+    let sectionHeaders = ["WORKSPACES", "FOCUS / MOVE / JOIN", "LAYOUT", "MONITORS", "OTHER",
+                          "SERVICE MODE", "DISMISS", "main monitor:", "built-in monitor:", "unassigned:"]
     // Title keyword to highlight (blue + bold)
     let titleKeyword = "AeroSpace Keybindings"
 

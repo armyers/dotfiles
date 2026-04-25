@@ -131,6 +131,9 @@ alt-equal = 'resize smart +50'
 # --- Fullscreen ---
 alt-cmd-f = 'fullscreen'
 
+# -- screen capture (screenshot) ---
+alt-cmd-s = 'exec-and-forget screencapture -i -c'
+
 # --- Switch to workspace (caps+key → alt+key) ---
 # Uses focus-workspace.sh to work around macOS focusing the wrong Chrome window
 alt-a = 'exec-and-forget ~/.config/aerospace/focus-workspace.sh A'
