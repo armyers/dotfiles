@@ -131,6 +131,9 @@ alt-equal = 'resize smart +50'
 # --- Fullscreen ---
 alt-cmd-f = 'fullscreen'
 
+# --- Equal screen sizes ---
+alt-cmd-equal = 'balance-sizes'
+
 # -- screen capture (screenshot) ---
 alt-cmd-s = 'exec-and-forget screencapture -i -c'
 
