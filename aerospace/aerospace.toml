@@ -92,13 +92,8 @@ run = 'move-node-to-workspace V'
 if.app-id = 'org.mozilla.firefox'
 run = 'move-node-to-workspace F'
 
-# Chrome windows go to different workspaces based on profile, but AeroSpace
-# can't distinguish profiles. You'll need to manually move Chrome windows
-# to the right workspace (alt-shift-<key>) after opening them.
-# The first Chrome window will land here by default:
-[[on-window-detected]]
-if.app-id = 'com.google.Chrome'
-run = 'move-node-to-workspace W'
+# Chrome windows open in the current workspace since AeroSpace can't
+# distinguish Chrome profiles. Move them with caps+shift+<key> if needed.
 
 # ─── Main keybindings ──────────────────────────────────────────────────────
 [mode.main.binding]
