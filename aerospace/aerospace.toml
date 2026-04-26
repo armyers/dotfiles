@@ -124,6 +124,11 @@ alt-cmd-j = ['join-with down', 'mode main']
 alt-cmd-k = ['join-with up', 'mode main']
 alt-cmd-l = ['join-with right', 'mode main']
 
+shift-cmd-h = ['swap left', 'mode main']
+shift-cmd-j = ['swap down', 'mode main']
+shift-cmd-k = ['swap up', 'mode main']
+shift-cmd-l = ['swap right', 'mode main']
+
 # --- Resize ---
 alt-minus = 'resize smart -50'
 alt-equal = 'resize smart +50'
