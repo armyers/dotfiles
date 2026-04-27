@@ -28,7 +28,7 @@ default-root-container-orientation = 'auto'
 
 # ─── Mouse ──────────────────────────────────────────────────────────────────
 on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
-on-focus-changed = ['move-mouse window-lazy-center']
+on-focus-changed = ['move-mouse window-lazy-center', 'exec-and-forget ~/.config/aerospace/on-focus-changed.sh']
 
 # Unhide apps so cmd-h doesn't break the tiling tree
 automatically-unhide-macos-hidden-apps = true
@@ -107,10 +107,10 @@ alt-slash = 'layout tiles horizontal vertical'
 alt-comma = 'layout accordion horizontal vertical'
 
 # --- Focus (move focus between tiled windows) ---
-alt-h = 'focus left'
-alt-j = 'focus down'
-alt-k = 'focus up'
-alt-l = 'focus right'
+alt-h = 'focus --boundaries-action wrap-around-the-workspace left'
+alt-j = 'focus --boundaries-action wrap-around-the-workspace down'
+alt-k = 'focus --boundaries-action wrap-around-the-workspace up'
+alt-l = 'focus --boundaries-action wrap-around-the-workspace right'
 
 # --- Move window within workspace ---
 alt-shift-h = 'move left'
@@ -167,28 +167,28 @@ alt-y = 'exec-and-forget ~/.config/aerospace/focus-workspace.sh Y'
 alt-z = 'exec-and-forget ~/.config/aerospace/focus-workspace.sh Z'
 
 # --- Move window to workspace (caps+shift+key → alt+shift+key) ---
-alt-shift-a = 'move-node-to-workspace A'
-alt-shift-b = 'move-node-to-workspace B'
-alt-shift-c = 'move-node-to-workspace C'
-alt-shift-d = 'move-node-to-workspace D'
-alt-shift-e = 'move-node-to-workspace E'
-alt-shift-f = 'move-node-to-workspace F'
-alt-shift-g = 'move-node-to-workspace G'
-alt-shift-i = 'move-node-to-workspace I'
-alt-shift-m = 'move-node-to-workspace M'
-alt-shift-n = 'move-node-to-workspace N'
-alt-shift-o = 'move-node-to-workspace O'
-alt-shift-p = 'move-node-to-workspace P'
-alt-shift-q = 'move-node-to-workspace Q'
-alt-shift-r = 'move-node-to-workspace R'
-alt-shift-s = 'move-node-to-workspace S'
-alt-shift-t = 'move-node-to-workspace T'
-alt-shift-u = 'move-node-to-workspace U'
-alt-shift-v = 'move-node-to-workspace V'
-alt-shift-w = 'move-node-to-workspace W'
-alt-shift-x = 'move-node-to-workspace X'
-alt-shift-y = 'move-node-to-workspace Y'
-alt-shift-z = 'move-node-to-workspace Z'
+alt-shift-a = 'move-node-to-workspace --focus-follows-window A'
+alt-shift-b = 'move-node-to-workspace --focus-follows-window B'
+alt-shift-c = 'move-node-to-workspace --focus-follows-window C'
+alt-shift-d = 'move-node-to-workspace --focus-follows-window D'
+alt-shift-e = 'move-node-to-workspace --focus-follows-window E'
+alt-shift-f = 'move-node-to-workspace --focus-follows-window F'
+alt-shift-g = 'move-node-to-workspace --focus-follows-window G'
+alt-shift-i = 'move-node-to-workspace --focus-follows-window I'
+alt-shift-m = 'move-node-to-workspace --focus-follows-window M'
+alt-shift-n = 'move-node-to-workspace --focus-follows-window N'
+alt-shift-o = 'move-node-to-workspace --focus-follows-window O'
+alt-shift-p = 'move-node-to-workspace --focus-follows-window P'
+alt-shift-q = 'move-node-to-workspace --focus-follows-window Q'
+alt-shift-r = 'move-node-to-workspace --focus-follows-window R'
+alt-shift-s = 'move-node-to-workspace --focus-follows-window S'
+alt-shift-t = 'move-node-to-workspace --focus-follows-window T'
+alt-shift-u = 'move-node-to-workspace --focus-follows-window U'
+alt-shift-v = 'move-node-to-workspace --focus-follows-window V'
+alt-shift-w = 'move-node-to-workspace --focus-follows-window W'
+alt-shift-x = 'move-node-to-workspace --focus-follows-window X'
+alt-shift-y = 'move-node-to-workspace --focus-follows-window Y'
+alt-shift-z = 'move-node-to-workspace --focus-follows-window Z'
 
 # --- Quick switch ---
 alt-tab = 'workspace-back-and-forth'
