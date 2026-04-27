@@ -3,7 +3,7 @@
 
 # ─── Startup ────────────────────────────────────────────────────────────────
 after-login-command = []
-after-startup-command = ['exec-and-forget sketchybar']
+after-startup-command = ['exec-and-forget sketchybar', 'exec-and-forget ~/.config/aerospace/empty-workspace-watcher.sh']
 
 # Notify sketchybar when workspace changes
 exec-on-workspace-change = ['/bin/bash', '-c',
@@ -28,7 +28,7 @@ default-root-container-orientation = 'auto'
 
 # ─── Mouse ──────────────────────────────────────────────────────────────────
 on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
-on-focus-changed = ['move-mouse window-lazy-center', 'exec-and-forget ~/.config/aerospace/on-focus-changed.sh']
+on-focus-changed = ['move-mouse window-lazy-center']
 
 # Unhide apps so cmd-h doesn't break the tiling tree
 automatically-unhide-macos-hidden-apps = true
