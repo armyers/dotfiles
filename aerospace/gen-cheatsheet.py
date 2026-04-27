@@ -250,6 +250,23 @@ def main():
     OUTPUT.write_text("\n".join(lines) + "\n")
     print(f"wrote {OUTPUT}")
 
+    # Also write workspace labels for sketchybar (bash 3.2 compatible)
+    labels_file = DIR / "workspace-labels.sh"
+    label_lines = [
+        "#!/bin/bash",
+        "# Auto-generated from aerospace.toml comments",
+        "ws_label() {",
+        '  case "$1" in',
+    ]
+    for key in sorted(ws_labels):
+        label_lines.append(f'    {key}) echo "{ws_labels[key]}" ;;')
+    label_lines.append('    *) echo "" ;;')
+    label_lines.append("  esac")
+    label_lines.append("}")
+    label_lines.append("")
+    labels_file.write_text("\n".join(label_lines) + "\n")
+    print(f"wrote {labels_file}")
+
 
 if __name__ == "__main__":
     main()

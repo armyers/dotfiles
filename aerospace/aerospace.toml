@@ -3,7 +3,12 @@
 
 # ─── Startup ────────────────────────────────────────────────────────────────
 after-login-command = []
-after-startup-command = []
+after-startup-command = ['exec-and-forget sketchybar']
+
+# Notify sketchybar when workspace changes
+exec-on-workspace-change = ['/bin/bash', '-c',
+    'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
+]
 start-at-login = true
 
 # ─── Focus follows mouse ────────────────────────────────────────────────────
@@ -33,14 +38,13 @@ automatically-unhide-macos-hidden-apps = true
 preset = 'qwerty'
 
 # ─── Gaps ───────────────────────────────────────────────────────────────────
-# Minimal gaps — your style is one maximized window per workspace
 [gaps]
-inner.horizontal = 0
-inner.vertical   = 0
-outer.left       = 0
-outer.bottom     = 0
-outer.top        = 0
-outer.right      = 0
+inner.horizontal = 4
+inner.vertical   = 4
+outer.left       = 4
+outer.bottom     = 4
+outer.top        = [{ monitor.'main' = 36 }, { monitor.'built-in' = 4 }, 36]
+outer.right      = 4
 
 # ─── Workspace → Monitor assignment ────────────────────────────────────────
 # Main/external monitor (left)

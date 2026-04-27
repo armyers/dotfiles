@@ -1,0 +1,71 @@
+#!/bin/bash
+
+# Regenerate workspace labels from aerospace config
+python3 "$HOME/.config/aerospace/gen-cheatsheet.py" >/dev/null 2>&1
+
+PLUGIN_DIR="$CONFIG_DIR/plugins"
+
+# ─── Colors (dark theme, accent blue #aac8ff) ────────────────────────────────
+BAR_COLOR=0xe0181825
+ACCENT=0xffaac8ff
+TEXT=0xffcdd6f4
+DIM_TEXT=0x80cdd6f4
+WS_BG=0xff313244
+WS_ACTIVE_BG=0xff45475a
+
+##### Bar Appearance #####
+sketchybar --bar position=top height=32 blur_radius=30 color=$BAR_COLOR \
+                 border_color=0x40aac8ff border_width=0 \
+                 shadow=on display=all
+
+##### Defaults #####
+default=(
+  padding_left=5
+  padding_right=5
+  icon.font="Hack Nerd Font:Bold:14.0"
+  label.font="Hack Nerd Font:Bold:14.0"
+  icon.color=$TEXT
+  label.color=$TEXT
+  icon.padding_left=4
+  icon.padding_right=4
+  label.padding_left=4
+  label.padding_right=4
+)
+sketchybar --default "${default[@]}"
+
+##### AeroSpace Workspace Indicator #####
+sketchybar --add event aerospace_workspace_change
+
+sketchybar --add item workspace left \
+           --subscribe workspace aerospace_workspace_change \
+           --set workspace \
+             background.color=$WS_ACTIVE_BG \
+             background.corner_radius=5 \
+             background.height=22 \
+             background.drawing=on \
+             label.color=$ACCENT \
+             icon.drawing=off \
+             script="$PLUGIN_DIR/aerospace.sh"
+
+##### Left Items #####
+sketchybar --add item chevron left \
+           --set chevron icon= label.drawing=off icon.color=$ACCENT \
+           --add item front_app left \
+           --set front_app icon.drawing=off label.color=$TEXT \
+                           script="$PLUGIN_DIR/front_app.sh" \
+           --subscribe front_app front_app_switched
+
+##### Right Items #####
+sketchybar --add item clock right \
+           --set clock update_freq=10 icon= icon.color=$ACCENT \
+                       label.color=$TEXT script="$PLUGIN_DIR/clock.sh" \
+           --add item volume right \
+           --set volume icon.color=$ACCENT label.color=$TEXT \
+                        script="$PLUGIN_DIR/volume.sh" \
+           --subscribe volume volume_change \
+           --add item battery right \
+           --set battery update_freq=120 icon.color=$ACCENT label.color=$TEXT \
+                         script="$PLUGIN_DIR/battery.sh" \
+           --subscribe battery system_woke power_source_change
+
+sketchybar --update
