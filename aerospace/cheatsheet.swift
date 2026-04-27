@@ -81,7 +81,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         let attrs: [NSAttributedString.Key: Any] = [
             .font: NSFont(name: "Menlo", size: 13) ?? NSFont.monospacedSystemFont(ofSize: 13, weight: .regular),
-            .foregroundColor: NSColor(white: 0.92, alpha: 1.0),
+            .foregroundColor: NSColor(white: 0.70, alpha: 1.0),
             .paragraphStyle: style
         ]
 
