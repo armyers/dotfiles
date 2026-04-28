@@ -16,7 +16,7 @@ WS_ACTIVE_BG=0xff45475a
 ##### Bar Appearance #####
 sketchybar --bar position=top height=32 blur_radius=30 color=$BAR_COLOR \
                  border_color=0x40aac8ff border_width=0 \
-                 shadow=on display=all
+                 shadow=on display=all padding_right=350
 
 ##### Defaults #####
 default=(
