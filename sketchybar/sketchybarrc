@@ -33,19 +33,38 @@ default=(
 )
 sketchybar --default "${default[@]}"
 
-##### AeroSpace Workspace Indicator #####
+##### AeroSpace Workspace Indicators #####
 sketchybar --add event aerospace_workspace_change
 
-sketchybar --add item workspace left \
-           --subscribe workspace aerospace_workspace_change \
-           --set workspace \
+sketchybar --add item ws_main left \
+           --subscribe ws_main aerospace_workspace_change \
+           --set ws_main \
              background.color=$WS_ACTIVE_BG \
              background.corner_radius=5 \
              background.height=22 \
              background.drawing=on \
              label.color=$ACCENT \
              icon.drawing=off \
-             script="$PLUGIN_DIR/aerospace.sh"
+             padding_right=0 \
+             script="$PLUGIN_DIR/aerospace.sh 1"
+
+sketchybar --add item ws_sep left \
+           --set ws_sep \
+             icon="|" icon.color=$DIM_TEXT \
+             label.drawing=off \
+             padding_left=2 padding_right=2
+
+sketchybar --add item ws_builtin left \
+           --subscribe ws_builtin aerospace_workspace_change \
+           --set ws_builtin \
+             background.color=$WS_BG \
+             background.corner_radius=5 \
+             background.height=22 \
+             background.drawing=on \
+             label.color=$DIM_TEXT \
+             icon.drawing=off \
+             padding_left=0 \
+             script="$PLUGIN_DIR/aerospace.sh 2"
 
 ##### Left Items #####
 sketchybar --add item chevron left \
