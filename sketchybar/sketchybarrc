@@ -66,6 +66,18 @@ sketchybar --add item clock right \
            --add item battery right \
            --set battery update_freq=120 icon.color=$ACCENT label.color=$TEXT \
                          script="$PLUGIN_DIR/battery.sh" \
-           --subscribe battery system_woke power_source_change
+           --subscribe battery system_woke power_source_change \
+           --add item vpn right \
+           --set vpn update_freq=10 icon=󰦝 icon.color=$ACCENT \
+                     label.color=$TEXT script="$PLUGIN_DIR/vpn.sh" \
+           --add item disk right \
+           --set disk update_freq=300 icon=󰋊 icon.color=$ACCENT \
+                      label.color=$TEXT script="$PLUGIN_DIR/disk.sh" \
+           --add item cpu right \
+           --set cpu update_freq=5 icon= icon.color=$ACCENT \
+                     label.color=$TEXT script="$PLUGIN_DIR/cpu.sh" \
+           --add item wifi right \
+           --set wifi update_freq=10 icon=󰖩 icon.color=$ACCENT \
+                      label.color=$TEXT script="$PLUGIN_DIR/wifi.sh"
 
 sketchybar --update
