@@ -3,7 +3,7 @@
 
 # ─── Startup ────────────────────────────────────────────────────────────────
 after-login-command = []
-after-startup-command = ['exec-and-forget sketchybar', 'exec-and-forget ~/.config/aerospace/empty-workspace-watcher.sh']
+after-startup-command = ['exec-and-forget sketchybar', 'exec-and-forget ~/.config/aerospace/window-close-watcher.sh']
 
 # Notify sketchybar when workspace changes
 exec-on-workspace-change = ['/bin/bash', '-c',
