@@ -1,0 +1,56 @@
+# ----- ~/.config/skhd/skhdrc -----
+# No alias; we spell out cmd+alt+ctrl+shift explicitly.
+
+
+# monocle/stack navigation (use symbol keys)
+# cmd + ctrl + alt + shift - . : yabai -m window --focus stack.next
+# cmd + ctrl + alt + shift - , : yabai -m window --focus stack.prev
+
+# reorder within the stack
+# cmd + ctrl + alt + shift - ] : yabai -m window --swap stack.next
+# cmd + ctrl + alt + shift - [ : yabai -m window --swap stack.prev
+
+# make current space monocle (stack) on the fly
+cmd + ctrl + alt + shift - m : yabai -m space --layout stack
+
+# fullscreen the focused window without macOS spaces
+cmd + ctrl + alt + shift - f : yabai -m window --toggle windowed-fullscreen
+
+# tiling helpers you had:
+cmd + ctrl + alt + shift - left  : yabai -m window --toggle float; yabai -m window --grid 1:2:0:0:1:1
+cmd + ctrl + alt + shift - right : yabai -m window --toggle float; yabai -m window --grid 1:2:1:0:1:1
+cmd + ctrl + alt + shift - h : yabai -m window --swap west;  yabai -m space --balance
+cmd + ctrl + alt + shift - l : yabai -m window --swap east;  yabai -m space --balance
+cmd + ctrl + alt + shift - k : yabai -m window --swap north; yabai -m space --balance
+cmd + ctrl + alt + shift - j : yabai -m window --swap south; yabai -m space --balance
+cmd + ctrl + alt + shift - a : yabai -m window --focus west
+cmd + ctrl + alt + shift - d : yabai -m window --focus east
+cmd + ctrl + alt + shift - w : yabai -m window --focus north
+cmd + ctrl + alt + shift - s : yabai -m window --focus south
+cmd + ctrl + alt + shift - b : yabai -m space --balance
+
+# ─── Karabiner→Kanata migration shortcuts ───────────────────────────────
+# Trigger via Kanata HRM (s=ctrl, a=shift, d=cmd, f=alt) or physical fn (=ctrl)
+
+# Arrow keys via ctrl+shift+h/j/k/l (HRM s+a+h/j/k/l)
+ctrl + shift - h : cliclick kp:arrow-left
+ctrl + shift - j : cliclick kp:arrow-down
+ctrl + shift - k : cliclick kp:arrow-up
+ctrl + shift - l : cliclick kp:arrow-right
+
+# Open Gemini in new Chrome window (ctrl+shift+g, HRM s+a+g)
+ctrl + shift - g : open -na 'Google Chrome' --args --new-window 'https://gemini.google.com'
+
+# Toggle AeroSpace (s is HRM ctrl key — trigger via physical fn+shift+s)
+ctrl + shift - s : pgrep -x AeroSpace > /dev/null && osascript -e 'tell application "AeroSpace" to quit' || open -a AeroSpace
+
+# Cycle audio devices (d is HRM cmd key — trigger via physical fn+shift+d)
+ctrl + shift - d : /Users/allenmyers/.local/bin/cycle-audio.sh
+
+# REDUNDANT with HRM (no longer needed):
+#   ctrl+shift+c/x/a/w/q/r/z/f/t/0/-/+/enter  → just hold d (cmd)
+#   ctrl+shift+n/p (find next/prev)           → just hold d+a, tap g
+#   ctrl+shift+[/] (AeroSpace focus)          → just hold f (alt), tap h/l
+# SKIPPED:
+#   ctrl+cmd+j/k (scroll wheel) — no easy macOS-CLI primitive
+#   ctrl+delete (forward delete) — complex with HRM-derived ctrl

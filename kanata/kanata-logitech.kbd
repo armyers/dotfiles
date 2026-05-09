@@ -1,0 +1,69 @@
+;; Kanata config — Logitech USB Receiver keyboard
+;; Mac modifier swap (lcmd↔lopt) + bilateral HRM + home/end → cmd+arrow
+
+(defcfg
+  process-unmapped-keys yes
+  macos-dev-names-include (
+    "USB Receiver"
+  )
+  log-layer-changes no
+)
+
+(defvar
+  ;; Default timings (index/middle/ring fingers)
+  tap-time   180
+  hold-time  190
+  ;; Pinky timings (a, ;) — longer to avoid misfires on slow pinkies
+  pinky-tap  250
+  pinky-hold 280
+
+  ;; Right-hand keys: trigger left-hand HRMs (a s d f)
+  right-hand-keys (
+    y u i o p
+    h j k l ; '
+    n m , . /
+    [ ] \
+    6 7 8 9 0 - =
+    ret bspc
+  )
+
+  ;; Left-hand keys: trigger right-hand HRMs (j k l ;)
+  left-hand-keys (
+    q w e r t
+    a s d f g
+    z x c v b
+    1 2 3 4 5
+    tab esc grv
+  )
+)
+
+(defsrc
+  caps  lmet  lalt  a    s    d    f    j    k    l    ;    home  end
+)
+
+(defalias
+  ;; Caps lock → escape
+  cap   esc
+
+  ;; Mac layout on PC keyboard: swap the two modifiers nearest the spacebar
+  swcmd lalt   ;; physical lcmd (Win key) → left option
+  swopt lmet   ;; physical lopt (Alt key) → left command
+
+  ;; Bilateral HRM
+  a    (tap-hold-release-keys $pinky-tap $pinky-hold a    lsft $right-hand-keys)
+  s    (tap-hold-release-keys $tap-time  $hold-time  s    lctl $right-hand-keys)
+  d    (tap-hold-release-keys $tap-time  $hold-time  d    lmet $right-hand-keys)
+  f    (tap-hold-release-keys $tap-time  $hold-time  f    lalt $right-hand-keys)
+  j    (tap-hold-release-keys $tap-time  $hold-time  j    ralt $left-hand-keys)
+  k    (tap-hold-release-keys $tap-time  $hold-time  k    rmet $left-hand-keys)
+  l    (tap-hold-release-keys $tap-time  $hold-time  l    rctl $left-hand-keys)
+  scln (tap-hold-release-keys $pinky-tap $pinky-hold ;    rsft $left-hand-keys)
+
+  ;; Line navigation (Logitech has physical home/end keys)
+  hm    (multi lmet left)
+  ed    (multi lmet rght)
+)
+
+(deflayer base
+  @cap @swcmd @swopt @a @s @d @f @j @k @l @scln @hm @ed
+)
