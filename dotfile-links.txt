@@ -16,7 +16,9 @@
 ~/.config/fzf -> ../.dotfiles/fzf
 ~/.config/gh -> ../.dotfiles/gh
 ~/.config/git/ignore -> ../../.dotfiles/git/ignore
+~/.config/kanata -> ../.dotfiles/kanata
 ~/.config/karabiner/karabiner.json -> ../../.dotfiles/karabiner-elements/karabiner.json
 ~/.config/rg -> ../.dotfiles/rg
+~/.config/skhd -> ../.dotfiles/skhd
 ~/.config/yabai -> ../.dotfiles/yabai
 ~/.zshrc -> .dotfiles/zsh/zshrc
