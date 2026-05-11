@@ -32,11 +32,11 @@ cmd + ctrl + alt + shift - b : yabai -m space --balance
 # ─── Karabiner→Kanata migration shortcuts ───────────────────────────────
 # Trigger via Kanata HRM (s=ctrl, a=shift, d=cmd, f=alt) or physical fn (=ctrl)
 
-# Arrow keys via ctrl+shift+h/j/k/l (HRM s+a+h/j/k/l)
-ctrl + shift - h : cliclick kp:arrow-left
-ctrl + shift - j : cliclick kp:arrow-down
-ctrl + shift - k : cliclick kp:arrow-up
-ctrl + shift - l : cliclick kp:arrow-right
+# Arrow keys via ctrl+shift+h/j/k/l (HRM s+a+h/j/k/l or l+;+h/j/k/l)
+ctrl + shift - h : skhd -k "left"
+ctrl + shift - j : skhd -k "down"
+ctrl + shift - k : skhd -k "up"
+ctrl + shift - l : skhd -k "right"
 
 # Open Gemini in new Chrome window (ctrl+shift+g, HRM s+a+g)
 ctrl + shift - g : open -na 'Google Chrome' --args --new-window 'https://gemini.google.com'

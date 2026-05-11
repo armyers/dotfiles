@@ -3,7 +3,7 @@
 
 # ─── Startup ────────────────────────────────────────────────────────────────
 after-login-command = []
-after-startup-command = ['exec-and-forget sketchybar', 'exec-and-forget ~/.config/aerospace/window-close-watcher.sh']
+after-startup-command = ['exec-and-forget sketchybar', 'exec-and-forget ~/.config/aerospace/empty-workspace-watcher.sh']
 
 # Notify sketchybar when workspace changes
 exec-on-workspace-change = ['/bin/bash', '-c',
@@ -92,10 +92,6 @@ run = 'move-node-to-workspace P'
 if.app-id = 'com.amazonaws.acvc.osx'
 run = 'move-node-to-workspace V'
 
-[[on-window-detected]]
-if.app-id = 'org.mozilla.firefox'
-run = 'move-node-to-workspace F'
-
 # Chrome windows open in the current workspace since AeroSpace can't
 # distinguish Chrome profiles. Move them with caps+shift+<key> if needed.
 
@@ -147,48 +143,27 @@ alt-a = 'exec-and-forget ~/.config/aerospace/focus-workspace.sh A'
 alt-b = 'exec-and-forget ~/.config/aerospace/focus-workspace.sh B'
 alt-c = 'exec-and-forget ~/.config/aerospace/focus-workspace.sh C'
 alt-d = 'exec-and-forget ~/.config/aerospace/focus-workspace.sh D'
-alt-e = 'exec-and-forget ~/.config/aerospace/focus-workspace.sh E'
-alt-f = 'exec-and-forget ~/.config/aerospace/focus-workspace.sh F'
-alt-g = 'exec-and-forget ~/.config/aerospace/focus-workspace.sh G'
-alt-i = 'exec-and-forget ~/.config/aerospace/focus-workspace.sh I'
 alt-m = 'exec-and-forget ~/.config/aerospace/focus-workspace.sh M'
-alt-n = 'exec-and-forget ~/.config/aerospace/focus-workspace.sh N'
 alt-o = 'exec-and-forget ~/.config/aerospace/focus-workspace.sh O'
 alt-p = 'exec-and-forget ~/.config/aerospace/focus-workspace.sh P'
-alt-q = 'exec-and-forget ~/.config/aerospace/focus-workspace.sh Q'
-alt-r = 'exec-and-forget ~/.config/aerospace/focus-workspace.sh R'
 alt-s = 'exec-and-forget ~/.config/aerospace/focus-workspace.sh S'
 alt-t = 'exec-and-forget ~/.config/aerospace/focus-workspace.sh T'
-alt-u = 'exec-and-forget ~/.config/aerospace/focus-workspace.sh U'
 alt-v = 'exec-and-forget ~/.config/aerospace/focus-workspace.sh V'
 alt-w = 'exec-and-forget ~/.config/aerospace/focus-workspace.sh W'
-alt-x = 'exec-and-forget ~/.config/aerospace/focus-workspace.sh X'
-alt-y = 'exec-and-forget ~/.config/aerospace/focus-workspace.sh Y'
-alt-z = 'exec-and-forget ~/.config/aerospace/focus-workspace.sh Z'
 
 # --- Move window to workspace (caps+shift+key → alt+shift+key) ---
 alt-shift-a = 'move-node-to-workspace --focus-follows-window A'
 alt-shift-b = 'move-node-to-workspace --focus-follows-window B'
 alt-shift-c = 'move-node-to-workspace --focus-follows-window C'
 alt-shift-d = 'move-node-to-workspace --focus-follows-window D'
-alt-shift-e = 'move-node-to-workspace --focus-follows-window E'
-alt-shift-f = 'move-node-to-workspace --focus-follows-window F'
-alt-shift-g = 'move-node-to-workspace --focus-follows-window G'
-alt-shift-i = 'move-node-to-workspace --focus-follows-window I'
 alt-shift-m = 'move-node-to-workspace --focus-follows-window M'
 alt-shift-n = 'move-node-to-workspace --focus-follows-window N'
 alt-shift-o = 'move-node-to-workspace --focus-follows-window O'
 alt-shift-p = 'move-node-to-workspace --focus-follows-window P'
-alt-shift-q = 'move-node-to-workspace --focus-follows-window Q'
-alt-shift-r = 'move-node-to-workspace --focus-follows-window R'
 alt-shift-s = 'move-node-to-workspace --focus-follows-window S'
 alt-shift-t = 'move-node-to-workspace --focus-follows-window T'
-alt-shift-u = 'move-node-to-workspace --focus-follows-window U'
 alt-shift-v = 'move-node-to-workspace --focus-follows-window V'
 alt-shift-w = 'move-node-to-workspace --focus-follows-window W'
-alt-shift-x = 'move-node-to-workspace --focus-follows-window X'
-alt-shift-y = 'move-node-to-workspace --focus-follows-window Y'
-alt-shift-z = 'move-node-to-workspace --focus-follows-window Z'
 
 # --- Quick switch ---
 alt-tab = 'workspace-back-and-forth'

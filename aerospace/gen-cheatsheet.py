@@ -25,12 +25,12 @@ KEY_DISPLAY = {
 
 
 def display_key(combo: str) -> str:
-    """Convert 'alt-ctrl-leftSquareBracket' → 'caps + ctrl + ['."""
+    """Convert 'alt-ctrl-leftSquareBracket' → 'alt + ctrl + ['."""
     parts = combo.split("-")
     out = []
     for p in parts:
         if p == "alt":
-            out.append("caps")
+            out.append("alt")
         elif p == "cmd":
             out.append("cmd")
         elif p == "ctrl":
@@ -159,13 +159,13 @@ def main():
 
     # Build output
     lines = []
-    lines.append(" AeroSpace Keybindings          (caps = alt via Karabiner)")
+    lines.append(" AeroSpace Keybindings")
     lines.append("")
 
     # Workspaces
     lines.append(" WORKSPACES")
-    lines.append("   caps + <key>                  switch to workspace")
-    lines.append("   caps + shift + <key>          move window to workspace")
+    lines.append("   alt + <key>                   switch to workspace")
+    lines.append("   alt + shift + <key>           move window to workspace")
     for combo, act in other:
         if "back-and-forth" in act:
             lines.append(f"   {combo:<33}back-and-forth")
@@ -192,15 +192,15 @@ def main():
     if focus:
         dirs = " ".join(focus.keys())
         vals = "/".join(focus.values())
-        lines.append(f"   caps + {dirs:<24}focus {vals}")
+        lines.append(f"   alt + {dirs:<25}focus {vals}")
     if move:
         dirs = " ".join(move.keys())
         vals = "/".join(move.values())
-        lines.append(f"   caps + shift + {dirs:<16}move  {vals}")
+        lines.append(f"   alt + shift + {dirs:<17}move  {vals}")
     if join:
         dirs = " ".join(join.keys())
         vals = "/".join(join.values())
-        lines.append(f"   caps + cmd + {dirs:<18}join  {vals}")
+        lines.append(f"   alt + cmd + {dirs:<19}join  {vals}")
     lines.append("")
 
     # Layout
@@ -236,7 +236,7 @@ def main():
         lines.append("")
 
     # Service mode
-    lines.append(" SERVICE MODE                    caps + ctrl + ;")
+    lines.append(" SERVICE MODE                    alt + ctrl + ;")
     for combo, action in sorted(svc_bind.items()):
         act = action_str(action)
         dk = display_key(combo)

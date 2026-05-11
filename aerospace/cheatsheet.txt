@@ -1,49 +1,47 @@
- AeroSpace Keybindings          (caps = alt via Karabiner)
+ AeroSpace Keybindings
 
  WORKSPACES
-   caps + <key>                  switch to workspace
-   caps + shift + <key>          move window to workspace
-   caps + tab                       back-and-forth
+   alt + <key>                   switch to workspace
+   alt + shift + <key>           move window to workspace
+   alt + tab                        back-and-forth
 
    main monitor:
    A aws console          B aws console          D aws console
-   F firefox              P postman              S slack
-   T terminal (Ghostty)   W work browser
+   P postman              S slack                T terminal (Ghostty)
+   W work browser
 
    built-in monitor:
    C personal browser   M meetings           O other
    V vpn
 
-   unassigned: E G I N Q R U X Y Z
-
  FOCUS / MOVE / JOIN
-   caps + h j k l                 focus left/down/up/right
-   caps + shift + h j k l         move  left/down/up/right
-   caps + cmd + h j k l           join  left/down/up/right
+   alt + h j k l                  focus left/down/up/right
+   alt + shift + h j k l          move  left/down/up/right
+   alt + cmd + h j k l            join  left/down/up/right
 
  LAYOUT
-   caps + cmd + f                   fullscreen
-   caps + ,                         layout accordion horizontal vertical
-   caps + /                         layout tiles horizontal vertical
-   caps + =                         resize smart +50
-   caps + -                         resize smart -50
+   alt + cmd + f                    fullscreen
+   alt + ,                          layout accordion horizontal vertical
+   alt + /                          layout tiles horizontal vertical
+   alt + =                          resize smart +50
+   alt + -                          resize smart -50
 
  MONITORS
-   caps + ctrl + tab                move-workspace-to-monitor next
+   alt + ctrl + tab                 move-workspace-to-monitor next
    ctrl + cmd + [                   focus-monitor prev
    ctrl + cmd + ]                   focus-monitor next
    ctrl + cmd + shift + [           move-node-to-monitor prev
    ctrl + cmd + shift + ]           move-node-to-monitor next
 
  OTHER
-   caps + cmd + =                   balance-sizes
-   caps + cmd + s                   screencapture -i -c
+   alt + cmd + =                    balance-sizes
+   alt + cmd + s                    screencapture -i -c
    shift + cmd + h                  swap left
    shift + cmd + j                  swap down
    shift + cmd + k                  swap up
    shift + cmd + l                  swap right
 
- SERVICE MODE                    caps + ctrl + ;
+ SERVICE MODE                    alt + ctrl + ;
    del                              close-all-windows-but-current
    down                             volume down
    esc                              reload-config

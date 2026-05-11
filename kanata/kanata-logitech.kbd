@@ -1,5 +1,6 @@
 ;; Kanata config — Logitech USB Receiver keyboard
-;; Mac modifier swap (lcmd↔lopt) + bilateral HRM + home/end → cmd+arrow
+;; Mac modifier swap (lcmd↔lopt) + bilateral HRM with double-tap-hold-repeat
+;; + home/end → cmd+arrow
 
 (defcfg
   process-unmapped-keys yes
@@ -11,11 +12,13 @@
 
 (defvar
   ;; Default timings (index/middle/ring fingers)
-  tap-time   180
-  hold-time  190
+  tap-time   148
+  hold-time  151
   ;; Pinky timings (a, ;) — longer to avoid misfires on slow pinkies
-  pinky-tap  250
-  pinky-hold 280
+  pinky-tap  200
+  pinky-hold 203
+  ;; Double-tap-hold-repeat window
+  repeat-window 200
 
   ;; Right-hand keys: trigger left-hand HRMs (a s d f)
   right-hand-keys (
@@ -49,15 +52,25 @@
   swcmd lalt   ;; physical lcmd (Win key) → left option
   swopt lmet   ;; physical lopt (Alt key) → left command
 
-  ;; Bilateral HRM
-  a    (tap-hold-release-keys $pinky-tap $pinky-hold a    lsft $right-hand-keys)
-  s    (tap-hold-release-keys $tap-time  $hold-time  s    lctl $right-hand-keys)
-  d    (tap-hold-release-keys $tap-time  $hold-time  d    lmet $right-hand-keys)
-  f    (tap-hold-release-keys $tap-time  $hold-time  f    lalt $right-hand-keys)
-  j    (tap-hold-release-keys $tap-time  $hold-time  j    ralt $left-hand-keys)
-  k    (tap-hold-release-keys $tap-time  $hold-time  k    rmet $left-hand-keys)
-  l    (tap-hold-release-keys $tap-time  $hold-time  l    rctl $left-hand-keys)
-  scln (tap-hold-release-keys $pinky-tap $pinky-hold ;    rsft $left-hand-keys)
+  ;; ── Underlying HRM behavior ───────────────────────────────────────────
+  a-hrm    (tap-hold-release-keys $pinky-tap $pinky-hold a    lsft $right-hand-keys)
+  s-hrm    (tap-hold-release-keys $tap-time  $hold-time  s    lctl $right-hand-keys)
+  d-hrm    (tap-hold-release-keys $tap-time  $hold-time  d    lmet $right-hand-keys)
+  f-hrm    (tap-hold-release-keys $tap-time  $hold-time  f    lalt $right-hand-keys)
+  j-hrm    (tap-hold-release-keys $tap-time  $hold-time  j    ralt $left-hand-keys)
+  k-hrm    (tap-hold-release-keys $tap-time  $hold-time  k    rmet $left-hand-keys)
+  l-hrm    (tap-hold-release-keys $tap-time  $hold-time  l    rctl $left-hand-keys)
+  scln-hrm (tap-hold-release-keys $pinky-tap $pinky-hold ;    rsft $left-hand-keys)
+
+  ;; ── Tap-dance-eager wraps HRM with double-tap-hold = repeat letter ──
+  a    (tap-dance-eager $repeat-window (@a-hrm a))
+  s    (tap-dance-eager $repeat-window (@s-hrm s))
+  d    (tap-dance-eager $repeat-window (@d-hrm d))
+  f    (tap-dance-eager $repeat-window (@f-hrm f))
+  j    (tap-dance-eager $repeat-window (@j-hrm j))
+  k    (tap-dance-eager $repeat-window (@k-hrm k))
+  l    (tap-dance-eager $repeat-window (@l-hrm l))
+  scln (tap-dance-eager $repeat-window (@scln-hrm ;))
 
   ;; Line navigation (Logitech has physical home/end keys)
   hm    (multi lmet left)

@@ -44,7 +44,7 @@ while true; do
       WIN_ID=$(aerospace list-windows --workspace "$WS" --format '%{window-id}' 2> /dev/null | head -1)
       echo "$(date +%T) ACTION: refocus app=$APP win=$WIN_ID on $WS" >> "$LOG"
       if [ -n "$APP" ]; then
-        osascript -e "tell application \"$APP\" to activate" &
+        osascript -e "tell application \"$APP\" to activate"
       fi
       sleep 0.15
       if [ -n "$WIN_ID" ]; then
@@ -65,16 +65,17 @@ while true; do
       && [ "$PREV_WS_NOW" -gt 0 ] 2> /dev/null; then
 
       echo "$(date +%T) DRIFT detected: switching back to $PREV_WS" >> "$LOG"
-      sleep 0.2
-      aerospace workspace "$PREV_WS" 2> /dev/null
-      sleep 0.15
+      sleep 0.3
       APP=$(aerospace list-windows --workspace "$PREV_WS" --format '%{app-name}' 2> /dev/null | head -1)
       WIN_ID=$(aerospace list-windows --workspace "$PREV_WS" --format '%{window-id}' 2> /dev/null | head -1)
       echo "$(date +%T) ACTION: refocus app=$APP win=$WIN_ID on $PREV_WS" >> "$LOG"
+      # Activate app first to reclaim macOS focus, then switch workspace
       if [ -n "$APP" ]; then
-        osascript -e "tell application \"$APP\" to activate" &
+        osascript -e "tell application \"$APP\" to activate"
       fi
-      sleep 0.15
+      sleep 0.2
+      aerospace workspace "$PREV_WS" 2> /dev/null
+      sleep 0.2
       if [ -n "$WIN_ID" ]; then
         aerospace focus --window-id "$WIN_ID" 2> /dev/null
       fi
