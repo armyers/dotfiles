@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>com.user.kanata-logitech-watcher</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/Users/allenmyers/.config/kanata/watch-logitech.sh</string>
+	</array>
+	<key>RunAtLoad</key>
+	<true/>
+	<key>KeepAlive</key>
+	<true/>
+	<key>StandardErrorPath</key>
+	<string>/opt/homebrew/var/log/kanata-logitech-watcher.log</string>
+	<key>StandardOutPath</key>
+	<string>/opt/homebrew/var/log/kanata-logitech-watcher.log</string>
+	<key>WorkingDirectory</key>
+	<string>/Users/allenmyers</string>
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>PATH</key>
+		<string>/opt/homebrew/bin:/opt/homebrew/sbin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+	</dict>
+</dict>
+</plist>

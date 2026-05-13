@@ -1,24 +1,28 @@
 ;; Kanata config — MacBook Pro built-in keyboard
-;; Home row mods (bilateral) with double-tap-hold-repeat
-;; + device remappings to mirror previous Karabiner setup
+;; Bilateral home row mods (longer tap-time for rolling reliability)
+;; + device remappings
 
 (defcfg
+  concurrent-tap-hold yes
   process-unmapped-keys yes
   macos-dev-names-include (
     "Apple Internal Keyboard / Trackpad"
+    "0xD4359520DA829EC8"
   )
   log-layer-changes no
 )
 
 (defvar
-  ;; Default timings (index/middle/ring fingers)
+  ;; tap-time: release before this → letter
+  ;; hold-time: must hold past this → modifier (only fires WITHOUT a trigger key)
+  ;; Big gap means casual typing won't accidentally trigger holds.
   tap-time   180
-  hold-time  190
-  ;; Pinky timings (a, ;) — longer to avoid misfires on slow pinkies
-  pinky-tap  250
-  pinky-hold 280
-  ;; Double-tap-hold-repeat window: max gap between first tap and second press
-  repeat-window 200
+  hold-time  185
+  pinky-tap  200
+  pinky-hold 205
+
+  ;; Window for tap-dance-eager: tap then tap-and-hold within this → repeat letter
+  dance-timeout 200
 
   ;; Right-hand keys: trigger left-hand HRMs (a s d f)
   right-hand-keys (
@@ -27,7 +31,7 @@
     n m , . /
     [ ] \
     6 7 8 9 0 - =
-    ret bspc
+    ret bspc spc
   )
 
   ;; Left-hand keys: trigger right-hand HRMs (j k l ;)
@@ -38,42 +42,76 @@
     1 2 3 4 5
     tab esc grv
   )
+
+  ;; All typing keys: trigger force-tap for c/v/x tap-hold so words like "code"
+  ;; don't accidentally trigger cmd+c when c is held momentarily during a roll.
+  typing-keys (
+    q w e r t y u i o p
+    a s d f g h j k l ; '
+    z x c v b n m , . /
+    1 2 3 4 5 6 7 8 9 0 - =
+    [ ] \
+    tab esc grv ret bspc spc
+  )
 )
 
-;; Source: only the keys we remap. Other keys pass through unchanged.
 (defsrc
-  caps  fn   lctl  a    s    d    f    j    k    l    ;
+  caps  fn   lctl  a    s    d    f    j    k    l    ;    c    x    v    z    esc
 )
 
 (defalias
-  ;; ── Device-level remaps ──────────────────────────────────────────────
-  cap  esc    ;; caps lock → escape
-  fn   lctl   ;; fn → left ctrl
-  lctl lmet   ;; left ctrl → left cmd
+  cap  esc
 
-  ;; ── Underlying HRM behavior (bilateral via tap-hold-release-keys) ───
-  a-hrm    (tap-hold-release-keys $pinky-tap $pinky-hold a    lsft $right-hand-keys)
-  s-hrm    (tap-hold-release-keys $tap-time  $hold-time  s    lctl $right-hand-keys)
-  d-hrm    (tap-hold-release-keys $tap-time  $hold-time  d    lmet $right-hand-keys)
-  f-hrm    (tap-hold-release-keys $tap-time  $hold-time  f    lalt $right-hand-keys)
-  j-hrm    (tap-hold-release-keys $tap-time  $hold-time  j    ralt $left-hand-keys)
-  k-hrm    (tap-hold-release-keys $tap-time  $hold-time  k    rmet $left-hand-keys)
-  l-hrm    (tap-hold-release-keys $tap-time  $hold-time  l    rctl $left-hand-keys)
-  scln-hrm (tap-hold-release-keys $pinky-tap $pinky-hold ;    rsft $left-hand-keys)
+  ;; Mac layout on PC keyboard: swap the two modifiers nearest the spacebar
+  swcmd lalt   ;; physical lcmd (Win key) → left option
+  swopt lmet   ;; physical lopt (Alt key) → left command
 
-  ;; ── Tap-dance-eager wraps HRM with double-tap-hold = repeat letter ──
-  ;; 1st press: HRM behavior (tap=letter, hold-with-trigger=modifier)
-  ;; 2nd press within repeat-window: raw letter (held → macOS auto-repeats)
-  a    (tap-dance-eager $repeat-window (@a-hrm a))
-  s    (tap-dance-eager $repeat-window (@s-hrm s))
-  d    (tap-dance-eager $repeat-window (@d-hrm d))
-  f    (tap-dance-eager $repeat-window (@f-hrm f))
-  j    (tap-dance-eager $repeat-window (@j-hrm j))
-  k    (tap-dance-eager $repeat-window (@k-hrm k))
-  l    (tap-dance-eager $repeat-window (@l-hrm l))
-  scln (tap-dance-eager $repeat-window (@scln-hrm ;))
+  ;; Home row mods (bilateral)
+  ;; Left-hand mods use $left-hand-keys to FORCE tap on same-hand rolls
+  a    (tap-hold-release-keys $pinky-tap $pinky-hold a    lctl $left-hand-keys)
+  s    (tap-hold-release-keys $tap-time  $hold-time  s    lsft $left-hand-keys)
+  d    (tap-hold-release-keys $tap-time  $hold-time  d    lmet $left-hand-keys)
+  f    (tap-hold-release-keys $tap-time  $hold-time  f    lalt $left-hand-keys)
+
+  ;; Right-hand mods use $right-hand-keys to FORCE tap on same-hand rolls
+  j    (tap-hold-release-keys $tap-time  $hold-time  j    ralt $right-hand-keys)
+  k    (tap-hold-release-keys $tap-time  $hold-time  k    rmet $right-hand-keys)
+  l    (tap-hold-release-keys $tap-time  $hold-time  l    rsft $right-hand-keys)
+  scln (tap-hold-release-keys $pinky-tap $pinky-hold ;    rctl $right-hand-keys)
+
+  ;; Line navigation (Logitech has physical home/end keys)
+  hm   (multi lmet left)
+  ed   (multi lmet rght)
+
+  ;; c/x/v: wrapped in tap-dance-eager for tap-tap-hold = auto-repeat letter.
+  ;;   1st press → tap-hold-release-keys (tap=letter w/ fork, hold=mac shortcut)
+  ;;   2nd press within $dance-timeout → plain letter; held → OS auto-repeats
+  c    (tap-dance-eager $dance-timeout (
+         (tap-hold-release-keys $tap-time $hold-time
+           (fork c (fork c (unmod (lctl lsft) lmet c) (lctl)) (lsft))
+           (macro M-c)
+           $typing-keys)
+         c))
+  x    (tap-dance-eager $dance-timeout (
+         (tap-hold-release-keys $tap-time $hold-time
+           (fork x (fork x (unmod (lctl lsft) lmet x) (lctl)) (lsft))
+           (macro M-x)
+           $typing-keys)
+         x))
+  v    (tap-dance-eager $dance-timeout (
+         (tap-hold-release-keys $tap-time $hold-time
+           v
+           (macro C-S-v)
+           $typing-keys)
+         v))
+  z    (tap-dance-eager $dance-timeout (
+         (tap-hold-release-keys $tap-time $hold-time
+           z
+           (macro C-spc)
+           $typing-keys)
+         z))
 )
 
 (deflayer base
-  @cap  @fn  @lctl  @a   @s   @d   @f   @j   @k   @l   @scln
+  @cap  lctl lmet   @a   @s   @d   @f   @j   @k   @l   @scln  @c   @x   @v   @z   caps
 )

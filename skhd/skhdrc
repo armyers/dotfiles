@@ -47,6 +47,9 @@ ctrl + shift - s : pgrep -x AeroSpace > /dev/null && osascript -e 'tell applicat
 # Cycle audio devices (d is HRM cmd key — trigger via physical fn+shift+d)
 ctrl + shift - d : /Users/allenmyers/.local/bin/cycle-audio.sh
 
+# PasteBot/cmd-ctrl-c bindings removed — HRM cmd+ctrl is unreliable (release-order
+# emits modifiers after the trigger). Use plain cmd+c / cmd+v instead.
+
 # REDUNDANT with HRM (no longer needed):
 #   ctrl+shift+c/x/a/w/q/r/z/f/t/0/-/+/enter  → just hold d (cmd)
 #   ctrl+shift+n/p (find next/prev)           → just hold d+a, tap g
