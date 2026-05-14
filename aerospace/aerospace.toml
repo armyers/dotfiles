@@ -181,6 +181,7 @@ ctrl-cmd-shift-rightSquareBracket = 'move-node-to-monitor --wrap-around next'
 
 # --- Cheatsheet (native transparent popup, dismiss with esc/q) ---
 alt-shift-slash = 'exec-and-forget python3 ~/.config/aerospace/gen-cheatsheet.py && ~/.config/aerospace/cheatsheet'
+alt-ctrl-k = 'exec-and-forget python3 ~/.config/kanata/gen-cheatsheet.py && ~/.config/kanata/cheatsheet'
 
 # --- Service mode ---
 alt-ctrl-semicolon = 'mode service'

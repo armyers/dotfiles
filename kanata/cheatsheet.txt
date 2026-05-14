@@ -1,0 +1,39 @@
+ Kanata Keybindings
+
+ KEY REMAPS
+   caps lock                        esc
+   fn                               ctrl
+   ctrl                             cmd
+   esc                              caps lock
+
+ HOME ROW MODS  (tap = letter, hold = modifier)
+   a                                ctrl
+   s                                shift
+   d                                cmd
+   f                                alt
+   j                                alt
+   k                                cmd
+   l                                shift
+   ;                                ctrl
+
+ LETTER TAP-HOLD  (tap = letter, hold = shortcut, tap-tap-hold = repeat)
+   c                                cmd+c
+   x                                cmd+x
+   v                                ctrl+shift+v
+   z                                ctrl+space
+
+ CHORDS  (press both within 50ms → combo held while either is held)
+   a + s                            ctrl+shift
+   a + d                            ctrl+cmd
+   a + f                            ctrl+alt
+   s + d                            shift+cmd
+   s + f                            shift+alt
+   d + f                            cmd+alt
+   j + k                            alt+cmd
+   j + l                            alt+shift
+   j + ;                            alt+ctrl
+   k + l                            cmd+shift
+   k + ;                            cmd+ctrl
+   l + ;                            shift+ctrl
+
+ DISMISS                          esc  or  q
