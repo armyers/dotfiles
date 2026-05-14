@@ -56,11 +56,20 @@
 )
 
 (defsrc
-  caps  fn   lctl  a    s    d    f    j    k    l    ;    c    x    v    z    esc
+  caps  fn   lctl  a    s    d    f    j    k    l    ;    c    x    v    z    esc  h    /
 )
 
 (defalias
-  cap  esc
+  ;; Tap caps → esc. Hold caps (or caps+other-key) → switch to nav layer.
+  cap  (tap-hold-press $tap-time $hold-time esc (layer-while-held nav))
+
+  ;; Nav-layer aliases — shortcuts fired while caps is held.
+  nav-s     (multi lalt lmet s)     ;; alt+cmd+s
+  nav-h     (multi lalt lsft h)     ;; alt+shift+h
+  nav-j     (multi lalt lsft j)     ;; alt+shift+j
+  nav-k     (multi lalt lsft k)     ;; alt+shift+k
+  nav-l     (multi lalt lsft l)     ;; alt+shift+l
+  nav-slash (multi lalt lsft /)     ;; alt+shift+/
 
   ;; Mac layout on PC keyboard: swap the two modifiers nearest the spacebar
   swcmd lalt   ;; physical lcmd (Win key) → left option
@@ -112,6 +121,35 @@
          z))
 )
 
+;; 2-key chord combinations of the HRM keys. Press both within 50ms →
+;; modifier combo held while any chord key is held (all-released).
+;; No 3-key chords: kanata waits to disambiguate overlapping prefixes
+;; (per defchordsv2 docs), which produces an annoying delay on the 2-key
+;; case. Re-add 3-key chords only if the wait becomes acceptable.
+;; Disabled in nav layer so caps-held overrides take priority there.
+(defchordsv2
+  ;; Left-hand (a=ctl s=sft d=cmd f=alt)
+  (a s)     (multi lctl lsft)            50 all-released (nav)
+  (a d)     (multi lctl lmet)            50 all-released (nav)
+  (a f)     (multi lctl lalt)            50 all-released (nav)
+  (s d)     (multi lsft lmet)            50 all-released (nav)
+  (s f)     (multi lsft lalt)            50 all-released (nav)
+  (d f)     (multi lmet lalt)            50 all-released (nav)
+
+  ;; Right-hand (j=alt k=cmd l=sft ;=ctl)
+  (j k)     (multi ralt rmet)            50 all-released (nav)
+  (j l)     (multi ralt rsft)            50 all-released (nav)
+  (j ;)     (multi ralt rctl)            50 all-released (nav)
+  (k l)     (multi rmet rsft)            50 all-released (nav)
+  (k ;)     (multi rmet rctl)            50 all-released (nav)
+  (l ;)     (multi rsft rctl)            50 all-released (nav)
+)
+
 (deflayer base
-  @cap  lctl lmet   @a   @s   @d   @f   @j   @k   @l   @scln  @c   @x   @v   @z   caps
+  @cap  lctl lmet   @a   @s   @d   @f   @j   @k   @l   @scln  @c   @x   @v   @z   caps  h    /
+)
+
+;; Activated while caps is held. _ = transparent (use base-layer binding).
+(deflayer nav
+  _     _    _      _    @nav-s _    _    @nav-j @nav-k @nav-l _      _    _    _    _    _     @nav-h @nav-slash
 )
