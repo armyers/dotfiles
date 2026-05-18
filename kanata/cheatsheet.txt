@@ -20,7 +20,7 @@
    c                                cmd+c
    x                                cmd+x
    v                                ctrl+shift+v
-   z                                ctrl+space
+   t                                ctrl+space
 
  CHORDS  (press both within 50ms → combo held while either is held)
    a + s                            ctrl+shift

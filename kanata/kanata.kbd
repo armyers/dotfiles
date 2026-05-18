@@ -56,7 +56,7 @@
 )
 
 (defsrc
-  caps  fn   lctl  a    s    d    f    j    k    l    ;    c    x    v    t    esc
+  caps  fn   lctl  a    s    d    f    j    k    l    ;    c    x    v    t    esc   u
 )
 
 (defalias
@@ -110,6 +110,12 @@
            (macro C-spc)
            $typing-keys)
          t))
+  u    (tap-dance-eager $dance-timeout (
+         (tap-hold-release-keys $tap-time $hold-time
+           u
+           (macro C-spc)
+           $typing-keys)
+         u))
 )
 
 ;; 2-key chord combinations of the HRM keys. Press both within 50ms →
@@ -136,5 +142,5 @@
 )
 
 (deflayer base
-  @cap  lctl lmet   @a   @s   @d   @f   @j   @k   @l   @scln  @c   @x   @v   @t   caps
+  @cap  lctl lmet   @a   @s   @d   @f   @j   @k   @l   @scln  @c   @x   @v   @t   caps   @u
 )
