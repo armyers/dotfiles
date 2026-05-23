@@ -46,6 +46,11 @@ export HISTSIZE=1000000000
 export HISTFILESIZE=1000000000
 export HISTTIMEFORMAT="[%F %H:%M:%S] "
 
+setopt AUTOCD
+setopt NOBEEP
+setopt NUMERIC_GLOB_SORT
+setopt HIST_SAVE_BY_COPY
+
 # INFO: settings for lsd that will mimic the Vague color scheme for neovim
 export LS_COLORS="\
 di=38;5;74:\

@@ -1,6 +1,7 @@
 alias Z='export PATH=; source /etc/zprofile; source ~/.zprofile; source ~/.zshrc'
 alias cd=j
 alias c='cd -'
+alias -- -='cd -'
 alias ls='lsd --icon=never --color=auto -aF'
 alias ll='ls -l'
 alias df='df -h'
