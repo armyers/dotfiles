@@ -72,55 +72,57 @@
   swopt lmet   ;; physical lopt (Alt key) → left command
 
   ;; Home row mods (bilateral)
-  ;; Left-hand mods use $left-hand-keys to FORCE tap on same-hand rolls
   a    (tap-hold-release-keys $pinky-tap $pinky-hold a    lctl $left-hand-keys)
   s    (tap-hold-release-keys $tap-time  $hold-time  s    lsft $left-hand-keys)
   d    (tap-hold-release-keys $tap-time  $hold-time  d    lmet $left-hand-keys)
   f    (tap-hold-release-keys $tap-time  $hold-time  f    lalt $left-hand-keys)
 
-  ;; Right-hand mods use $right-hand-keys to FORCE tap on same-hand rolls
+  ;; Right-hand mods
   j    (tap-hold-release-keys $tap-time  $hold-time  j    ralt $right-hand-keys)
   k    (tap-hold-release-keys $tap-time  $hold-time  k    rmet $right-hand-keys)
   l    (tap-hold-release-keys $tap-time  $hold-time  l    rsft $right-hand-keys)
   scln (tap-hold-release-keys $pinky-tap $pinky-hold ;    rctl $right-hand-keys)
 
-  ;; Line navigation (Logitech has physical home/end keys)
+  ;; Line navigation
   hm   (multi lmet left)
   ed   (multi lmet rght)
 
-  ;; c/x/v: wrapped in tap-dance-eager for tap-tap-hold = auto-repeat letter.
-  ;;   1st press → tap-hold-release-keys (tap=letter w/ fork, hold=mac shortcut)
-  ;;   2nd press within $dance-timeout → plain letter; held → OS auto-repeats
-  c    (tap-dance-eager $dance-timeout (
-         (tap-hold-release-keys $tap-time $hold-time
+  ;; Swapped Nesting: tap-hold on outside ensures shortcuts work cleanly; 
+  ;; tap-dance-eager on inside allows rapid tap-tap-hold for OS auto-repeat.
+  c    (tap-hold-release-keys $tap-time $hold-time
+         (tap-dance-eager $dance-timeout (
            (fork c (fork c (unmod (lctl lsft) lmet c) (lctl)) (lsft))
-           (macro M-c)
-           $typing-keys)
-         c))
-  x    (tap-dance-eager $dance-timeout (
-         (tap-hold-release-keys $tap-time $hold-time
+           c))
+         (macro M-c)
+         $typing-keys)
+
+  x    (tap-hold-release-keys $tap-time $hold-time
+         (tap-dance-eager $dance-timeout (
            (fork x (fork x (unmod (lctl lsft) lmet x) (lctl)) (lsft))
-           (macro M-x)
-           $typing-keys)
-         x))
-  v    (tap-dance-eager $dance-timeout (
-         (tap-hold-release-keys $tap-time $hold-time
+           x))
+         (macro M-x)
+         $typing-keys)
+
+  v    (tap-hold-release-keys $tap-time $hold-time
+         (tap-dance-eager $dance-timeout (
            v
-           (macro C-S-v)
-           $typing-keys)
-         v))
-  t    (tap-dance-eager $dance-timeout (
-         (tap-hold-release-keys $shortcut-tap $shortcut-hold
+           v))
+         (macro C-S-v)
+         $typing-keys)
+
+  t    (tap-hold-release-keys $shortcut-tap $shortcut-hold
+         (tap-dance-eager $dance-timeout (
            t
-           (macro C-spc)
-           $typing-keys)
-         t))
-  u    (tap-dance-eager $dance-timeout (
-         (tap-hold-release-keys $shortcut-tap $shortcut-hold
+           t))
+         (macro C-spc)
+         $typing-keys)
+
+  u    (tap-hold-release-keys $shortcut-tap $shortcut-hold
+         (tap-dance-eager $dance-timeout (
            u
-           (macro C-spc)
-           $typing-keys)
-         u))
+           u))
+         (macro C-spc)
+         $typing-keys)
 )
 
 ;; 2-key chord combinations of the HRM keys. Press both within 50ms →
