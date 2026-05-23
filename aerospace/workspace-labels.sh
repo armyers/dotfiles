@@ -3,9 +3,7 @@
 ws_label() {
   case "$1" in
     A) echo "aws console" ;;
-    B) echo "aws console" ;;
     C) echo "personal browser" ;;
-    D) echo "aws console" ;;
     F) echo "firefox" ;;
     M) echo "meetings" ;;
     O) echo "other" ;;
@@ -14,6 +12,7 @@ ws_label() {
     T) echo "terminal (Ghostty)" ;;
     V) echo "vpn" ;;
     W) echo "work browser" ;;
+    Z) echo "zoom" ;;
     *) echo "" ;;
   esac
 }

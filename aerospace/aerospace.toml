@@ -49,8 +49,6 @@ outer.right      = 4
 # ─── Workspace → Monitor assignment ────────────────────────────────────────
 # Main/external monitor (left)
 #   A = aws console
-#   B = aws console
-#   D = aws console
 #   F = firefox
 #   P = postman
 #   S = slack
@@ -61,11 +59,10 @@ outer.right      = 4
 #   M = meetings
 #   O = other
 #   V = vpn
+#   Z = zoom
 [workspace-to-monitor-force-assignment]
 A = 'main'
-B = 'main'
 C = 'built-in'
-D = 'main'
 F = 'main'
 M = 'built-in'
 O = 'built-in'
@@ -74,6 +71,7 @@ S = 'main'
 T = 'main'
 V = 'built-in'
 W = 'main'
+Z = 'built-in'
 
 # ─── Auto-assign apps to workspaces ────────────────────────────────────────
 [[on-window-detected]]
@@ -91,6 +89,10 @@ run = 'move-node-to-workspace P'
 [[on-window-detected]]
 if.app-id = 'com.amazonaws.acvc.osx'
 run = 'move-node-to-workspace V'
+
+[[on-window-detected]]
+if.app-id = 'us.zoom.xos'
+run = 'move-node-to-workspace Z'
 
 # Chrome windows open in the current workspace since AeroSpace can't
 # distinguish Chrome profiles. Move them with caps+shift+<key> if needed.
@@ -140,9 +142,7 @@ alt-cmd-s = 'exec-and-forget screencapture -i -c'
 # --- Switch to workspace (caps+key → alt+key) ---
 # Uses focus-workspace.sh to work around macOS focusing the wrong Chrome window
 alt-a = 'exec-and-forget ~/.config/aerospace/focus-workspace.sh A'
-alt-b = 'exec-and-forget ~/.config/aerospace/focus-workspace.sh B'
 alt-c = 'exec-and-forget ~/.config/aerospace/focus-workspace.sh C'
-alt-d = 'exec-and-forget ~/.config/aerospace/focus-workspace.sh D'
 alt-m = 'exec-and-forget ~/.config/aerospace/focus-workspace.sh M'
 alt-o = 'exec-and-forget ~/.config/aerospace/focus-workspace.sh O'
 alt-p = 'exec-and-forget ~/.config/aerospace/focus-workspace.sh P'
@@ -150,12 +150,11 @@ alt-s = 'exec-and-forget ~/.config/aerospace/focus-workspace.sh S'
 alt-t = 'exec-and-forget ~/.config/aerospace/focus-workspace.sh T'
 alt-v = 'exec-and-forget ~/.config/aerospace/focus-workspace.sh V'
 alt-w = 'exec-and-forget ~/.config/aerospace/focus-workspace.sh W'
+alt-z = 'exec-and-forget ~/.config/aerospace/focus-workspace.sh Z'
 
 # --- Move window to workspace (caps+shift+key → alt+shift+key) ---
 alt-shift-a = 'move-node-to-workspace --focus-follows-window A'
-alt-shift-b = 'move-node-to-workspace --focus-follows-window B'
 alt-shift-c = 'move-node-to-workspace --focus-follows-window C'
-alt-shift-d = 'move-node-to-workspace --focus-follows-window D'
 alt-shift-m = 'move-node-to-workspace --focus-follows-window M'
 alt-shift-n = 'move-node-to-workspace --focus-follows-window N'
 alt-shift-o = 'move-node-to-workspace --focus-follows-window O'
@@ -164,6 +163,7 @@ alt-shift-s = 'move-node-to-workspace --focus-follows-window S'
 alt-shift-t = 'move-node-to-workspace --focus-follows-window T'
 alt-shift-v = 'move-node-to-workspace --focus-follows-window V'
 alt-shift-w = 'move-node-to-workspace --focus-follows-window W'
+alt-shift-z = 'move-node-to-workspace --focus-follows-window Z'
 
 # --- Quick switch ---
 alt-tab = 'workspace-back-and-forth'

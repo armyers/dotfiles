@@ -6,13 +6,12 @@
    alt + tab                        back-and-forth
 
    main monitor:
-   A aws console          B aws console          D aws console
-   P postman              S slack                T terminal (Ghostty)
-   W work browser
+   A aws console          P postman              S slack
+   T terminal (Ghostty)   W work browser
 
    built-in monitor:
    C personal browser   M meetings           O other
-   V vpn
+   V vpn                Z zoom
 
  FOCUS / MOVE / JOIN
    alt + h j k l                  focus left/down/up/right
