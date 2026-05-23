@@ -16,10 +16,15 @@
   ;; tap-time: release before this → letter
   ;; hold-time: must hold past this → modifier (only fires WITHOUT a trigger key)
   ;; Big gap means casual typing won't accidentally trigger holds.
-  tap-time   180
-  hold-time  185
-  pinky-tap  200
-  pinky-hold 205
+  tap-time   210
+  hold-time  215
+  pinky-tap  210
+  pinky-hold 215
+
+  ;; Shortcut-trigger keys (t/u → C-spc): shorter hold so subsequent letters
+  ;; (e.g. "th") land after the hold-timeout instead of force-tapping.
+  shortcut-tap   160
+  shortcut-hold  175
 
   ;; Window for tap-dance-eager: tap then tap-and-hold within this → repeat letter
   dance-timeout 200
@@ -105,13 +110,13 @@
            $typing-keys)
          v))
   t    (tap-dance-eager $dance-timeout (
-         (tap-hold-release-keys $tap-time $hold-time
+         (tap-hold-release-keys $shortcut-tap $shortcut-hold
            t
            (macro C-spc)
            $typing-keys)
          t))
   u    (tap-dance-eager $dance-timeout (
-         (tap-hold-release-keys $tap-time $hold-time
+         (tap-hold-release-keys $shortcut-tap $shortcut-hold
            u
            (macro C-spc)
            $typing-keys)
