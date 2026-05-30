@@ -13,13 +13,13 @@
 )
 
 (defvar
-  ;; tap-time: release before this → letter
-  ;; hold-time: must hold past this → modifier (only fires WITHOUT a trigger key)
-  ;; Big gap means casual typing won't accidentally trigger holds.
-  tap-time   210
-  hold-time  215
-  pinky-tap  210
-  pinky-hold 215
+  ;; urob "timeless" timings (kanata port of urob's ZMK pattern).
+  ;; False holds during fast typing are prevented by the nomods layer
+  ;; (typing-streak suppression), not by a big tap/hold gap.
+  tap-time   200
+  hold-time  150
+  pinky-tap  220
+  pinky-hold 170
 
   ;; Shortcut-trigger keys (t/u → C-spc): shorter hold so subsequent letters
   ;; (e.g. "th") land after the hold-timeout instead of force-tapping.
@@ -28,6 +28,12 @@
 
   ;; Window for tap-dance-eager: tap then tap-and-hold within this → repeat letter
   dance-timeout 200
+
+  ;; Typing-streak window: after any HRM tap, switch to the nomods layer for
+  ;; this long. Subsequent keys during the streak resolve as plain letters,
+  ;; making accidental hold-during-roll impossible. Mirrors urob's
+  ;; require-prior-idle-ms 150.
+  idle-timeout 150
 
   ;; Right-hand keys: trigger left-hand HRMs (a s d f)
   right-hand-keys (
@@ -71,23 +77,47 @@
   swcmd lalt   ;; physical lcmd (Win key) → left option
   swopt lmet   ;; physical lopt (Alt key) → left command
 
-  ;; Home row mods (bilateral)
-  a    (tap-hold-release-keys $pinky-tap $pinky-hold a    lctl $left-hand-keys)
-  s    (tap-hold-release-keys $tap-time  $hold-time  s    lsft $left-hand-keys)
-  d    (tap-hold-release-keys $tap-time  $hold-time  d    lmet $left-hand-keys)
-  f    (tap-hold-release-keys $tap-time  $hold-time  f    lalt $left-hand-keys)
+  ;; On HRM tap: emit letter, jump to nomods, schedule return-to-base on idle.
+  ;; This is the kanata equivalent of urob's require-prior-idle-ms.
+  tap-streak (multi
+    (layer-switch nomods)
+    (on-idle-fakekey to-base tap $idle-timeout))
+
+  ;; Home row mods (bilateral + typing-streak + tap-then-hold repeat).
+  ;; tap-dance-eager wraps the tap action so press-release-press-hold within
+  ;; $dance-timeout produces OS auto-repeat of the letter.
+  a    (tap-hold-release-keys $pinky-tap $pinky-hold
+         (tap-dance-eager $dance-timeout ((multi a @tap-streak) a))
+         lctl $left-hand-keys)
+  s    (tap-hold-release-keys $tap-time  $hold-time
+         (tap-dance-eager $dance-timeout ((multi s @tap-streak) s))
+         lsft $left-hand-keys)
+  d    (tap-hold-release-keys $tap-time  $hold-time
+         (tap-dance-eager $dance-timeout ((multi d @tap-streak) d))
+         lmet $left-hand-keys)
+  f    (tap-hold-release-keys $tap-time  $hold-time
+         (tap-dance-eager $dance-timeout ((multi f @tap-streak) f))
+         lalt $left-hand-keys)
 
   ;; Right-hand mods
-  j    (tap-hold-release-keys $tap-time  $hold-time  j    ralt $right-hand-keys)
-  k    (tap-hold-release-keys $tap-time  $hold-time  k    rmet $right-hand-keys)
-  l    (tap-hold-release-keys $tap-time  $hold-time  l    rsft $right-hand-keys)
-  scln (tap-hold-release-keys $pinky-tap $pinky-hold ;    rctl $right-hand-keys)
+  j    (tap-hold-release-keys $tap-time  $hold-time
+         (tap-dance-eager $dance-timeout ((multi j @tap-streak) j))
+         ralt $right-hand-keys)
+  k    (tap-hold-release-keys $tap-time  $hold-time
+         (tap-dance-eager $dance-timeout ((multi k @tap-streak) k))
+         rmet $right-hand-keys)
+  l    (tap-hold-release-keys $tap-time  $hold-time
+         (tap-dance-eager $dance-timeout ((multi l @tap-streak) l))
+         rsft $right-hand-keys)
+  scln (tap-hold-release-keys $pinky-tap $pinky-hold
+         (tap-dance-eager $dance-timeout ((multi ; @tap-streak) ;))
+         rctl $right-hand-keys)
 
   ;; Line navigation
   hm   (multi lmet left)
   ed   (multi lmet rght)
 
-  ;; Swapped Nesting: tap-hold on outside ensures shortcuts work cleanly; 
+  ;; Swapped Nesting: tap-hold on outside ensures shortcuts work cleanly;
   ;; tap-dance-eager on inside allows rapid tap-tap-hold for OS auto-repeat.
   c    (tap-hold-release-keys $tap-time $hold-time
          (tap-dance-eager $dance-timeout (
@@ -148,6 +178,16 @@
   (l ;)     (multi rsft rctl)            50 all-released ()
 )
 
+(deffakekeys
+  to-base (layer-switch base)
+)
+
 (deflayer base
   @cap  lctl lmet   @a   @s   @d   @f   @j   @k   @l   @scln  @c   @x   @v   @t   caps   @u
+)
+
+;; Streak layer: HRMs become plain letters; everything else mirrors base.
+;; Entered on any HRM tap; left after $idle-timeout of inactivity.
+(deflayer nomods
+  @cap  lctl lmet   a    s    d    f    j    k    l    ;      @c   @x   @v   @t   caps   @u
 )
