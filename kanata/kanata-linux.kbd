@@ -1,0 +1,129 @@
+;; Kanata config — Logitech keyboard on Linux Mint XFCE + i3
+;; Bilateral home row mods (urob "timeless" pattern).
+;; Mac-isms removed: no lcmd↔lopt swap, no home/end line nav,
+;; no c/x/v/t/u tap-hold shortcuts. lmet stays as super (i3 $mod).
+
+(defcfg
+  concurrent-tap-hold yes
+  process-unmapped-keys yes
+  linux-dev-names-include (
+    "TODO-device-name"  ;; populate from `kanata --list` (or evtest)
+  )
+  log-layer-changes no
+)
+
+(defvar
+  ;; urob "timeless" timings (kanata port of urob's ZMK pattern).
+  ;; False holds during fast typing are prevented by the nomods layer
+  ;; (typing-streak suppression), not by a big tap/hold gap.
+  tap-time   200
+  hold-time  150
+  pinky-tap  220
+  pinky-hold 170
+
+  ;; Window for tap-dance-eager: tap then tap-and-hold within this → repeat letter
+  dance-timeout 200
+
+  ;; Typing-streak window: after any HRM tap, switch to the nomods layer for
+  ;; this long. Subsequent keys during the streak resolve as plain letters,
+  ;; making accidental hold-during-roll impossible. Mirrors urob's
+  ;; require-prior-idle-ms 150.
+  idle-timeout 150
+
+  ;; Right-hand keys: trigger left-hand HRMs (a s d f)
+  right-hand-keys (
+    y u i o p
+    h j k l ; '
+    n m , . /
+    [ ] \
+    6 7 8 9 0 - =
+    ret bspc spc
+  )
+
+  ;; Left-hand keys: trigger right-hand HRMs (j k l ;)
+  left-hand-keys (
+    q w e r t
+    a s d f g
+    z x c v b
+    1 2 3 4 5
+    tab esc grv
+  )
+)
+
+(defsrc
+  caps  a  s  d  f  j  k  l  ;  esc
+)
+
+(defalias
+  cap  esc
+
+  ;; On HRM tap: emit letter, jump to nomods, schedule return-to-base on idle.
+  ;; This is the kanata equivalent of urob's require-prior-idle-ms.
+  tap-streak (multi
+    (layer-switch nomods)
+    (on-idle-fakekey to-base tap $idle-timeout))
+
+  ;; Home row mods (bilateral + typing-streak + tap-then-hold repeat).
+  ;; tap-dance-eager wraps the tap action so press-release-press-hold within
+  ;; $dance-timeout produces OS auto-repeat of the letter.
+  a    (tap-hold-release-keys $pinky-tap $pinky-hold
+         (tap-dance-eager $dance-timeout ((multi a @tap-streak) a))
+         lctl $left-hand-keys)
+  s    (tap-hold-release-keys $tap-time  $hold-time
+         (tap-dance-eager $dance-timeout ((multi s @tap-streak) s))
+         lsft $left-hand-keys)
+  d    (tap-hold-release-keys $tap-time  $hold-time
+         (tap-dance-eager $dance-timeout ((multi d @tap-streak) d))
+         lmet $left-hand-keys)
+  f    (tap-hold-release-keys $tap-time  $hold-time
+         (tap-dance-eager $dance-timeout ((multi f @tap-streak) f))
+         lalt $left-hand-keys)
+
+  ;; Right-hand mods
+  j    (tap-hold-release-keys $tap-time  $hold-time
+         (tap-dance-eager $dance-timeout ((multi j @tap-streak) j))
+         ralt $right-hand-keys)
+  k    (tap-hold-release-keys $tap-time  $hold-time
+         (tap-dance-eager $dance-timeout ((multi k @tap-streak) k))
+         rmet $right-hand-keys)
+  l    (tap-hold-release-keys $tap-time  $hold-time
+         (tap-dance-eager $dance-timeout ((multi l @tap-streak) l))
+         rsft $right-hand-keys)
+  scln (tap-hold-release-keys $pinky-tap $pinky-hold
+         (tap-dance-eager $dance-timeout ((multi ; @tap-streak) ;))
+         rctl $right-hand-keys)
+)
+
+;; 2-key chord combinations of the HRM keys. Press both within 50ms →
+;; modifier combo held while any chord key is held (all-released).
+(defchordsv2
+  ;; Left-hand (a=ctl s=sft d=super f=alt)
+  (a s)     (multi lctl lsft)            50 all-released ()
+  (a d)     (multi lctl lmet)            50 all-released ()
+  (a f)     (multi lctl lalt)            50 all-released ()
+  (s d)     (multi lsft lmet)            50 all-released ()
+  (s f)     (multi lsft lalt)            50 all-released ()
+  (d f)     (multi lmet lalt)            50 all-released ()
+
+  ;; Right-hand (j=alt k=super l=sft ;=ctl)
+  (j k)     (multi ralt rmet)            50 all-released ()
+  (j l)     (multi ralt rsft)            50 all-released ()
+  (j ;)     (multi ralt rctl)            50 all-released ()
+  (k l)     (multi rmet rsft)            50 all-released ()
+  (k ;)     (multi rmet rctl)            50 all-released ()
+  (l ;)     (multi rsft rctl)            50 all-released ()
+)
+
+(deffakekeys
+  to-base (layer-switch base)
+)
+
+(deflayer base
+  @cap  @a   @s   @d   @f   @j   @k   @l   @scln  caps
+)
+
+;; Streak layer: HRMs become plain letters; everything else mirrors base.
+;; Entered on any HRM tap; left after $idle-timeout of inactivity.
+(deflayer nomods
+  @cap  a    s    d    f    j    k    l    ;      caps
+)
