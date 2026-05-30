@@ -6,8 +6,8 @@
   concurrent-tap-hold yes
   process-unmapped-keys yes
   macos-dev-names-include (
-    "USB Receiver"
-    "0x332291CC636E3094"  ;; Logitech USB Receiver (hash from `kanata --list`
+    "MX MCHNCL"
+    "0x172DE50E1A6E15F9"  ;; Logitech USB Receiver (hash from `kanata --list`
   )
   log-layer-changes no
 )
