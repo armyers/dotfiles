@@ -56,15 +56,26 @@ def parse_macro(expr: str) -> str:
 
 
 def find_hrms(text: str) -> list[tuple[str, str]]:
-    """Aliases of the form `<key> (tap-hold-release-keys … <key> <mod> …)`."""
+    """Aliases of the form `<key> (tap-hold-release-keys … <tap-action> <mod> …)`.
+
+    Supports both legacy single-key tap action and the urob-style tap action
+    wrapped in `(tap-dance-eager … ((multi <key> @tap-streak) <key>))`.
+    """
     out = []
     pattern = re.compile(
-        r"^\s*(\w+)\s+\(tap-hold-release-keys\s+\$\S+\s+\$\S+\s+(\S+)\s+(lctl|lsft|lmet|lalt|rctl|rsft|rmet|ralt)\b",
-        re.MULTILINE,
+        r"^\s*(\w+)\s+\(tap-hold-release-keys\s+\$\S+\s+\$\S+\s+"
+        r"(?:"
+        r"\(tap-dance-eager\s+\$\S+\s+\(\s*\(multi\s+(\S+)\s+@tap-streak\)\s+\S+\s*\)\)"
+        r"|"
+        r"(\S+)"
+        r")"
+        r"\s+(lctl|lsft|lmet|lalt|rctl|rsft|rmet|ralt)\b",
+        re.MULTILINE | re.DOTALL,
     )
     for m in pattern.finditer(text):
-        alias, tap_key, hold_mod = m.group(1), m.group(2), m.group(3)
-        # Use the alias name (e.g. `scln`) only if it differs from the tap key
+        alias = m.group(1)
+        tap_key = m.group(2) or m.group(3)
+        hold_mod = m.group(4)
         display_key = tap_key if tap_key != alias else alias
         out.append((display_key, MOD[hold_mod]))
     return out
