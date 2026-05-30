@@ -16,6 +16,13 @@
    l                                shift
    ;                                ctrl
 
+ LETTER TAP-HOLD  (tap = letter, hold = shortcut, tap-tap-hold = repeat)
+   c                                cmd+c
+   x                                cmd+x
+   v                                ctrl+shift+v
+   t                                ctrl+space
+   u                                ctrl+space
+
  CHORDS  (press both within 50ms → combo held while either is held)
    a + s                            ctrl+shift
    a + d                            ctrl+cmd

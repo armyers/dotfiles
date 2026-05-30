@@ -55,41 +55,87 @@ def parse_macro(expr: str) -> str:
     return "+".join(mods + [key])
 
 
-def find_hrms(text: str) -> list[tuple[str, str]]:
-    """Aliases of the form `<key> (tap-hold-release-keys … <tap-action> <mod> …)`.
+MOD_NAMES = ("lctl", "lsft", "lmet", "lalt", "rctl", "rsft", "rmet", "ralt")
+MOD_RE = re.compile(rf"\b({'|'.join(MOD_NAMES)})\b")
 
-    Supports both legacy single-key tap action and the urob-style tap action
-    wrapped in `(tap-dance-eager … ((multi <key> @tap-streak) <key>))`.
-    """
+
+def iter_aliases(text: str):
+    """Yield (name, body) for each entry in defalias, with body paren-balanced."""
+    block_match = re.search(r"\(defalias\b(.+?)^\)", text, re.DOTALL | re.MULTILINE)
+    if not block_match:
+        return
+    body = block_match.group(1)
+    pos = 0
+    n = len(body)
+    while pos < n:
+        while pos < n and body[pos].isspace():
+            pos += 1
+        if pos >= n:
+            break
+        name_match = re.match(r"[\w-]+", body[pos:])
+        if not name_match:
+            break
+        name = name_match.group(0)
+        pos += len(name)
+        while pos < n and body[pos].isspace():
+            pos += 1
+        if pos >= n:
+            break
+        if body[pos] == "(":
+            depth = 1
+            start = pos
+            pos += 1
+            while pos < n and depth > 0:
+                if body[pos] == "(":
+                    depth += 1
+                elif body[pos] == ")":
+                    depth -= 1
+                pos += 1
+            yield name, body[start:pos]
+        else:
+            value_match = re.match(r"\S+", body[pos:])
+            if not value_match:
+                break
+            yield name, value_match.group(0)
+            pos += value_match.end()
+
+
+def find_hrms(text: str) -> list[tuple[str, str]]:
+    """HRM aliases: tap-hold-release-keys whose hold action is a bare modifier."""
     out = []
-    pattern = re.compile(
-        r"^\s*(\w+)\s+\(tap-hold-release-keys\s+\$\S+\s+\$\S+\s+"
-        r"(?:"
-        r"\(tap-dance-eager\s+\$\S+\s+\(\s*\(multi\s+(\S+)\s+@tap-streak\)\s+\S+\s*\)\)"
-        r"|"
-        r"(\S+)"
-        r")"
-        r"\s+(lctl|lsft|lmet|lalt|rctl|rsft|rmet|ralt)\b",
-        re.MULTILINE | re.DOTALL,
-    )
-    for m in pattern.finditer(text):
-        alias = m.group(1)
-        tap_key = m.group(2) or m.group(3)
-        hold_mod = m.group(4)
-        display_key = tap_key if tap_key != alias else alias
-        out.append((display_key, MOD[hold_mod]))
+    for name, body in iter_aliases(text):
+        if not body.startswith("(tap-hold-release-keys"):
+            continue
+        # Letter-shortcut aliases hold a (macro …); skip those here.
+        if re.search(r"\(macro\b", body):
+            continue
+        mod_match = MOD_RE.search(body)
+        if not mod_match:
+            continue
+        # Tap key: prefer `(multi X @tap-streak)` form, fall back to legacy bare-key form.
+        tap_match = re.search(r"\(multi\s+(\S+)\s+@tap-streak\)", body)
+        if tap_match:
+            tap_key = tap_match.group(1)
+        else:
+            legacy = re.match(
+                r"\(tap-hold-release-keys\s+\$\S+\s+\$\S+\s+(\S+)\s+", body
+            )
+            tap_key = legacy.group(1) if legacy else name
+        display_key = tap_key if tap_key != name else name
+        out.append((display_key, MOD[mod_match.group(1)]))
     return out
 
 
 def find_letter_shortcuts(text: str) -> list[tuple[str, str]]:
-    """`<letter> (tap-dance-eager … (macro X-Y) …)` — hold action of tap-dance."""
+    """Letter-shortcut aliases: tap-hold-release-keys whose hold action is (macro …)."""
     out = []
-    for m in re.finditer(
-        r"^\s*(\w+)\s+\(tap-dance-eager\s+\$\S+.*?\(macro\s+([^\)]+)\)",
-        text,
-        re.DOTALL | re.MULTILINE,
-    ):
-        out.append((m.group(1), parse_macro(m.group(2))))
+    for name, body in iter_aliases(text):
+        if not body.startswith("(tap-hold-release-keys"):
+            continue
+        macro_match = re.search(r"\(macro\s+([^\)]+)\)", body)
+        if not macro_match:
+            continue
+        out.append((name, parse_macro(macro_match.group(1))))
     return out
 
 
