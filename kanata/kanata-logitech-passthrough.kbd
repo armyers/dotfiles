@@ -1,0 +1,25 @@
+;; Passthrough config — pair for kanata-logitech.kbd (Logitech MX MCHNCL).
+;; Loaded as the second --cfg arg. Hold caps 500ms here to return to the
+;; main config. Everything else passes through untouched.
+
+(defcfg
+  concurrent-tap-hold yes
+  process-unmapped-keys yes
+  macos-dev-names-include (
+    "MX MCHNCL"
+    "0x172DE50E1A6E15F9"
+  )
+  log-layer-changes no
+)
+
+(defsrc
+  caps
+)
+
+(defalias
+  cap (tap-hold 200 500 esc lrnx)
+)
+
+(deflayer base
+  @cap
+)

@@ -171,14 +171,17 @@ def find_remaps(text: str) -> list[tuple[str, str]]:
     src_keys = src_match.group(1).split()
     layer_actions = layer_match.group(1).split()
 
-    # Build a map of simple `name keycode` aliases (skip multi-token expressions).
+    # Map alias → display target. Includes bare-keycode aliases (e.g. `cap esc`)
+    # and the tap-action of `(tap-hold N N <key> …)` aliases — so e.g.
+    # `cap (tap-hold 200 500 esc lrnx)` still renders as caps → esc.
     simple_aliases: dict[str, str] = {}
-    alias_block = re.search(r"\(defalias\b(.+?)^\)", text, re.DOTALL | re.MULTILINE)
-    if alias_block:
-        for m in re.finditer(
-            r"^\s*(\w+)\s+(\w+)\s*$", alias_block.group(1), re.MULTILINE
-        ):
-            simple_aliases[m.group(1)] = m.group(2)
+    for name, body in iter_aliases(text):
+        if not body.startswith("("):
+            simple_aliases[name] = body
+            continue
+        m = re.match(r"\(tap-hold\s+\S+\s+\S+\s+(\w+)\b", body)
+        if m:
+            simple_aliases[name] = m.group(1)
 
     out = []
     for src, action in zip(src_keys, layer_actions):

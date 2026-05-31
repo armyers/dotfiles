@@ -10,6 +10,8 @@
 		<string>--no-wait</string>
 		<string>--cfg</string>
 		<string>/Users/allenmyers/.config/kanata/kanata-logitech.kbd</string>
+		<string>--cfg</string>
+		<string>/Users/allenmyers/.config/kanata/kanata-logitech-passthrough.kbd</string>
 	</array>
 	<key>RunAtLoad</key>
 	<true/>

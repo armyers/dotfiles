@@ -71,7 +71,10 @@
 )
 
 (defalias
-  cap  esc
+  ;; Tap caps → esc. Hold caps 500ms → live-reload to the next --cfg file
+  ;; (paired passthrough), or back. Lets you toggle remapping without
+  ;; killing the kanata daemon.
+  cap  (tap-hold 200 500 esc lrnx)
 
   ;; Mac layout on PC keyboard: swap the two modifiers nearest the spacebar
   swcmd lalt   ;; physical lcmd (Win key) → left option
