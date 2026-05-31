@@ -16,6 +16,10 @@ cmd + ctrl + alt + shift - m : yabai -m space --layout stack
 # fullscreen the focused window without macOS spaces
 cmd + ctrl + alt + shift - f : yabai -m window --toggle windowed-fullscreen
 
+# Restart both kanata daemons (post-sleep recovery). Uses osascript so macOS
+# shows its native auth dialog (TouchID / password) for the sudo step.
+cmd + ctrl + alt + shift - r : osascript -e 'do shell script "/Users/allenmyers/.dotfiles/kanata/reset-daemons.sh" with administrator privileges' -e 'display notification "Both daemons restarted" with title "Kanata Reset"'
+
 # tiling helpers you had:
 cmd + ctrl + alt + shift - left  : yabai -m window --toggle float; yabai -m window --grid 1:2:0:0:1:1
 cmd + ctrl + alt + shift - right : yabai -m window --toggle float; yabai -m window --grid 1:2:1:0:1:1
