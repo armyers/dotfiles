@@ -70,7 +70,7 @@ Parsing uses a paren-balanced splitter in `iter_aliases()`. If you add a new HRM
 
 ## Toggle remapping on/off (live-reload pairs)
 
-Each main config has a paired `*-passthrough.kbd` file with matching device specs, an empty defsrc beyond `caps`, and the same caps-toggle binding. Holding `caps` for 500ms fires `lrnx` (live-reload-next), cycling between the two configs in the kanata process's `--cfg` list. Tap caps still emits esc as before.
+Each main config has a paired `*-passthrough.kbd` file with matching device specs, an empty defsrc beyond `caps`, and the same caps-toggle binding. Holding `caps` for 3 seconds fires `lrnx` (live-reload-next), cycling between the configs in the kanata process's `--cfg` list. Tap caps still emits esc as before. (The hold is intentionally long — caps gets bumped by accident during normal typing, and a shorter hold caused unwanted toggles.)
 
 To enable, the launchd plist (or whatever invokes kanata) must pass both files:
 
@@ -80,6 +80,21 @@ To enable, the launchd plist (or whatever invokes kanata) must pass both files:
 ```
 
 Forcefully exiting kanata is still available out-of-band: `Left Control + Space + Escape` held together (kanata-builtin, operates on raw input before any remap).
+
+### Beyond two configs
+
+Nothing requires the chain to stop at two. kanata accepts arbitrarily many `--cfg` flags; `lrnx`/`lrpv` cycle through them, and `(lrld-num N)` jumps to the Nth (1-indexed). Reasons to add a third (or more):
+
+- **Gaming mode** — HRMs off, faster (or no) tap-hold timings, no streak shield. Treating "WASD held forever" as a tap-hold is wrong for games.
+- **Per-app profiles** — e.g., a "vim-heavy" config that disables redundant shortcuts vs. a "browser/email" config. Pair with a watcher that calls `(lrld-num N)` via a signal when the focused app changes.
+- **Tiered remap depth** — full HRMs ↔ just key-swaps (caps/esc, ctrl/cmd) ↔ raw passthrough. The middle tier is useful for A/B-ing which feature misbehaves when something breaks.
+- **Alternate layouts** — qwerty ↔ colemak/dvorak at the kanata level (less common; usually OS-level).
+- **Experimentation** — keep the stable config first, an experimental one second, passthrough third. `lrnx` to flip in and out without editing files.
+
+Mechanics worth knowing:
+
+- Per-config `defcfg` is **ignored** after the first load (device grab is fixed at startup). All configs in the chain share the device set from the first one — there's no point in giving them divergent `linux-dev` / `macos-dev-names-include` lists.
+- For direct jumps, bind specific keys to `(lrld-num N)` rather than cycling — much faster than tapping caps three times to reach the third config.
 
 ## macOS daemons
 

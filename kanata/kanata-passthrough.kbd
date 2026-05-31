@@ -1,5 +1,5 @@
 ;; Passthrough config — pair for kanata.kbd (MBP built-in keyboard).
-;; Loaded as the second --cfg arg. Hold caps 500ms here to return to the
+;; Loaded as the second --cfg arg. Hold caps 3s here to return to the
 ;; main config. Everything else passes through untouched.
 
 (defcfg
@@ -17,7 +17,7 @@
 )
 
 (defalias
-  cap (tap-hold 200 500 esc lrnx)
+  cap (tap-hold 200 3000 esc lrnx)
 )
 
 (deflayer base
