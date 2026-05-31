@@ -20,6 +20,9 @@ cmd + ctrl + alt + shift - f : yabai -m window --toggle windowed-fullscreen
 # shows its native auth dialog (TouchID / password) for the sudo step.
 cmd + ctrl + alt + shift - r : osascript -e 'do shell script "/Users/allenmyers/.dotfiles/kanata/reset-daemons.sh" with administrator privileges' -e 'display notification "Both daemons restarted" with title "Kanata Reset"'
 
+# Tomahawk56 cheatsheet popup (SVG keymap)
+ctrl + alt - t : /Users/allenmyers/code/armyers/tomahawk56-zmk-config/cheatsheet
+
 # tiling helpers you had:
 cmd + ctrl + alt + shift - left  : yabai -m window --toggle float; yabai -m window --grid 1:2:0:0:1:1
 cmd + ctrl + alt + shift - right : yabai -m window --toggle float; yabai -m window --grid 1:2:1:0:1:1
