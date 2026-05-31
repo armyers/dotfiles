@@ -13,13 +13,15 @@
 )
 
 (defvar
-  ;; urob "timeless" timings (kanata port of urob's ZMK pattern).
-  ;; False holds during fast typing are prevented by the nomods layer
-  ;; (typing-streak suppression), not by a big tap/hold gap.
-  tap-time   200
-  hold-time  150
-  pinky-tap  220
-  pinky-hold 170
+  ;; Conservative tap/hold timings. urob's canonical 200/150 (hold < tap)
+  ;; caused isolated HRM keypresses to misfire as modifiers — holding a key
+  ;; alone for >150ms fired the hold action. These near-equal values keep
+  ;; holds rare unless deliberately long-pressed; the nomods layer below
+  ;; still handles the typing-streak case.
+  tap-time   210
+  hold-time  215
+  pinky-tap  210
+  pinky-hold 215
 
   ;; Shortcut-trigger keys (t/u → C-spc): shorter hold so subsequent letters
   ;; (e.g. "th") land after the hold-timeout instead of force-tapping.
