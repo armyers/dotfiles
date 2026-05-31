@@ -83,10 +83,13 @@ Forcefully exiting kanata is still available out-of-band: `Left Control + Space 
 
 ## macOS daemons
 
-- `com.user.kanata-logitech.plist` — keeps kanata running with the Logitech config
+- `com.user.kanata-builtin.plist` — keeps kanata running with the MBP builtin config (`kanata.kbd` + `kanata-passthrough.kbd`)
+- `com.user.kanata-logitech.plist` — same, for the Logitech (`kanata-logitech.kbd` + `kanata-logitech-passthrough.kbd`)
 - `com.user.kanata-logitech-watcher.plist` — runs `watch-logitech.sh`, which polls `kanata --list` for the device hash and `launchctl kickstart`s kanata-logitech when the device reappears (kanata doesn't reattach to a hot-plugged device on its own)
 
 Install these by copying into `/Library/LaunchDaemons/` and `launchctl bootstrap`-ing.
+
+The Homebrew formula's `homebrew.mxcl.kanata.plist` is **not** used — `com.user.kanata-builtin.plist` replaces it so the plist lives in dotfiles and survives `brew upgrade`. If you ever see it back (e.g. after a reinstall), `launchctl bootout` it before bootstrapping the user one.
 
 ## Conventions
 
