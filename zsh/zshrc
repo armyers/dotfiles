@@ -14,7 +14,7 @@ fi
 
 if [[ -d $HOME/.local/bin ]]
 then
-   export PATH=$PATH:$HOME/.local/bin
+   export PATH=$HOME/.local/bin:$PATH
 fi
 
 # Check if shell is interactive
@@ -218,3 +218,12 @@ export PATH=/Users/allenmyers/.opencode/bin:$PATH
 export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# bun completions
+[ -s "/Users/allenmyers/.bun/_bun" ] && source "/Users/allenmyers/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+[[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
