@@ -3,11 +3,16 @@
 
 # ─── Startup ────────────────────────────────────────────────────────────────
 after-login-command = []
-after-startup-command = ['exec-and-forget sketchybar', 'exec-and-forget ~/.config/aerospace/empty-workspace-watcher.sh']
+after-startup-command = [
+  'exec-and-forget sketchybar',
+  'exec-and-forget ~/.config/aerospace/empty-workspace-watcher.sh',
+]
 
 # Notify sketchybar when workspace changes
-exec-on-workspace-change = ['/bin/bash', '-c',
-    'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
+exec-on-workspace-change = [
+  '/bin/bash',
+  '-c',
+  'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE',
 ]
 start-at-login = true
 
@@ -28,7 +33,7 @@ default-root-container-orientation = 'auto'
 
 # ─── Mouse ──────────────────────────────────────────────────────────────────
 on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
-on-focus-changed = ['move-mouse window-lazy-center']
+on-focus-changed = ['move-mouse window-force-center']
 
 # Unhide apps so cmd-h doesn't break the tiling tree
 automatically-unhide-macos-hidden-apps = true
@@ -40,11 +45,11 @@ preset = 'qwerty'
 # ─── Gaps ───────────────────────────────────────────────────────────────────
 [gaps]
 inner.horizontal = 4
-inner.vertical   = 4
-outer.left       = 4
-outer.bottom     = 4
-outer.top        = [{ monitor.'main' = 36 }, { monitor.'built-in' = 4 }, 36]
-outer.right      = 4
+inner.vertical = 4
+outer.left = 4
+outer.bottom = 4
+outer.top = [{ monitor.'main' = 36 }, { monitor.'built-in' = 4 }, 36]
+outer.right = 4
 
 # ─── Workspace → Monitor assignment ────────────────────────────────────────
 # Main/external monitor (left)
@@ -52,7 +57,7 @@ outer.right      = 4
 #   F = firefox
 #   P = postman
 #   S = slack
-#   T = terminal (Ghostty)
+#   T = terminal
 #   W = work browser
 # Built-in monitor (right)
 #   C = personal browser
@@ -65,6 +70,7 @@ A = 'main'
 C = 'built-in'
 F = 'main'
 M = 'built-in'
+N = 'main'
 O = 'built-in'
 P = 'main'
 S = 'main'
@@ -80,6 +86,10 @@ run = 'move-node-to-workspace S'
 
 [[on-window-detected]]
 if.app-id = 'com.mitchellh.ghostty'
+run = 'move-node-to-workspace T'
+
+[[on-window-detected]]
+if.app-id = 'com.thdxg.cyotearm.debug'
 run = 'move-node-to-workspace T'
 
 [[on-window-detected]]
@@ -143,7 +153,9 @@ alt-cmd-s = 'exec-and-forget screencapture -i -c'
 # Uses focus-workspace.sh to work around macOS focusing the wrong Chrome window
 alt-a = 'exec-and-forget ~/.config/aerospace/focus-workspace.sh A'
 alt-c = 'exec-and-forget ~/.config/aerospace/focus-workspace.sh C'
+alt-f = 'exec-and-forget ~/.config/aerospace/focus-workspace.sh F'
 alt-m = 'exec-and-forget ~/.config/aerospace/focus-workspace.sh M'
+alt-n = 'exec-and-forget ~/.config/aerospace/focus-workspace.sh N'
 alt-o = 'exec-and-forget ~/.config/aerospace/focus-workspace.sh O'
 alt-p = 'exec-and-forget ~/.config/aerospace/focus-workspace.sh P'
 alt-s = 'exec-and-forget ~/.config/aerospace/focus-workspace.sh S'
@@ -155,6 +167,7 @@ alt-z = 'exec-and-forget ~/.config/aerospace/focus-workspace.sh Z'
 # --- Move window to workspace (caps+shift+key → alt+shift+key) ---
 alt-shift-a = 'move-node-to-workspace --focus-follows-window A'
 alt-shift-c = 'move-node-to-workspace --focus-follows-window C'
+alt-shift-f = 'move-node-to-workspace --focus-follows-window F'
 alt-shift-m = 'move-node-to-workspace --focus-follows-window M'
 alt-shift-n = 'move-node-to-workspace --focus-follows-window N'
 alt-shift-o = 'move-node-to-workspace --focus-follows-window O'
@@ -172,11 +185,11 @@ alt-tab = 'workspace-back-and-forth'
 alt-ctrl-tab = 'move-workspace-to-monitor --wrap-around next'
 
 # --- Focus monitor (ctrl-cmd-[/]) ---
-ctrl-cmd-leftSquareBracket  = 'focus-monitor --wrap-around prev'
+ctrl-cmd-leftSquareBracket = 'focus-monitor --wrap-around prev'
 ctrl-cmd-rightSquareBracket = 'focus-monitor --wrap-around next'
 
 # --- Move window to other monitor ---
-ctrl-cmd-shift-leftSquareBracket  = 'move-node-to-monitor --wrap-around prev'
+ctrl-cmd-shift-leftSquareBracket = 'move-node-to-monitor --wrap-around prev'
 ctrl-cmd-shift-rightSquareBracket = 'move-node-to-monitor --wrap-around next'
 
 # --- Cheatsheet (native transparent popup w/ fuzzy search, dismiss with esc) ---
@@ -190,8 +203,8 @@ alt-ctrl-semicolon = 'mode service'
 # ─── Service mode ──────────────────────────────────────────────────────────
 [mode.service.binding]
 esc = ['reload-config', 'mode main']
-r = ['flatten-workspace-tree', 'mode main']           # reset layout
-f = ['layout floating tiling', 'mode main']            # toggle float
+r = ['flatten-workspace-tree', 'mode main']                # reset layout
+f = ['layout floating tiling', 'mode main']                # toggle float
 backspace = ['close-all-windows-but-current', 'mode main']
 
 down = 'volume down'

@@ -9,7 +9,7 @@ ws_label() {
     O) echo "other" ;;
     P) echo "postman" ;;
     S) echo "slack" ;;
-    T) echo "terminal (Ghostty)" ;;
+    T) echo "terminal" ;;
     V) echo "vpn" ;;
     W) echo "work browser" ;;
     Z) echo "zoom" ;;
