@@ -1,0 +1,7 @@
+ Hammerspoon Keybindings
+
+ SCROLL  (hold to repeat)
+   cmd + shift + h                  scroll left
+   cmd + shift + j                  scroll down
+   cmd + shift + k                  scroll up
+   cmd + shift + l                  scroll right

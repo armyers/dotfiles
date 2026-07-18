@@ -7,22 +7,23 @@ Tiling window manager config with Karabiner integration (`caps_lock` → `alt` f
 | File                 | Purpose                                                         |
 | -------------------- | --------------------------------------------------------------- |
 | `aerospace.toml`     | AeroSpace config (keybindings, workspaces, monitor assignments) |
-| `cheatsheet.swift`   | Native macOS popup cheatsheet (translucent, dismiss with esc/q) |
-| `cheatsheet`         | Compiled binary (built from `cheatsheet.swift`)                 |
 | `cheatsheet.txt`     | Cheatsheet content (auto-generated from `aerospace.toml`)       |
-| `gen-cheatsheet.py`  | Generates `cheatsheet.txt` by parsing `aerospace.toml`          |
+| `gen-cheatsheet.py`  | Generates `cheatsheet.txt` and `workspace-labels.sh`            |
 | `focus-workspace.sh` | Workspace switcher that force-focuses the correct window        |
-| `Makefile`           | Builds the cheatsheet binary                                    |
 
 ## Cheatsheet
 
-The popup cheatsheet is triggered by `caps + shift + ?` and auto-generates its content from the config on every invocation.
+The AeroSpace keybindings are shown alongside the Kanata, skhd, and Hammerspoon
+keybindings in the combined popup that lives in [`../cheatsheet/`](../cheatsheet/)
+— a single multi-column, fuzzy-searchable window triggered by `ctrl + alt + k`.
 
 ### How it works
 
-1. AeroSpace keybinding calls `gen-cheatsheet.py` then launches the `cheatsheet` binary
-2. `gen-cheatsheet.py` parses `aerospace.toml` (keybindings, workspace assignments, and comment labels) and writes `cheatsheet.txt`
-3. The binary reads `cheatsheet.txt` and displays a transparent floating popup
+1. The `alt-ctrl-k` keybinding runs each source's `gen-cheatsheet.py` (this dir
+   plus kanata, skhd, hammerspoon), then launches `~/.config/cheatsheet/cheatsheet`
+2. `gen-cheatsheet.py` parses `aerospace.toml` (keybindings, workspace
+   assignments, and comment labels) and writes `cheatsheet.txt`
+3. The combined popup reads every source's `cheatsheet.txt` and displays them
 
 ### Updating content
 
@@ -34,16 +35,9 @@ Edit `aerospace.toml` — workspace labels come from the comments above `[worksp
 #   W = Work browser
 ```
 
-Changes appear automatically the next time you press `caps + shift + ?`.
-
-### Rebuilding the binary
-
-Only needed if you edit `cheatsheet.swift` (appearance, colors, window size):
-
-```sh
-cd ~/.config/aerospace
-make
-```
+Changes appear automatically the next time you press `ctrl + alt + k`. See
+[`../cheatsheet/README.md`](../cheatsheet/README.md) for the popup itself
+(appearance, rebuilding the binary).
 
 ## Keybinding Summary
 
@@ -66,7 +60,7 @@ make
 | ctrl + cmd + [ / ]           | focus prev/next monitor          |
 | ctrl + cmd + shift + [ / ]   | move window to prev/next monitor |
 | caps + cmd + s               | screenshot (interactive)         |
-| caps + shift + ?             | cheatsheet popup                 |
+| ctrl + alt + k               | cheatsheet popup (combined)      |
 | caps + ctrl + ;              | service mode                     |
 
 ## macOS Permissions

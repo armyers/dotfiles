@@ -1,0 +1,14 @@
+ skhd Keybindings
+
+ GENERAL
+   cmd + ctrl + alt + shift + r     Restart both kanata daemons
+   ctrl + alt + t                   Tomahawk56 cheatsheet popup
+
+ KARABINER→KANATA MIGRATION SHORTCUTS
+   ctrl + shift + h                 → left
+   ctrl + shift + j                 → down
+   ctrl + shift + k                 → up
+   ctrl + shift + l                 → right
+   ctrl + shift + g                 Open Gemini in new Chrome window
+   ctrl + shift + s                 Toggle AeroSpace
+   ctrl + shift + d                 Cycle audio devices

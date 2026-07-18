@@ -7,3 +7,6 @@ debug
 data
 .DS_Store
 tags
+
+# compiled cheatsheet popup binary (build with `make` in cheatsheet/)
+cheatsheet/cheatsheet

@@ -28,8 +28,7 @@ kanata --list
 # Regenerate cheatsheet.txt from kanata.kbd
 python3 gen-cheatsheet.py
 
-# Build the macOS cheatsheet popup binary (Cocoa, Swift)
-make
+# The cheatsheet popup binary now lives in ../cheatsheet (build it there).
 ```
 
 `~/.config/kanata` is a symlink to this directory, so the launchd plists and any kanata invocation that reads from `~/.config/kanata/*.kbd` end up here.
@@ -66,7 +65,10 @@ The `c`/`x`/`v`/`t`/`u` aliases (macOS configs only) share the outer `tap-hold-r
 
 Parsing uses a paren-balanced splitter in `iter_aliases()`. If you add a new HRM or shortcut style, the parser may need updating there (in particular, HRMs are distinguished from letter-shortcuts by whether the body contains `(macro …)`).
 
-`cheatsheet.swift` is a Cocoa popup that renders `cheatsheet.txt` next to the binary, highlighting section headers. It's typically bound to a global hotkey (Alt+Ctrl+K) and dismisses on focus loss, Esc, or `q`. Build with `make`; the binary goes to `./cheatsheet`.
+`cheatsheet.txt` is rendered by the combined popup in `../cheatsheet/` (a
+multi-column, fuzzy-searchable Cocoa window showing Kanata alongside AeroSpace,
+skhd, and Hammerspoon), bound to `Ctrl+Alt+K` and dismissed on focus loss or
+Esc. This dir no longer has its own popup binary — see `../cheatsheet/README.md`.
 
 ## Toggle remapping on/off (live-reload pairs)
 

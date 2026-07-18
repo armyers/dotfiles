@@ -179,9 +179,10 @@ ctrl-cmd-rightSquareBracket = 'focus-monitor --wrap-around next'
 ctrl-cmd-shift-leftSquareBracket  = 'move-node-to-monitor --wrap-around prev'
 ctrl-cmd-shift-rightSquareBracket = 'move-node-to-monitor --wrap-around next'
 
-# --- Cheatsheet (native transparent popup, dismiss with esc/q) ---
-alt-shift-slash = 'exec-and-forget python3 ~/.config/aerospace/gen-cheatsheet.py && ~/.config/aerospace/cheatsheet'
-alt-ctrl-k = 'exec-and-forget python3 ~/.config/kanata/gen-cheatsheet.py && ~/.config/kanata/cheatsheet'
+# --- Cheatsheet (native transparent popup w/ fuzzy search, dismiss with esc) ---
+# Combined AeroSpace + Kanata + skhd + Hammerspoon keybindings; regenerate each
+# source's cheatsheet, then open the popup.
+alt-ctrl-k = 'exec-and-forget python3 ~/.config/aerospace/gen-cheatsheet.py && python3 ~/.config/kanata/gen-cheatsheet.py && python3 ~/.config/skhd/gen-cheatsheet.py && python3 ~/.config/hammerspoon/gen-cheatsheet.py && ~/.config/cheatsheet/cheatsheet'
 
 # --- Service mode ---
 alt-ctrl-semicolon = 'mode service'

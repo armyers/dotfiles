@@ -12,9 +12,11 @@
 ~/.dotfiles/rg/ignore -> ../fd/ignore
 ~/.bash_functions -> .dotfiles/bash/bash_functions
 ~/.bashrc -> .dotfiles/bash/bashrc
+~/.config/cheatsheet -> ../.dotfiles/cheatsheet
 ~/.config/fd -> ../.dotfiles/fd
 ~/.config/fzf -> ../.dotfiles/fzf
 ~/.config/gh -> ../.dotfiles/gh
+~/.config/hammerspoon -> ../.dotfiles/hammerspoon
 ~/.config/git/ignore -> ../../.dotfiles/git/ignore
 ~/.config/kanata -> ../.dotfiles/kanata
 ~/.config/karabiner/karabiner.json -> ../../.dotfiles/karabiner-elements/karabiner.json
