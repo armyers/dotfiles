@@ -1,40 +1,12 @@
 # ----- ~/.config/skhd/skhdrc -----
 # No alias; we spell out cmd+alt+ctrl+shift explicitly.
 
-
-# monocle/stack navigation (use symbol keys)
-# cmd + ctrl + alt + shift - . : yabai -m window --focus stack.next
-# cmd + ctrl + alt + shift - , : yabai -m window --focus stack.prev
-
-# reorder within the stack
-# cmd + ctrl + alt + shift - ] : yabai -m window --swap stack.next
-# cmd + ctrl + alt + shift - [ : yabai -m window --swap stack.prev
-
-# make current space monocle (stack) on the fly
-cmd + ctrl + alt + shift - m : yabai -m space --layout stack
-
-# fullscreen the focused window without macOS spaces
-cmd + ctrl + alt + shift - f : yabai -m window --toggle windowed-fullscreen
-
 # Restart both kanata daemons (post-sleep recovery). Uses osascript so macOS
 # shows its native auth dialog (TouchID / password) for the sudo step.
 cmd + ctrl + alt + shift - r : osascript -e 'do shell script "/Users/allenmyers/.dotfiles/kanata/reset-daemons.sh" with administrator privileges' -e 'display notification "Both daemons restarted" with title "Kanata Reset"'
 
 # Tomahawk56 cheatsheet popup (SVG keymap)
 ctrl + alt - t : /Users/allenmyers/code/armyers/tomahawk56-zmk-config/cheatsheet
-
-# tiling helpers you had:
-cmd + ctrl + alt + shift - left  : yabai -m window --toggle float; yabai -m window --grid 1:2:0:0:1:1
-cmd + ctrl + alt + shift - right : yabai -m window --toggle float; yabai -m window --grid 1:2:1:0:1:1
-cmd + ctrl + alt + shift - h : yabai -m window --swap west;  yabai -m space --balance
-cmd + ctrl + alt + shift - l : yabai -m window --swap east;  yabai -m space --balance
-cmd + ctrl + alt + shift - k : yabai -m window --swap north; yabai -m space --balance
-cmd + ctrl + alt + shift - j : yabai -m window --swap south; yabai -m space --balance
-cmd + ctrl + alt + shift - a : yabai -m window --focus west
-cmd + ctrl + alt + shift - d : yabai -m window --focus east
-cmd + ctrl + alt + shift - w : yabai -m window --focus north
-cmd + ctrl + alt + shift - s : yabai -m window --focus south
-cmd + ctrl + alt + shift - b : yabai -m space --balance
 
 # ─── Karabiner→Kanata migration shortcuts ───────────────────────────────
 # Trigger via Kanata HRM (s=ctrl, a=shift, d=cmd, f=alt) or physical fn (=ctrl)
@@ -53,14 +25,3 @@ ctrl + shift - s : pgrep -x AeroSpace > /dev/null && osascript -e 'tell applicat
 
 # Cycle audio devices (d is HRM cmd key — trigger via physical fn+shift+d)
 ctrl + shift - d : /Users/allenmyers/.local/bin/cycle-audio.sh
-
-# PasteBot/cmd-ctrl-c bindings removed — HRM cmd+ctrl is unreliable (release-order
-# emits modifiers after the trigger). Use plain cmd+c / cmd+v instead.
-
-# REDUNDANT with HRM (no longer needed):
-#   ctrl+shift+c/x/a/w/q/r/z/f/t/0/-/+/enter  → just hold d (cmd)
-#   ctrl+shift+n/p (find next/prev)           → just hold d+a, tap g
-#   ctrl+shift+[/] (AeroSpace focus)          → just hold f (alt), tap h/l
-# SKIPPED:
-#   ctrl+cmd+j/k (scroll wheel) — no easy macOS-CLI primitive
-#   ctrl+delete (forward delete) — complex with HRM-derived ctrl
