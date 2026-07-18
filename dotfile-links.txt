@@ -24,3 +24,4 @@
 ~/.config/skhd -> ../.dotfiles/skhd
 ~/.config/yabai -> ../.dotfiles/yabai
 ~/.zshrc -> .dotfiles/zsh/zshrc
+~/.local/bin/gen-mcp-profiles.py -> ../../.dotfiles/local-bin/gen-mcp-profiles.py
