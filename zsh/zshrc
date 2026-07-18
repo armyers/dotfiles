@@ -17,6 +17,12 @@ then
    export PATH=$HOME/.local/bin:$PATH
 fi
 
+# AWS MCP proxy: allowlist of profiles switchable per-call (first = default)
+# Derived dynamically from ~/.aws/config so it stays in sync as profiles change
+if command -v gen-mcp-profiles.py &>/dev/null; then
+   export AWS_MCP_PROXY_PROFILES="$(gen-mcp-profiles.py)"
+fi
+
 # Check if shell is interactive
 if [[ $- != *i* ]]; then
   # don't need any of the commands below for non-interactive shells
