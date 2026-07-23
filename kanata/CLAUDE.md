@@ -102,9 +102,41 @@ Mechanics worth knowing:
 
 - `com.user.kanata-builtin.plist` — keeps kanata running with the MBP builtin config (`kanata.kbd` + `kanata-passthrough.kbd`)
 - `com.user.kanata-logitech.plist` — same, for the Logitech (`kanata-logitech.kbd` + `kanata-logitech-passthrough.kbd`)
-- `com.user.kanata-logitech-watcher.plist` — runs `watch-logitech.sh`, which polls `kanata --list` for the device hash and `launchctl kickstart`s kanata-logitech when the device reappears (kanata doesn't reattach to a hot-plugged device on its own)
+- `com.user.kanata-logitech-watcher.plist` — runs `watch-logitech.sh`, which polls `kanata --list` for the device (by name `MX MCHNCL`, since the hash drifts) and `launchctl kickstart`s kanata-logitech when it appears (kanata doesn't reattach to a hot-plugged device on its own)
+- `com.user.kanata-reset.plist` — mouse-only recovery. `QueueDirectories` on `~/.local/state/kanata`; when the Hammerspoon menu-bar item drops a request file there, it runs `kanata-reset.sh` to clean-restart all three daemons. See "Mouse-only reset" below.
 
 Install these by copying into `/Library/LaunchDaemons/` and `launchctl bootstrap`-ing.
+
+## Mouse-only reset
+
+When a daemon jams, the keyboard(s) stop working, so the keyboard/`sudo` reset
+paths (the skhd `cmd+ctrl+alt+shift+r` binding, or typing `sudo`) are
+unreachable — the worst case was rebooting. The mouse-only path recovers without
+a keyboard or a password:
+
+1. The Hammerspoon menu-bar item **⌨️ kanata → "Reset kanata daemons"** (`../hammerspoon/init.lua`)
+   creates `~/.local/state/kanata/reset.request`.
+2. The root `com.user.kanata-reset` daemon watches that directory via `QueueDirectories`
+   and runs `kanata-reset.sh` as root — no password, no keyboard.
+
+Install (the only step needing `sudo`):
+
+```sh
+sudo ~/.config/kanata/install-reset-daemon.sh
+```
+
+Two design choices matter, both learned the hard way:
+
+- **`bootout` + `bootstrap`, never `kickstart -k`.** A `SIGKILL` can leave the
+  device grab / Karabiner driver wedged and send kanata into a `SIGTRAP`
+  crash-loop that only a reboot clears. `bootout` (graceful `SIGTERM`) lets
+  kanata release cleanly.
+- **No spurious reset at install/boot.** `QueueDirectories` only launches the job
+  while the watched dir is non-empty. The installer creates the dir but not the
+  request file, so it stays empty — and idle — until a menu-bar click drops the
+  file in; `kanata-reset.sh` removes it first thing so launchd doesn't relaunch.
+  (`WatchPaths`, tried first, does not fire reliably on directory _content_
+  changes — hence `QueueDirectories`.)
 
 The Homebrew formula's `homebrew.mxcl.kanata.plist` is **not** used — `com.user.kanata-builtin.plist` replaces it so the plist lives in dotfiles and survives `brew upgrade`. If you ever see it back (e.g. after a reinstall), `launchctl bootout` it before bootstrapping the user one.
 

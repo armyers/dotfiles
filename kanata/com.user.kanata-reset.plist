@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>com.user.kanata-reset</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/Users/allenmyers/.config/kanata/kanata-reset.sh</string>
+	</array>
+	<key>QueueDirectories</key>
+	<array>
+		<string>/Users/allenmyers/.local/state/kanata</string>
+	</array>
+	<key>RunAtLoad</key>
+	<false/>
+	<key>KeepAlive</key>
+	<false/>
+	<key>ThrottleInterval</key>
+	<integer>2</integer>
+	<key>StandardErrorPath</key>
+	<string>/opt/homebrew/var/log/kanata-reset.log</string>
+	<key>StandardOutPath</key>
+	<string>/opt/homebrew/var/log/kanata-reset.log</string>
+	<key>WorkingDirectory</key>
+	<string>/Users/allenmyers</string>
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>PATH</key>
+		<string>/opt/homebrew/bin:/opt/homebrew/sbin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+	</dict>
+</dict>
+</plist>

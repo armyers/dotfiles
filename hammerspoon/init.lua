@@ -50,3 +50,31 @@ for key, d in pairs(DIRS) do
 end
 
 hs.alert.show("Scroll bindings loaded")
+
+------------------------------------------------------------
+-- Kanata reset menu-bar item (mouse-only, keyboard-independent)
+--
+-- When a kanata daemon jams, the keyboard stops working — so the usual
+-- keyboard/sudo reset is unreachable. Clicking this menu-bar item instead
+-- creates a request file that a root LaunchDaemon (com.user.kanata-reset)
+-- watches; that daemon clean-restarts all three kanata daemons (bootout +
+-- bootstrap, no SIGKILL) with no password. See ../kanata/CLAUDE.md.
+------------------------------------------------------------
+
+local RESET_DIR = os.getenv("HOME") .. "/.local/state/kanata"
+local RESET_REQ = RESET_DIR .. "/reset.request"
+
+local function requestKanataReset()
+  -- Create the request file; the root daemon reacts to the directory change.
+  os.execute(string.format("/bin/mkdir -p %q && /usr/bin/touch %q", RESET_DIR, RESET_REQ))
+  hs.alert.show("Resetting kanata daemons…")
+end
+
+local kanataMenu = hs.menubar.new()
+if kanataMenu then
+  kanataMenu:setTitle("⌨️ kanata")
+  kanataMenu:setTooltip("Reset kanata daemons")
+  kanataMenu:setMenu({
+    { title = "Reset kanata daemons", fn = requestKanataReset },
+  })
+end
