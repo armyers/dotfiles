@@ -47,6 +47,19 @@ kanata) rather than in kanata itself, so it works even when both keyboards are
 dead. Setup and mechanics: [`../kanata/CLAUDE.md`](../kanata/CLAUDE.md)
 ("Mouse-only reset").
 
+> [!important]
+> The menu-bar object **must** be held in a persistent reference. `hs.menubar`
+> objects are not retained internally by Hammerspoon, so a `local kanataMenu`
+> goes out of scope when `init.lua` finishes and the icon gets garbage-collected
+> off the menu bar on the next GC cycle — even while Hammerspoon keeps running.
+> `init.lua` keeps it in a **global** (`kanataMenu`, no `local`) to prevent this.
+
+If the icon does disappear (Hammerspoon crashed, or an older config regressed the
+reference), the mouse-only fallback that survives even a missing icon is
+`../kanata/reset-kanata.command` — a double-clickable script (Finder runs
+`.command` files in Terminal) that drops the same request file. Keep a copy or
+alias on the Desktop or in the Dock.
+
 ## Cheatsheet
 
 `gen-cheatsheet.py` parses `init.lua` (the `SCROLL_MODS` chord and the `DIRS`

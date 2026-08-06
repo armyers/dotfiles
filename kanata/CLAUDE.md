@@ -103,7 +103,7 @@ Mechanics worth knowing:
 - `com.user.kanata-builtin.plist` — keeps kanata running with the MBP builtin config (`kanata.kbd` + `kanata-passthrough.kbd`)
 - `com.user.kanata-logitech.plist` — same, for the Logitech (`kanata-logitech.kbd` + `kanata-logitech-passthrough.kbd`)
 - `com.user.kanata-logitech-watcher.plist` — runs `watch-logitech.sh`, which polls `kanata --list` for the device (by name `MX MCHNCL`, since the hash drifts) and `launchctl kickstart`s kanata-logitech when it appears (kanata doesn't reattach to a hot-plugged device on its own)
-- `com.user.kanata-reset.plist` — mouse-only recovery. `QueueDirectories` on `~/.local/state/kanata`; when the Hammerspoon menu-bar item drops a request file there, it runs `kanata-reset.sh` to clean-restart all three daemons. See "Mouse-only reset" below.
+- `com.user.kanata-reset.plist` — mouse-only recovery. `QueueDirectories` on `~/.local/state/kanata`; when the Hammerspoon menu-bar item (or `reset-kanata.command`) drops a request file there, it runs `kanata-reset.sh` to clean-restart all three daemons. See "Mouse-only reset" below.
 
 Install these by copying into `/Library/LaunchDaemons/` and `launchctl bootstrap`-ing.
 
@@ -114,10 +114,21 @@ paths (the skhd `cmd+ctrl+alt+shift+r` binding, or typing `sudo`) are
 unreachable — the worst case was rebooting. The mouse-only path recovers without
 a keyboard or a password:
 
-1. The Hammerspoon menu-bar item **⌨️ kanata → "Reset kanata daemons"** (`../hammerspoon/init.lua`)
-   creates `~/.local/state/kanata/reset.request`.
+1. Either entry point creates `~/.local/state/kanata/reset.request` — both are
+   mouse-only and neither needs a password (the privileged work happens in the
+   root daemon, not the trigger):
+   - The Hammerspoon menu-bar item **⌨️ kanata → "Reset kanata daemons"** (`../hammerspoon/init.lua`).
+   - `reset-kanata.command` — a double-clickable script (Finder runs `.command`
+     files in Terminal). This is the fallback for when even the menu-bar icon is
+     gone (e.g. Hammerspoon crashed, or the icon got garbage-collected). Keep a
+     copy or alias on the Desktop or in the Dock for one-click access.
 2. The root `com.user.kanata-reset` daemon watches that directory via `QueueDirectories`
    and runs `kanata-reset.sh` as root — no password, no keyboard.
+
+Recovery layers, most to least dependent on a working keyboard: skhd
+`cmd+ctrl+alt+shift+r` (needs a live keyboard) → Hammerspoon menu-bar icon (needs
+Hammerspoon + its icon) → `reset-kanata.command` via Finder/Dock (mouse-only,
+survives a dead keyboard _and_ a missing icon).
 
 Install (the only step needing `sudo`):
 
