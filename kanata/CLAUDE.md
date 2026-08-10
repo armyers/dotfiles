@@ -154,5 +154,6 @@ The Homebrew formula's `homebrew.mxcl.kanata.plist` is **not** used — `com.use
 ## Conventions
 
 - Keep `kanata.kbd` and `kanata-logitech.kbd` structurally identical (same aliases, same timings, same `defvar`/`defalias`/`defchordsv2`/`deflayer` ordering). When you edit one, mirror to the other.
+  - **Deliberate exception:** the function-row → media-key mappings (`f1 f2 f7-f12` → brightness/media/volume) live in `kanata.kbd` **only**. They exist because grabbing the Apple internal keyboard through the Karabiner virtual HID device bypasses macOS's built-in fn-row → media translation, leaving raw F-keys. The Logitech's fn row already emits media keys natively, so mirroring there is unnecessary and would only risk breaking what works. Do **not** copy them into `kanata-logitech.kbd`.
 - After any HRM/alias change, regenerate `cheatsheet.txt` so the popup stays accurate.
 - Validate every config change with `kanata --cfg <file> --check` before committing.

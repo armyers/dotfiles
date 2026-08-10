@@ -70,6 +70,12 @@
 
 (defsrc
   caps  fn   lctl  a    s    d    f    j    k    l    ;    c    x    v    t    esc   u
+  ;; Function row → Mac media keys. kanata grabs the built-in keyboard via the
+  ;; Karabiner virtual HID device, which bypasses macOS's Apple-internal fn-row →
+  ;; media translation, so the top row would otherwise be raw F1-F12. f3-f6 are
+  ;; left unmapped (pass through as F-keys): Mission Control / Spotlight /
+  ;; dictation / Focus are Apple vendor keys kanata can't emit.
+  f1    f2   f7   f8   f9   f10  f11  f12
 )
 
 (defalias
@@ -189,10 +195,12 @@
 
 (deflayer base
   @cap  lctl lmet   @a   @s   @d   @f   @j   @k   @l   @scln  @c   @x   @v   @t   caps   @u
+  brdown brup prev pp   next mute vold volu
 )
 
 ;; Streak layer: HRMs become plain letters; everything else mirrors base.
 ;; Entered on any HRM tap; left after $idle-timeout of inactivity.
 (deflayer nomods
   @cap  lctl lmet   a    s    d    f    j    k    l    ;      @c   @x   @v   @t   caps   @u
+  brdown brup prev pp   next mute vold volu
 )

@@ -5,6 +5,14 @@
    fn                               ctrl
    ctrl                             cmd
    esc                              caps lock
+   f1                               brdown
+   f2                               brup
+   f7                               prev
+   f8                               pp
+   f9                               next
+   f10                              mute
+   f11                              vold
+   f12                              volu
 
  HOME ROW MODS  (tap = letter, hold = modifier)
    a                                ctrl
