@@ -88,8 +88,8 @@ disabled = false
 # oh-my-posh closer: "" () in the "os" grey (#ACB0BE). Red on error is a
 # small enhancement over omp's always-grey chevron.
 [character]
-success_symbol = '[](#acb0be)'
-error_symbol = '[](red)'
+success_symbol = '[](#acb0be)'
+error_symbol = '[](red)'
 disabled = false
 
 [palettes.catppuccin_mocha]
