@@ -1,60 +1,96 @@
-#
+"$schema" = 'https://starship.rs/config-schema.json'
+
+# Converted from oh-my-posh (config.omp.json). Two-line prompt:
+#   line 1:  aws  terraform  conda  python  git-branch
+#   line 2:  path
 add_newline = false
+command_timeout = 1000
 
-# A minimal left prompt
-format = """ (yellow) $aws$kubernetes$python$conda$git_status
-$directory> """
-
-# move the rest of the prompt to the right
-# right_format = """$kubernetes$python$terraform$aws"""
+format = """\
+${custom.aws}\
+${custom.terraform}\
+$conda\
+$python\
+$git_branch\
+$git_status\
+$line_break\
+$directory\
+$character"""
 
 palette = "catppuccin_mocha"
 
-command_timeout = 700
+# ── line 1 ──────────────────────────────────────────────────────────────────
 
-[directory]
-truncation_length = 6
-truncate_to_repo = true
-disabled = false
+# oh-my-posh aws segment reproduced faithfully:  profile@region, always shown.
+# starship's built-in aws can't emit the literal "default" when AWS_* is unset, so
+# mirror oh-my-posh: profile = $AWS_VAULT/$AWS_PROFILE or "default"; region =
+# $AWS_REGION/$AWS_DEFAULT_REGION or the profile's region from ~/.aws/config.
+[custom.aws]
+command = '''
+p="${AWS_VAULT:-${AWS_PROFILE:-default}}"
+r="${AWS_REGION:-$AWS_DEFAULT_REGION}"
+if [ -z "$r" ]; then
+  r=$(awk -v p="$p" 'BEGIN{sec=(p=="default")?"[default]":"[profile " p "]"} $0==sec{f=1;next} /^\[/{f=0} f&&/^[ \t]*region[ \t]*=/{sub(/^[^=]*=[ \t]*/,"");print;exit}' "${AWS_CONFIG_FILE:-$HOME/.aws/config}")
+fi
+if [ -n "$r" ]; then printf '%s@%s' "$p" "$r"; else printf '%s' "$p"; fi
+'''
+when = true
+shell = ["bash", "--noprofile", "--norc"]
+format = '[  $output ]($style)'
+style = "blue"
 
-[package]
-disabled = true
+# oh-my-posh command segment running ~/bin/tf-version.sh (white text). The script
+# prints " 󱁢 <version>" only inside a terraform dir and is silent otherwise.
+[custom.terraform]
+command = "$HOME/bin/tf-version.sh"
+when = true
+shell = ["bash", "--noprofile", "--norc"]
+format = '[$output]($style)'
+style = "white"
 
-[aws]
-format = '[$symbol($profile )(\($region\) )]($style)'
-style = 'bold blue'
-symbol = "  "
-disabled = false
-
-[python]
-format = '[${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'
-disabled = false
-
-[git_branch]
-format = '[$symbol$branch(:$remote_branch)]($style) '
-disabled = false
-
-[git_status]
-disabled = false
-
+# oh-my-posh: "(conda){{env}}" unless env is base. starship hides base by default.
 [conda]
+format = '[\(conda\)$environment ]($style)'
+style = "#ababab"
 disabled = false
 
-[nodejs]
-disabled = true
-
-[terraform]
-format = '[$symbol$version]($style) '
-disabled = true
-
-[kubernetes]
-symbol = '☸ '
-detect_files = ['Dockerfile']
-format = '[$context(\[$namespace\])]($style) '
+# oh-my-posh python: "  {{ .Full }} ", foreground #AABB00 (olive)
+[python]
+symbol = " "
+format = '[$symbol$version ]($style)'
+style = "#AABB00"
 disabled = false
 
-[docker_context]
-disabled = true
+# oh-my-posh git: branch/HEAD, plus working/staging status,
+# branch_icon " ", foreground lavender.
+[git_branch]
+symbol = " "
+format = '[$symbol$branch ]($style)'
+style = "lavender"
+disabled = false
+
+# Working/staging status (matches oh-my-posh fetch_status:true).
+[git_status]
+style = "yellow"
+disabled = false
+
+# ── line 2 ──────────────────────────────────────────────────────────────────
+
+# oh-my-posh path: pink, home as ~, full-ish path.
+[directory]
+style = "pink"
+truncate_to_repo = false
+truncation_length = 5
+truncation_symbol = "…/"
+home_symbol = "~"
+disabled = false
+
+# oh-my-posh closer: "" () in the "os" grey (#ACB0BE). Red on error is a
+# small enhancement over omp's always-grey chevron.
+[character]
+success_symbol = '[](#acb0be)'
+error_symbol = '[](red)'
+disabled = false
 
 [palettes.catppuccin_mocha]
 rosewater = "#f5e0dc"
@@ -84,228 +120,28 @@ base = "#1e1e2e"
 mantle = "#181825"
 crust = "#11111b"
 
+# ── everything else off (single source of truth for the two lines above) ──────
+[kubernetes]
+disabled = true
+[nodejs]
+disabled = true
+[terraform]
+disabled = true
+[docker_context]
+disabled = true
+[package]
+disabled = true
 [username]
 disabled = true
-
 [hostname]
 disabled = true
-
-[localip]
-disabled = true
-
-[shlvl]
-disabled = true
-
-[singularity]
-disabled = true
-
-[vcsh]
-disabled = true
-
-[fossil_branch]
-disabled = true
-
-[fossil_metrics]
-disabled = true
-
-[git_commit]
-disabled = true
-
-[git_state]
-disabled = true
-
-[git_metrics]
-disabled = true
-
-[hg_branch]
-disabled = true
-
-[pijul_channel]
-disabled = true
-
-[c]
-disabled = true
-
-[cmake]
-disabled = true
-
-[cobol]
-disabled = true
-
-[daml]
-disabled = true
-
-[dart]
-disabled = true
-
-[deno]
-disabled = true
-
-[dotnet]
-disabled = true
-
-[elixir]
-disabled = true
-
-[elm]
-disabled = true
-
-[erlang]
-disabled = true
-
-[fennel]
-disabled = true
-
-[guix_shell]
-disabled = true
-
-[haskell]
-disabled = true
-
-[haxe]
-disabled = true
-
-[helm]
-disabled = true
-
-[java]
-disabled = true
-
-[julia]
-disabled = true
-
-[kotlin]
-disabled = true
-
-[gradle]
-disabled = true
-
-[lua]
-disabled = true
-
-[nim]
-disabled = true
-
-[ocaml]
-disabled = true
-
-[opa]
-disabled = true
-
-[perl]
-disabled = true
-
-[php]
-disabled = true
-
-[pulumi]
-disabled = true
-
-[purescript]
-disabled = true
-
-[raku]
-disabled = true
-
-[rlang]
-disabled = true
-
-[red]
-disabled = true
-
-[ruby]
-disabled = true
-
-[rust]
-disabled = true
-
-[scala]
-disabled = true
-
-[solidity]
-disabled = true
-
-[swift]
-disabled = true
-
-[typst]
-disabled = true
-
-[vlang]
-disabled = true
-
-[vagrant]
-disabled = true
-
-[zig]
-disabled = true
-
-[buf]
-disabled = true
-
-[nix_shell]
-disabled = true
-
-[meson]
-disabled = true
-
-[spack]
-disabled = true
-
-[memory_usage]
-disabled = true
-
-[gcloud]
-disabled = true
-
-[openstack]
-disabled = true
-
-[azure]
-disabled = true
-
-[direnv]
-disabled = true
-
-[env_var]
-disabled = true
-
-[crystal]
-disabled = true
-
-[custom]
-disabled = true
-
-[sudo]
-disabled = true
-
 [cmd_duration]
 disabled = true
-
-[line_break]
-disabled = true
-
-[jobs]
-disabled = true
-
-[battery]
-disabled = true
-
 [time]
 disabled = true
-
 [status]
 disabled = true
-
-[os]
+[battery]
 disabled = true
-
-[container]
+[jobs]
 disabled = true
-
-[shell]
-disabled = true
-
-[character]
-disabled = true
-
