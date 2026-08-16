@@ -65,13 +65,27 @@ disabled = false
 # branch_icon " ", foreground lavender.
 [git_branch]
 symbol = " "
-format = '[$symbol$branch ]($style)'
+format = '[$symbol$branch]($style)'
 style = "lavender"
 disabled = false
 
-# Working/staging status (matches oh-my-posh fetch_status:true).
+# Working/staging status (matches oh-my-posh fetch_status:true), with counts.
+# Each state is space-separated and colored per type for readability; the outer
+# brackets use the subtle overlay style. stashed needs the literal $ escaped
+# ('\$'), since starship's parser errors on a bare '$${count}'.
 [git_status]
-style = "yellow"
+style = "overlay1"
+format = '($all_status$ahead_behind)'
+conflicted = '[ =${count}](red)'
+stashed    = '[ \$${count}](teal)'
+deleted    = '[ ✘${count}](red)'
+renamed    = '[ »${count}](mauve)'
+modified   = '[ !${count}](yellow)'
+staged     = '[ +${count}](green)'
+untracked  = '[ ?${count}](sky)'
+ahead      = '[ ⇡${count}](green)'
+behind     = '[ ⇣${count}](red)'
+diverged   = '[ ⇕⇡${ahead_count}⇣${behind_count}](peach)'
 disabled = false
 
 # ── line 2 ──────────────────────────────────────────────────────────────────
