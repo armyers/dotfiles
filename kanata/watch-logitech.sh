@@ -14,7 +14,7 @@ POLL_SECS=2
 
 # Start as "absent" so a device already present when the watcher launches still
 # triggers a kickstart. This recovers the boot race where kanata-logitech starts
-# before the USB keyboard finishes enumerating and gives up ("doesn't match any
+# before the Bluetooth keyboard finishes connecting and gives up ("doesn't match any
 # connected device").
 prev="absent"
 while true; do

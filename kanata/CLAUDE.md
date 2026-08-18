@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 Three kanata keyboard remap configs and the supporting tooling:
 
 - `kanata.kbd` — MacBook Pro built-in keyboard (macOS)
-- `kanata-logitech.kbd` — Logitech MX MCHNCL via USB receiver (macOS)
+- `kanata-logitech.kbd` — Logitech MX MCHNCL via Bluetooth (macOS built-in, not a USB receiver)
 - `kanata-linux.kbd` — Logitech keyboard on Linux Mint XFCE + i3
 
 The three `.kbd` files are deliberately near-duplicates and kept in sync. They all implement urob's "timeless" home-row-mod pattern (see "HRM architecture" below). Differences:
