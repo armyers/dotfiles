@@ -104,6 +104,11 @@ disabled = false
 [character]
 success_symbol = '[](#acb0be)'
 error_symbol = '[](red)'
+# vi-mode: keep the same chevron in every mode instead of switching to '<'.
+vimcmd_symbol = '[](#acb0be)'
+vimcmd_replace_symbol = '[](#acb0be)'
+vimcmd_replace_one_symbol = '[](#acb0be)'
+vimcmd_visual_symbol = '[](#acb0be)'
 disabled = false
 
 [palettes.catppuccin_mocha]
