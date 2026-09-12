@@ -28,6 +28,9 @@ kanata --list
 # Regenerate cheatsheet.txt from kanata.kbd
 python3 gen-cheatsheet.py
 
+# Verify both macOS TCC permissions still match the current binary
+./check-permissions.sh
+
 # The cheatsheet popup binary now lives in ../cheatsheet (build it there).
 ```
 
@@ -101,9 +104,10 @@ Mechanics worth knowing:
 ## macOS daemons
 
 - `com.user.kanata-builtin.plist` — keeps kanata running with the MBP builtin config (`kanata.kbd` + `kanata-passthrough.kbd`)
-- `com.user.kanata-logitech.plist` — same, for the Logitech (`kanata-logitech.kbd` + `kanata-logitech-passthrough.kbd`)
-- `com.user.kanata-logitech-watcher.plist` — runs `watch-logitech.sh`, which polls `kanata --list` for the device (by name `MX MCHNCL`, since the hash drifts) and `launchctl kickstart`s kanata-logitech when it appears (kanata doesn't reattach to a hot-plugged device on its own)
+- `com.user.kanata-logitech.plist` — same, for the Logitech (`kanata-logitech.kbd` + `kanata-logitech-passthrough.kbd`). **`RunAtLoad` and `KeepAlive` are both `false`** — it is started only by the watcher below. See "Log growth" for why.
+- `com.user.kanata-logitech-watcher.plist` — runs `watch-logitech.sh`, which polls `kanata --list` for the device (by name `MX MCHNCL`, since the hash drifts) and `launchctl kickstart`s kanata-logitech when it appears (kanata doesn't reattach to a hot-plugged device on its own). It owns that daemon's entire lifecycle and retry policy.
 - `com.user.kanata-reset.plist` — mouse-only recovery. `QueueDirectories` on `~/.local/state/kanata`; when the Hammerspoon menu-bar item (or `reset-kanata.command`) drops a request file there, it runs `kanata-reset.sh` to clean-restart all three daemons. See "Mouse-only reset" below.
+- `com.user.kanata-logtrim.plist` — hourly `trim-kanata-logs.sh`, which bounds `/opt/homebrew/var/log/kanata*.log`. Install with `sudo ~/.config/kanata/install-logtrim-daemon.sh`. See "Log growth".
 
 Install these by copying into `/Library/LaunchDaemons/` and `launchctl bootstrap`-ing.
 
@@ -150,6 +154,114 @@ Two design choices matter, both learned the hard way:
   changes — hence `QueueDirectories`.)
 
 The Homebrew formula's `homebrew.mxcl.kanata.plist` is **not** used — `com.user.kanata-builtin.plist` replaces it so the plist lives in dotfiles and survives `brew upgrade`. If you ever see it back (e.g. after a reinstall), `launchctl bootout` it before bootstrapping the user one.
+
+## macOS permissions break on every kanata upgrade
+
+kanata needs **two** TCC permissions on macOS, and missing either one produces
+the identical symptom: `failed to open keyboard device(s)`, the process exits,
+and `KeepAlive` restarts it every ~10s — a crash loop that leaves the keyboard
+unremapped.
+
+| TCC service | System Settings pane | Notes |
+| --- | --- | --- |
+| `kTCCServiceListenEvent` | Input Monitoring | Read the physical keyboard |
+| `kTCCServiceAccessibility` | Accessibility | Added in kanata 1.12.0 ([#1211](https://github.com/jtroo/kanata/issues/1211)); 1.11.0 did not need it |
+
+The trap: **TCC pins each grant to the binary's cdhash**, not to its path or
+name. Homebrew's kanata is ad-hoc signed, so every `brew upgrade` yields a new
+cdhash and silently revokes both grants. The stale entry still shows in System
+Settings under the same name "kanata", toggled on, looking perfectly healthy.
+
+There is no path trick that avoids this. `/opt/homebrew/opt/kanata/bin/kanata`
+(what the plists invoke) is a symlink into the versioned Cellar directory, and
+TCC resolves symlinks to the real path and pins the hash regardless. Copying the
+binary to a fixed location doesn't help either — the copy's hash still changes on
+each upgrade.
+
+Mitigations in place:
+
+- **`brew pin kanata`** — upgrades become deliberate instead of a surprise that
+  eats your keyboard remaps. Run `brew unpin kanata` when you actually want one.
+- **`check-permissions.sh`** — reads `ProgramArguments[0]` out of the builtin
+  plist, resolves it, compares its `codesign` cdhash against the csreq blob in
+  both TCC rows, and distinguishes "never granted" from "granted to a stale
+  binary" (the latter needs a **remove** before the re-add). Also reachable from
+  the Hammerspoon **⌨️ kanata → "Check permissions…"** menu item.
+
+  Reading `TCC.db` requires Full Disk Access for the calling process. Terminal
+  typically has it; Hammerspoon typically does not, so the script falls back to
+  checking daemon liveness plus recent log errors. Run it from a terminal when
+  you want the precise per-permission verdict.
+
+### Re-granting after an upgrade
+
+For **each** of the two panes — remove any existing kanata entry first, since a
+stale one looks identical to a valid one:
+
+```sh
+./check-permissions.sh          # tells you which of the two are broken
+open "x-apple.systempreferences:com.apple.preference.security?Privacy_ListenEvent"
+open "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility"
+# Reveal the binary in Finder (check-permissions.sh prints its exact path)
+open -R /opt/homebrew/Cellar/kanata/<version>/bin/kanata
+```
+
+In each pane: `−` the stale entry, `+`, then drag the binary in or press `⌘⇧G`
+and paste its full Cellar path. Then restart the daemons (`bootout` +
+`bootstrap`, never `kickstart -k` — see above).
+
+## Log growth
+
+The kanata logs are unbounded by default and had been growing ~15 MB/day from
+two unrelated causes. Both are handled now, but they needed different fixes —
+one was a bug, the other is inherent.
+
+**1. `kanata-logitech.log` — a crash loop (~12.6 MB/day). Fixed at the root.**
+
+The daemon used to be `RunAtLoad=true` / `KeepAlive=true`. Whenever the Bluetooth
+keyboard was disconnected, kanata exited with `Couldn't register any device` and
+launchd relaunched it ~10s later, forever. 483 restarts were logged before this
+was noticed, burying real errors under identical repeats.
+
+launchd has no way to express "start when this device appears", but
+`watch-logitech.sh` already polls for exactly that — so the daemon is now
+`RunAtLoad=false` / `KeepAlive=false` and the watcher owns its lifecycle:
+
+- **Level-triggered**, not edge-triggered. The old watcher fired on an
+  absent→present transition, which misses a kanata crash while the keyboard
+  stays connected (no transition ever occurs, so nothing restarts it) and misses
+  a `bootout`+`bootstrap` from `kanata-reset.sh`. It now starts the daemon
+  whenever _device present AND daemon not running_, which recovers from both.
+- **Exponential backoff** (10s → 600s) so a persistently failing start — revoked
+  TCC permissions after a `brew upgrade`, a bad config — degrades to occasional
+  retries instead of hammering `launchctl` every 2s and re-creating the flood.
+  The backoff only resets after the daemon survives ~30s, so a fast
+  crash-start-crash cycle can't keep it pinned at the minimum.
+- Plain `kickstart`, never `kickstart -k` (same SIGKILL reasoning as
+  `kanata-reset.sh`).
+
+**2. `kanata-builtin.log` — inherent chatter (~2.7 MB/day). Bounded, not fixed.**
+
+A healthy builtin daemon still emits a bare `virtual_hid_keyboard_ready true`
+line on a timer. It comes from the Karabiner VirtualHIDDevice client library
+printing straight to stdout — note it carries no timestamp or log-level prefix,
+because it never passes through kanata's logger. `--quiet` therefore does not
+suppress it and no kanata flag does. It can only be bounded.
+
+`trim-kanata-logs.sh` (hourly, via `com.user.kanata-logtrim`) truncates any
+`kanata*.log` over 5 MB down to its last 2000 lines.
+
+> [!IMPORTANT]
+> It truncates **in place** and must keep doing so. `/etc/newsyslog.d` is the
+> usual macOS answer, but newsyslog rotates by _renaming_ — and launchd holds an
+> open fd on the original inode, so it would keep writing to the rotated file
+> while the fresh log stayed empty forever. newsyslog has no `copytruncate`.
+>
+> In-place truncation works because launchd opens `StandardOutPath` with
+> `O_APPEND`: every write is positioned at the current end of file, so after a
+> truncation the daemon's next write lands at offset 0 — no restart, no lost
+> bytes, no NUL padding. `cat tmp > "$f"` is what preserves the inode; a `mv`
+> would reintroduce the newsyslog bug.
 
 ## Conventions
 

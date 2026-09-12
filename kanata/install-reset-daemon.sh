@@ -3,7 +3,7 @@
 #
 # This is the ONLY step that needs sudo. Afterward, resetting the kanata daemons
 # is password-free and keyboard-free: the Hammerspoon menu-bar item creates the
-# request file, and this root daemon reacts to it via WatchPaths.
+# request file, and this root daemon reacts to it via QueueDirectories.
 #
 # Run:  sudo ~/.config/kanata/install-reset-daemon.sh
 set -euo pipefail

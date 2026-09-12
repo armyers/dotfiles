@@ -80,6 +80,25 @@ local function requestKanataReset()
 	hs.alert.show("Resetting kanata daemons…")
 end
 
+-- Every `brew upgrade` of kanata re-signs the binary with a new cdhash, which
+-- silently revokes both TCC grants (Input Monitoring + Accessibility) and leaves
+-- the daemons crash-looping. This surfaces that without a terminal.
+--
+-- Hammerspoon normally lacks Full Disk Access, so the script can't read TCC.db
+-- from here; it falls back to checking daemon liveness and recent log errors,
+-- which is enough to tell you whether something is broken. Run the script from
+-- Terminal for the precise per-permission verdict.
+local CHECK_SCRIPT = os.getenv("HOME") .. "/.config/kanata/check-permissions.sh"
+
+local function checkKanataPermissions()
+	local out, ok = hs.execute(CHECK_SCRIPT)
+	hs.dialog.blockAlert(
+		ok and "kanata permissions OK" or "kanata permissions need attention",
+		out ~= "" and out or "check-permissions.sh produced no output",
+		"OK"
+	)
+end
+
 -- NOTE: intentionally a GLOBAL (no `local`). hs.menubar objects are not
 -- retained internally by Hammerspoon; a `local` reference goes out of scope
 -- when this chunk finishes and the icon is garbage-collected off the menu bar
@@ -88,8 +107,10 @@ end
 kanataMenu = hs.menubar.new()
 if kanataMenu then
 	kanataMenu:setTitle("⌨️ kanata")
-	kanataMenu:setTooltip("Reset kanata daemons")
+	kanataMenu:setTooltip("Reset kanata daemons / check permissions")
 	kanataMenu:setMenu({
 		{ title = "Reset kanata daemons", fn = requestKanataReset },
+		{ title = "-" },
+		{ title = "Check permissions…", fn = checkKanataPermissions },
 	})
 end

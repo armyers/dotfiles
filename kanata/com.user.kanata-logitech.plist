@@ -13,10 +13,16 @@
 		<string>--cfg</string>
 		<string>/Users/allenmyers/.config/kanata/kanata-logitech-passthrough.kbd</string>
 	</array>
+	<!-- Started ONLY by watch-logitech.sh, which can see whether the Bluetooth
+	     keyboard is actually connected. Under RunAtLoad/KeepAlive, every moment
+	     the keyboard was away launchd relaunched kanata, it failed with
+	     "Couldn't register any device", and launchd relaunched it ~10s later,
+	     forever — ~12 MB of log per day. launchd has no way to express "start
+	     when this device appears", so that policy lives in the watcher. -->
 	<key>RunAtLoad</key>
-	<true/>
+	<false/>
 	<key>KeepAlive</key>
-	<true/>
+	<false/>
 	<key>StandardErrorPath</key>
 	<string>/opt/homebrew/var/log/kanata-logitech.log</string>
 	<key>StandardOutPath</key>

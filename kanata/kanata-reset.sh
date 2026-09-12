@@ -16,6 +16,10 @@ REQ="/Users/allenmyers/.local/state/kanata/reset.request"
 [ -e "$REQ" ] || exit 0
 rm -f "$REQ"
 
+# kanata-logitech is RunAtLoad=false, so bootstrapping it only LOADS the job —
+# it stays stopped until watch-logitech.sh sees the keyboard and kickstarts it
+# (within ~2s if it's connected). That's expected; don't "fix" it by restoring
+# RunAtLoad, which is what caused the crash-loop log flood. See ../kanata/CLAUDE.md.
 SERVICES="com.user.kanata-builtin com.user.kanata-logitech com.user.kanata-logitech-watcher"
 
 for svc in $SERVICES; do
