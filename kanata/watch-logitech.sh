@@ -24,8 +24,17 @@
 # never re-transitions, so no restart ever fires) and misses a bootout+bootstrap
 # from kanata-reset.sh. Level-triggering recovers from both.
 
-LIST_CMD="/opt/homebrew/opt/kanata/bin/kanata --list"
+# An ARRAY, not a string. As a string this was invoked as "$LIST_CMD" — fully
+# quoted — so bash searched for a command literally named
+# "/opt/homebrew/opt/kanata/bin/kanata --list", which of course does not exist.
+# The failure went to stderr, straight into the `2>&1 | grep` that consumed it,
+# so every probe silently reported "keyboard absent" and nothing ever logged it.
+# That bug was harmless while the daemon had KeepAlive (launchd retried every
+# ~10s and grabbed the keyboard on its own); it became fatal the moment this
+# watcher became the only thing that starts the daemon.
+LIST_CMD=(/opt/homebrew/opt/kanata/bin/kanata --list)
 TARGET="MX MCHNCL" # product name from `kanata --list` (stable; Logitech vendor 1133)
+LIST_HEADER="Available keyboard devices" # proves the probe actually ran
 SERVICE="system/com.user.kanata-logitech"
 CFG_MATCH="kanata-logitech.kbd" # unique to this daemon's command line
 POLL_SECS=2
@@ -43,7 +52,34 @@ BACKOFF_MAX=600
 # otherwise a fast crash-start-crash cycle never backs off at all.
 HEALTHY_POLLS=15
 
-device_present() { "$LIST_CMD" 2>&1 | grep -q "$TARGET"; }
+# How often to re-report a probe that cannot run at all (see device_present).
+PROBE_COMPLAINT_SECS=300
+
+# A probe that CANNOT RUN must be loud, never indistinguishable from "keyboard
+# is not plugged in" — that silence is exactly what hid the bug above. So this
+# checks that the listing actually happened (exit status + expected header)
+# before trusting a negative result, and complains when it didn't.
+probe_failed_at=0
+device_present() {
+  local out rc now
+  out=$("${LIST_CMD[@]}" 2>&1)
+  rc=$?
+
+  if [[ $rc -ne 0 ]] || ! grep -q "$LIST_HEADER" <<< "$out"; then
+    # Rate-limited: this runs every POLL_SECS, and a broken probe must not
+    # recreate the log flood this rewrite exists to prevent.
+    now=$(date +%s)
+    if [[ $((now - probe_failed_at)) -ge $PROBE_COMPLAINT_SECS ]]; then
+      probe_failed_at=$now
+      echo "$(date '+%Y-%m-%d %H:%M:%S') ERROR: device probe failed (exit $rc); cannot tell if the keyboard is connected" >&2
+      echo "$out" | head -3 | sed 's/^/    /' >&2
+    fi
+    return 1
+  fi
+
+  grep -q "$TARGET" <<< "$out"
+}
+
 daemon_running() { pgrep -f "$CFG_MATCH" > /dev/null 2>&1; }
 
 backoff=$BACKOFF_MIN

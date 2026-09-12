@@ -239,6 +239,20 @@ launchd has no way to express "start when this device appears", but
   crash-start-crash cycle can't keep it pinned at the minimum.
 - Plain `kickstart`, never `kickstart -k` (same SIGKILL reasoning as
   `kanata-reset.sh`).
+- **The device probe is an array and validates that it ran.** `LIST_CMD` used
+  to be a string invoked as `"$LIST_CMD"` — fully quoted, so bash searched for a
+  command literally named `/opt/homebrew/opt/kanata/bin/kanata --list`. It never
+  ran, the error was swallowed by the `2>&1 | grep` consuming it, and every poll
+  silently concluded "keyboard absent". The watcher log sat at 0 bytes from May
+  until September because of it.
+
+  That was survivable only because `KeepAlive` was independently retrying every
+  ~10s and grabbing the keyboard anyway — the watcher was decorative and nobody
+  knew. Removing `KeepAlive` promoted it to load-bearing and the dormant bug
+  became "the Logitech never works". **A probe that cannot run must never be
+  indistinguishable from a negative result**, so `device_present` now checks
+  exit status and the expected listing header before trusting an "absent", and
+  logs loudly (rate-limited to 5 min) when the probe itself is broken.
 
 **2. `kanata-builtin.log` — inherent chatter (~2.7 MB/day). Bounded, not fixed.**
 
