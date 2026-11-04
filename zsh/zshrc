@@ -37,8 +37,9 @@ export LESSOPEN='| /opt/homebrew/bin/src-hilite-lesspipe.sh %s'
 export LESS=' -R -X'
 export MANPAGER='nvim +Man!'
 export KUBECTL_EXTERNAL_DIFF="colordiff -u -N"
-export GITHUB_TOKEN=$(cat ~/.private/GITHUB_ACCESS_TOKEN)
+export GITHUB_TOKEN="$(cat ~/.private/GITHUB_ACCESS_TOKEN)"
 [[ -f ~/.private/DD_API_KEY ]] && source ~/.private/DD_API_KEY
+[[ -f ~/.private/POSTMAN_API_KEY ]] && export POSTMAN_API_KEY="$(cat ~/.private/POSTMAN_API_KEY)"
 export TENV_AUTO_INSTALL=true
 
 # history settings
@@ -238,4 +239,6 @@ export NVM_DIR="$HOME/.config/nvm"
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
-[[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
+# direnv to set environments based on directory entry
+export DIRENV_LOG_FORMAT=""
+eval "$(direnv hook zsh)"

@@ -93,11 +93,6 @@
       "newline": true
     }
   ],
-  "transient_prompt": {
-    "template": " ",
-    "foreground": "p:closer",
-    "background": "transparent"
-  },
   "secondary_prompt": {
     "template": " ",
     "foreground": "p:closer",

@@ -1,7 +1,7 @@
 # This is Git's per-user configuration file.
 [user]
   name = Allen Myers
-	email = am@zest.ai
+  email = am@zest.ai
 [branch]
   autosetupmerge = true
 [alias]
@@ -48,7 +48,7 @@
   tool = vimdiff
 [core]
   editor = nvim
-	pager = git-split-diffs --color | less -RFX
+	pager = delta
   ignoreCase = false
 [rerere]
   enabled = true
@@ -65,4 +65,23 @@
 [split-diffs]
   theme-name = dark
 [credential]
-	helper = osxkeychain
+  helper = osxkeychain
+[interactive]
+	diffFilter = delta --color-only
+[delta]
+	side-by-side = true
+	navigate = true
+	syntax-theme = Catppuccin Mocha
+	minus-style = "syntax \"#44293a\""
+	minus-emph-style = "syntax \"#633649\""
+	plus-style = "syntax \"#2b3d31\""
+	plus-emph-style = "syntax \"#3d5a40\""
+	line-numbers-minus-style = "#f38ba8"
+	line-numbers-plus-style = "#a6e3a1"
+	line-numbers-zero-style = "#6c7086"
+	file-style = "#cdd6f4 bold"
+	file-decoration-style = "#585b70 ul"
+	hunk-header-style = file line-number syntax
+	hunk-header-decoration-style = "#585b70 box"
+[merge]
+	conflictStyle = zdiff3
