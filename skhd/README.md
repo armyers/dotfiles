@@ -22,7 +22,6 @@ are `ctrl + shift + …` chords produced by the Kanata home-row mods (or physica
 | ctrl + alt + t               | Tomahawk56 cheatsheet popup   |
 | ctrl + shift + h/j/k/l       | arrow keys ← ↓ ↑ →            |
 | ctrl + shift + g             | Gemini in a new Chrome window |
-| ctrl + shift + s             | toggle AeroSpace              |
 | ctrl + shift + d             | cycle audio output devices    |
 
 The `ctrl + shift + …` chords are meant to be triggered through the Kanata

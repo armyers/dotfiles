@@ -28,6 +28,10 @@ symlinks to `~/.config/hammerspoon` (see `../dotfile-links.txt`).
 | cmd + shift + k | scroll up    |
 | cmd + shift + l | scroll right |
 
+| Combo                        | Action                                         |
+| ---------------------------- | ---------------------------------------------- |
+| cmd + ctrl + alt + shift + a | restart AeroSpace (force-kill after 3s if hung), or start it if not running |
+
 Hold to scroll continuously (timer-driven, smooth); release to stop. The
 `cmd + shift` chord is produced by the Kanata home-row mods (left-hand `s + d`
 or right-hand `k + l`). Tuning knobs (`TICK_INTERVAL`, `SCROLL_STEP`,

@@ -114,3 +114,51 @@ if kanataMenu then
 		{ title = "Check permissions…", fn = checkKanataPermissions },
 	})
 end
+
+------------------------------------------------------------
+-- Restart / start AeroSpace
+-- cmd+ctrl+alt+shift + a -> quit AeroSpace if running (force-kill if it
+-- doesn't exit within RESTART_TIMEOUT), then launch it. Starts it if it
+-- isn't running.
+--
+-- Lives in Hammerspoon rather than aerospace.toml because AeroSpace's own
+-- bindings are useless when AeroSpace is hung or not running.
+------------------------------------------------------------
+
+local AEROSPACE_MODS = { "cmd", "ctrl", "alt", "shift" }
+local AEROSPACE_KEY = "a"
+local AEROSPACE_BUNDLE = "bobko.aerospace"
+local RESTART_TIMEOUT = 3 -- seconds to wait for a graceful quit
+
+local function launchAerospace()
+	hs.application.launchOrFocusByBundleID(AEROSPACE_BUNDLE)
+	hs.alert.show("AeroSpace started")
+end
+
+local function restartAerospace()
+	local app = hs.application.get(AEROSPACE_BUNDLE)
+	if not app then
+		launchAerospace()
+		return
+	end
+
+	hs.alert.show("Restarting AeroSpace…")
+	app:kill()
+	local waited = 0
+	-- Global so the timer isn't garbage-collected mid-wait (see kanataMenu note).
+	aerospaceRestartTimer = hs.timer.doEvery(0.2, function()
+		waited = waited + 0.2
+		local running = hs.application.get(AEROSPACE_BUNDLE)
+		if running and waited >= RESTART_TIMEOUT then
+			running:kill9()
+			return
+		end
+		if not running then
+			aerospaceRestartTimer:stop()
+			aerospaceRestartTimer = nil
+			launchAerospace()
+		end
+	end)
+end
+
+hs.hotkey.bind(AEROSPACE_MODS, AEROSPACE_KEY, restartAerospace)

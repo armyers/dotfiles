@@ -5,3 +5,6 @@
    cmd + shift + alt + j            scroll down
    cmd + shift + alt + k            scroll up
    cmd + shift + alt + l            scroll right
+
+ AEROSPACE
+   cmd + ctrl + alt + shift + a     restart / start AeroSpace
