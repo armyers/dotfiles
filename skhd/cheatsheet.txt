@@ -10,5 +10,4 @@
    ctrl + shift + k                 → up
    ctrl + shift + l                 → right
    ctrl + shift + g                 Open Gemini in new Chrome window
-   ctrl + shift + s                 Toggle AeroSpace
    ctrl + shift + d                 Cycle audio devices

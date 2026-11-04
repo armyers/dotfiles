@@ -2,8 +2,9 @@
 """Generate cheatsheet.txt from init.lua.
 
 The config binds one modifier chord (SCROLL_MODS) to a set of direction keys
-defined in the DIRS table, each with a trailing `-- <direction>` comment. If
-you add other Hammerspoon bindings, extend the parsing here.
+defined in the DIRS table, each with a trailing `-- <direction>` comment, plus
+the AeroSpace restart chord (AEROSPACE_MODS + AEROSPACE_KEY). If you add other
+Hammerspoon bindings, extend the parsing here.
 """
 
 import re
@@ -34,6 +35,14 @@ def main():
         for key, direction in dirs:
             combo = " + ".join(mods + [key])
             lines.append(f"   {combo:<33}scroll {direction}")
+        lines.append("")
+
+    am = re.search(r"AEROSPACE_MODS\s*=\s*\{([^}]*)\}", text)
+    ak = re.search(r'AEROSPACE_KEY\s*=\s*"(\w+)"', text)
+    if am and ak:
+        combo = " + ".join(re.findall(r'"(\w+)"', am.group(1)) + [ak.group(1)])
+        lines.append(" AEROSPACE")
+        lines.append(f"   {combo:<33}restart / start AeroSpace")
         lines.append("")
 
     OUTPUT.write_text("\n".join(lines).rstrip() + "\n")

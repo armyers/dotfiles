@@ -20,8 +20,5 @@ ctrl + shift - l : skhd -k "right"
 # Open Gemini in new Chrome window (ctrl+shift+g, HRM s+a+g)
 ctrl + shift - g : open -na 'Google Chrome' --args --new-window 'https://gemini.google.com'
 
-# Toggle AeroSpace (s is HRM ctrl key — trigger via physical fn+shift+s)
-ctrl + shift - s : pgrep -x AeroSpace > /dev/null && osascript -e 'tell application "AeroSpace" to quit' || open -a AeroSpace
-
 # Cycle audio devices (d is HRM cmd key — trigger via physical fn+shift+d)
 ctrl + shift - d : /Users/allenmyers/.local/bin/cycle-audio.sh
