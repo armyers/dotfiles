@@ -24,8 +24,8 @@ local SCROLL_UNIT = "pixel" -- "pixel" = smooth, "line" = notched
 local DIRS = {
 	h = { SCROLL_STEP, 0 }, -- left
 	l = { -SCROLL_STEP, 0 }, -- right
-	k = { 0, -SCROLL_STEP }, -- up
-	j = { 0, SCROLL_STEP }, -- down
+	k = { 0, SCROLL_STEP }, -- up
+	j = { 0, -SCROLL_STEP }, -- down
 }
 
 local scrollTimer = nil
