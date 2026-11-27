@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Create a Rex session: prompt for a name, pick a starting directory with fzf
-# over zoxide's list, then create it with `rex new`. Run by the
-# new_named_session action in init.lua, inside a floating pane.
+# over zoxide's list, pick a pane layout from layouts.json, then create it
+# and switch the app to it. Run by the new_named_session action in init.lua,
+# inside a floating pane.
 #
 # In the directory picker, Enter on an empty match uses what you typed:
 # a path (~/x, /x) as-is, anything else as a zoxide query (like `z text`).
@@ -56,15 +57,39 @@ if [ ! -d "$dir" ]; then
   exit 1
 fi
 
-if [ -n "$name" ]; then
-  out=$(rex new "$name" --cwd "$dir" --json 2>&1)
-else
-  out=$(rex new --cwd "$dir" --json 2>&1)
-fi
+# Pick a layout from layouts.json (first entry is the default). Each "pane"
+# in a layout becomes a terminal starting in $dir.
+LAYOUTS="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/layouts.json"
+export LAYOUTS
+layout_name=$(
+  jq -r '.[].name' "$LAYOUTS" \
+    | fzf --prompt 'layout> ' \
+      --header 'Enter: pick   Esc: cancel' \
+      --layout reverse \
+      --no-sort \
+      --height 100% \
+      --preview-window 'right,60%' \
+      --preview 'jq -r --arg n {} ".[] | select(.name == \$n) | .diagram[]" "$LAYOUTS"'
+) || exit 0
+
+request=$(
+  jq -n --slurpfile L "$LAYOUTS" --arg layout "$layout_name" --arg label "$name" --arg dir "$dir" '
+    ($L[0][] | select(.name == $layout) | .layout) as $tree
+    | {
+        initial_windows: [{
+          layout: ($tree | walk(if . == "pane" then
+            { block: { flavor: "com.superlogical.terminal.shell", options: { cwd: $dir } } }
+          else . end))
+        }]
+      }
+    + (if $label == "" then {} else { label: $label } end)'
+)
+
+out=$(rex api call session.create "$request" 2>&1)
 rc=$?
 
 if [ "$rc" -ne 0 ]; then
-  printf '\n  rex new failed:\n%s\n' "$out"
+  printf '\n  Creating the session failed:\n%s\n' "$out"
   read -r -n 1 -s -p "  Press any key to close"
   exit 1
 fi
