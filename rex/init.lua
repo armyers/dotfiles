@@ -57,9 +57,42 @@ rex.action({
 	end,
 })
 
+-- New session: a floating pane runs new-session.sh, which prompts for a name,
+-- picks a starting directory with fzf over zoxide, and runs `rex new`. The
+-- palette prompts (rex.ui) can't be resized, hence the pane. Without Remote
+-- Control the script can't switch the app, so switch with cmd+shift+p.
+local rex_bin_dir = "/Applications/Rex.app/Contents/Helpers/Rex Server.rex/Contents/MacOS"
+local new_session_script = (os.getenv("HOME") or "") .. "/.dotfiles/rex/new-session.sh"
+
+rex.action({
+	name = "new_named_session",
+	title = "New Session (name + directory)",
+	run = function(ctx)
+		local _, err = rex.session.new_layer({
+			session_id = ctx.session_id,
+			bounds = { 0.05, 0.1, 0.9, 0.8 },
+			focus = true,
+			layout = {
+				block = {
+					flavor = "com.superlogical.terminal.shell",
+					label = "new session",
+					options = {
+						path_prepend = { "/opt/homebrew/bin", rex_bin_dir },
+						command = { "bash", new_session_script },
+					},
+				},
+			},
+		})
+		if err ~= nil then
+			error(err, 0)
+		end
+	end,
+})
+
 rex.bind("cmd+p", "client.palette.toggle")
 rex.bind("cmd+shift+p", "switch_session")
 rex.bind("cmd+shift+o", "last_session")
+rex.bind("cmd+shift+n", "new_named_session")
 
 -- panes ----------------------------------------------------------------------
 
@@ -122,7 +155,6 @@ rex.bind("cmd+w", "pane.close")
 -- Pop up a floating pane with this config's bindings (`rex keymap`) in less.
 -- The pane closes when less exits (q). Only shows init.lua bindings, not the
 -- app's built-in defaults.
-local rex_bin_dir = "/Applications/Rex.app/Contents/Helpers/Rex Server.rex/Contents/MacOS"
 
 rex.action({
 	name = "show_keymap",
