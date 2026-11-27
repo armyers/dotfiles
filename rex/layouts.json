@@ -1,0 +1,114 @@
+[
+  {
+    "name": "main + 2 stacked",
+    "diagram": [
+      "+----------+----------+",
+      "|          |          |",
+      "|          |          |",
+      "|          +----------+",
+      "|          |          |",
+      "|          |          |",
+      "+----------+----------+"
+    ],
+    "layout": {
+      "split": {
+        "direction": "horizontal",
+        "ratio": 0.5,
+        "before": "pane",
+        "after": {
+          "split": {
+            "direction": "vertical",
+            "ratio": 0.5,
+            "before": "pane",
+            "after": "pane"
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "single",
+    "diagram": [
+      "+---------------------+",
+      "|                     |",
+      "|                     |",
+      "|                     |",
+      "|                     |",
+      "+---------------------+"
+    ],
+    "layout": "pane"
+  },
+  {
+    "name": "side by side",
+    "diagram": [
+      "+----------+----------+",
+      "|          |          |",
+      "|          |          |",
+      "|          |          |",
+      "|          |          |",
+      "+----------+----------+"
+    ],
+    "layout": {
+      "split": {
+        "direction": "horizontal",
+        "ratio": 0.5,
+        "before": "pane",
+        "after": "pane"
+      }
+    }
+  },
+  {
+    "name": "2 stacked",
+    "diagram": [
+      "+---------------------+",
+      "|                     |",
+      "|                     |",
+      "+---------------------+",
+      "|                     |",
+      "|                     |",
+      "+---------------------+"
+    ],
+    "layout": {
+      "split": {
+        "direction": "vertical",
+        "ratio": 0.5,
+        "before": "pane",
+        "after": "pane"
+      }
+    }
+  },
+  {
+    "name": "2x2 grid",
+    "diagram": [
+      "+----------+----------+",
+      "|          |          |",
+      "|          |          |",
+      "+----------+----------+",
+      "|          |          |",
+      "|          |          |",
+      "+----------+----------+"
+    ],
+    "layout": {
+      "split": {
+        "direction": "horizontal",
+        "ratio": 0.5,
+        "before": {
+          "split": {
+            "direction": "vertical",
+            "ratio": 0.5,
+            "before": "pane",
+            "after": "pane"
+          }
+        },
+        "after": {
+          "split": {
+            "direction": "vertical",
+            "ratio": 0.5,
+            "before": "pane",
+            "after": "pane"
+          }
+        }
+      }
+    }
+  }
+]
